@@ -1,0 +1,71 @@
+<<<<<<< HEAD
+/* src/styles/Banner.css */
+.banner-section {
+  background: linear-gradient(90deg, #5D54A4, #7C78B8);
+  color: white;
+  text-align: center;
+  padding: 40px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #5C5696;
+}
+
+.banner-section h1 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.banner-section p {
+  font-size: 16px;
+}
+
+.banner-btn {
+  background: #7C78B8;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.banner-btn:hover {
+  background: #5D54A4;
+}
+=======
+/* src/styles/Banner.css */
+.banner-section {
+  background: linear-gradient(90deg, #5D54A4, #7C78B8);
+  color: white;
+  text-align: center;
+  padding: 40px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #5C5696;
+}
+
+.banner-section h1 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.banner-section p {
+  font-size: 16px;
+}
+
+.banner-btn {
+  background: #7C78B8;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.banner-btn:hover {
+  background: #5D54A4;
+}
+>>>>>>> 14fd7dee0989f6389f8eb859f968216a0fcec654

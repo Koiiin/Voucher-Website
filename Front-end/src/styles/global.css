@@ -1,0 +1,85 @@
+<<<<<<< HEAD
+/* global.css */
+/* Reset cơ bản */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+/* Màu nền mặc định */
+body {
+  background: #f8f9fa;
+  color: #333;
+  transition: background 0.3s, color 0.3s; /* hiệu ứng chuyển màu mượt */
+}
+
+
+/* Đảm bảo toàn bộ trang chiếm đủ chiều cao */
+#root, .app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Đẩy nội dung chính mở rộng để giữ footer ở dưới cùng */
+.main-content {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Footer cũ */
+.footer {
+  text-align: center;
+  padding: 20px;
+  background: #333;
+  color: white;
+  width: 100%;
+}
+
+=======
+/* global.css */
+/* Reset cơ bản */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+/* Màu nền mặc định */
+body {
+  background: #f8f9fa;
+  color: #333;
+  transition: background 0.3s, color 0.3s; /* hiệu ứng chuyển màu mượt */
+}
+
+
+/* Đảm bảo toàn bộ trang chiếm đủ chiều cao */
+#root, .app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Đẩy nội dung chính mở rộng để giữ footer ở dưới cùng */
+.main-content {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Footer cũ */
+.footer {
+  text-align: center;
+  padding: 20px;
+  background: #333;
+  color: white;
+  width: 100%;
+}
+
+>>>>>>> 14fd7dee0989f6389f8eb859f968216a0fcec654
