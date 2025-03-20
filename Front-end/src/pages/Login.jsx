@@ -1,17 +1,14 @@
-
-// src/pages/Login.jsx
 import React, { useState, useEffect } from "react";
 import "../styles/Login.css";
 import { Link } from "react-router-dom";
 
 function Login() {
   const [loading, setLoading] = useState(false);
-
-  // Dùng để thêm fade-in class
   const [fadeIn, setFadeIn] = useState(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   useEffect(() => {
-    // Khi component mount, bật fade-in
     setFadeIn(true);
   }, []);
 
@@ -19,12 +16,26 @@ function Login() {
     e.preventDefault();
     setLoading(true);
 
-    // Giả lập thời gian chờ (2s)
-    setTimeout(() => {
-      setLoading(false);
-      alert("Đăng nhập thành công (giả lập)!");
-      // Chuyển trang, v.v.
-    }, 2000);
+    fetch("http://localhost:3000/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ username, password }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setLoading(false);
+        if (data.success) {
+          alert("Đăng nhập thành công!");
+        } else {
+          alert("Đăng nhập thất bại!");
+        }
+      })
+      .catch((error) => {
+        setLoading(false);
+        alert("Lỗi kết nối đến server!");
+      });
   };
 
   return (
@@ -39,6 +50,8 @@ function Login() {
                 className="login__input"
                 placeholder="User name / Email"
                 required
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
               />
             </div>
             <div className="login__field">
@@ -48,6 +61,8 @@ function Login() {
                 className="login__input"
                 placeholder="Password"
                 required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
             <button
@@ -73,4 +88,3 @@ function Login() {
 }
 
 export default Login;
-
