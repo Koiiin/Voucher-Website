@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 /* src/styles/Header.css */
 .header {
   display: flex;
@@ -41,47 +41,4 @@
 }
 
 
-=======
-/* src/styles/Header.css */
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 40px;
-  background: linear-gradient(90deg, #5D54A4, #7C78B8);
-  border-bottom: 1px solid #5C5696;
-  width: 100%;
-}
 
-.logo a {
-  font-size: 24px;
-  font-weight: bold;
-  text-decoration: none;
-  color: #FFF;
-}
-
-.header nav a {
-  margin: 0 15px;
-  text-decoration: none;
-  color: #DDD;
-}
-
-.menu-btn, .discount-btn, .login-btn, .register-btn {
-  background: #7C78B8;
-  color: white;
-  padding: 8px 15px;
-  border-radius: 5px;
-  border: none;
-}
-
-.menu-btn:hover, .discount-btn:hover {
-  background: #5D54A4;
-}
-
-.login-btn:hover,
-.register-btn:hover {
-  background: #5D54A4;
-}
-
-
->>>>>>> 14fd7dee0989f6389f8eb859f968216a0fcec654
