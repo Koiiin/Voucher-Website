@@ -6,9 +6,12 @@ const cors = require("cors");
 require("dotenv").config();
 const connectDB = require("./database/database");
 const authRoutes = require("./Routes/AuthRoutes");
-const Category = require("./Routes/categoryR");
-let app = express()
+const Category = require("./Routes/categoryR")
 
+
+
+let app = express()
+app.use(cors({ origin: "*" }));
 //ketnoiDB
 connectDB();
 
@@ -21,9 +24,9 @@ app.use(express.json())
 
 
 //su dung api cho auth(dang nhap, dang ki )
-app.use("/", authRoutes);
+app.use("/api", authRoutes);
 // phan loai va ley 
-app.use("/",Category)
+app.use("/api",Category)
 
 
 
