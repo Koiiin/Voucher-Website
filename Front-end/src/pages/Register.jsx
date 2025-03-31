@@ -45,7 +45,7 @@ function Register() {
 
       const data = await response.json();
 
-      if (response.ok) {
+      if (response.success) {
         alert("Đăng ký thành công!");
       } else {
         alert(data.message || "Lỗi đăng ký!");
