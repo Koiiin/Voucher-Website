@@ -16,7 +16,7 @@ function Login() {
     e.preventDefault();
     setLoading(true);
 
-    fetch("http://localhost:3000/api/login", {
+    fetch("http://localhost:3000/api/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -27,6 +27,7 @@ function Login() {
       .then((data) => {
         setLoading(false);
         if (data.success) {
+          sessionStorage.setItem("accessToken", data.accessToken);
           alert("Đăng nhập thành công!");
         } else {
           alert("Đăng nhập thất bại!");

@@ -1,31 +1,28 @@
 {
-  "name": "voucher",
+  "name": "back-end",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon main.js",
-    "start": "node main.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Keywi75/Voucher.git"
+    "start": "node server.js"
   },
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Keywi75/Voucher/issues"
+  "description": "Voucher-Website",
+  "devDependencies": {
+    "nodemon": "^3.1.9"
   },
-  "homepage": "https://github.com/Keywi75/Voucher#readme",
   "dependencies": {
+    "axios": "^1.8.4",
     "bcryptjs": "^3.0.2",
+    "cookie-session": "^2.1.0",
     "cors": "^2.8.5",
+    "crypto": "^1.0.1",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.12.1"
-  },
-  "keywords": [],
-  "type": "commonjs"
+    "mongoose": "^8.13.0",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0"
+  }
 }
