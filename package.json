@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "server": "npm run dev --prefix voucher-app",
-    "client": "npm run dev --prefix voucher",
+    "server": "npm run start --prefix Back-end",
+    "client": "npm run dev --prefix Front-end",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "repository": {

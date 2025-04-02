@@ -36,6 +36,7 @@ function Login() {
       .catch((error) => {
         setLoading(false);
         alert("Lỗi kết nối đến server!");
+        console.error(error);
       });
   };
 
