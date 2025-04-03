@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { sendMessage } from "../service/chatService";
+import { sendMessage } from "../services/chatService";
 
 const Chatbot = ({ userId }) => {
   const [messages, setMessages] = useState([]);
