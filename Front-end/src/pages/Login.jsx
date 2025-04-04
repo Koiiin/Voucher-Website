@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import "../styles/Login.css";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; // Điều hướng sau khi đăng nhập
 
 function Login() {
   const [loading, setLoading] = useState(false);
   const [fadeIn, setFadeIn] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
+  const navigate = useNavigate();
   useEffect(() => {
     setFadeIn(true);
   }, []);
@@ -28,7 +29,10 @@ function Login() {
         setLoading(false);
         if (data.success) {
           sessionStorage.setItem("accessToken", data.accessToken);
+          sessionStorage.setItem("username", data.username); // them de luu ten
           alert("Đăng nhập thành công!");
+          navigate("/"); // dieu huong ve home 
+          window.location.reload(); // cp nhat trang thoi
         } else {
           alert("Đăng nhập thất bại!");
         }
