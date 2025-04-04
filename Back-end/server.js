@@ -8,6 +8,7 @@ const userRoute = require('./routes/userRoute');
 const passport = require('passport');
 const Momo = require("./routes/payment");
 const Voucher = require("./routes/voucher");
+const morgan = require('morgan');
 
 // AI Chatbot
 const AI = require("./Routes/aiRoute");
@@ -17,6 +18,7 @@ require('./config/passport');
 require('dotenv').config();
 
 connectDB();
+app.use(morgan('dev'));
 
 app.use(cors());
 
