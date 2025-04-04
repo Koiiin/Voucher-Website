@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../styles/Login.css";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom"; // Điều hướng sau khi đăng nhập
+import { login } from "../services/authService"; // Import hàm login từ authService
 
 function Login() {
   const [loading, setLoading] = useState(false);
@@ -13,35 +14,54 @@ function Login() {
     setFadeIn(true);
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
-    fetch("http://localhost:3000/api/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username, password }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setLoading(false);
-        if (data.success) {
-          sessionStorage.setItem("accessToken", data.accessToken);
-          sessionStorage.setItem("username", data.username); // them de luu ten
-          alert("Đăng nhập thành công!");
-          navigate("/"); // dieu huong ve home 
-          window.location.reload(); // cp nhat trang thoi
-        } else {
-          alert("Đăng nhập thất bại!");
-        }
-      })
-      .catch((error) => {
-        setLoading(false);
-        alert("Lỗi kết nối đến server!");
-        console.error(error);
-      });
+    // fetch("http://localhost:3000/api/auth/login", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({ username, password }),
+    // })
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     setLoading(false);
+    //     if (data.success) {
+    //       sessionStorage.setItem("accessToken", data.accessToken);
+    //       sessionStorage.setItem("username", data.username); // them de luu ten
+    //       alert("Đăng nhập thành công!");
+    //       navigate("/"); // dieu huong ve home 
+    //       window.location.reload(); // cp nhat trang thoi
+    //     } else {
+    //       alert("Đăng nhập thất bại!");
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     setLoading(false);
+    //     alert("Lỗi kết nối đến server!");
+    //     console.error(error);
+    //   });
+    
+    try {
+      const data = await login(username, password);
+      setLoading(false);
+      
+      if (data.success) {
+        sessionStorage.setItem("accessToken", data.accessToken);
+        sessionStorage.setItem("username", data.username); // them de luu ten
+        alert("Đăng nhập thành công!");
+        navigate("/"); // dieu huong ve home 
+        window.location.reload(); // cp nhat trang thoi
+      } else {
+        alert("Đăng nhập thất bại!");
+      }
+    } catch (error) {
+      setLoading(false);
+      alert("Lỗi kết nối đến server!");
+      console.error("hahahahahah");
+    }
   };
 
   return (

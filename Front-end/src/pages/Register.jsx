@@ -1,6 +1,7 @@
 // src/pages/Register.jsx
 import React, { useState, useEffect } from "react";
 import "../styles/Login.css";
+import { register } from "../services/authService";
 
 function Register() {
   const [loading, setLoading] = useState(false);
@@ -31,30 +32,23 @@ function Register() {
     }
 
     try {
-      const response = await fetch("http://localhost:3000/api/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: formData.username,
-          email: formData.email,
-          password: formData.password,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (response.success) {
-        alert("Đăng ký thành công!");
-      } else {
-        alert(data.message || "Lỗi đăng ký!");
-      }
-    } catch (error) {
-      alert("Lỗi kết nối server!");
-      console.error(error);
-    } finally {
+      const data = await register(
+        formData.username,
+        formData.email,
+        formData.password
+      );
       setLoading(false);
+      if (data.success) {
+        alert("Đăng ký thành công!");
+        window.location.href = "/login"; // Redirect to login page after successful registration
+      } else {
+        alert("Đăng ký thất bại!");
+      }
+    }
+    catch (error) {
+      setLoading(false);
+      alert("Lỗi kết nối đến server!");
+      console.error(error);
     }
   };
 
