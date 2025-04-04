@@ -60,7 +60,7 @@ function Login() {
     } catch (error) {
       setLoading(false);
       alert("Lỗi kết nối đến server!");
-      console.error("hahahahahah");
+      console.error(error);
     }
   };
 
