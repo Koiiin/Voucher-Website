@@ -1,0 +1,18 @@
+const express = require('express');
+const router = express.Router();
+const voucherController = require('../controllers/voucherController');
+const authMiddleware = require('../controllers/middlewareController');
+
+// tao voucher
+router.post('/createVoucher',authMiddleware.verifyToken ,voucherController.createVoucher);
+// lay tat ca voucher
+router.get('/getAllVoucher', voucherController.getAllVoucher);
+
+
+router.delete('/deleteVoucher/:id',authMiddleware.verifyToken , voucherController.deleteVoucher);
+router.put('/updateVoucher/:id', voucherController.updateVoucher);
+
+// tim kiem voucher
+router.get('/searchVoucher', voucherController.searchVoucher);
+
+module.exports = router;

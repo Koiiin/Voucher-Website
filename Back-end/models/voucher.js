@@ -3,18 +3,15 @@ const Schema = mongoose.Schema;
 
 const voucherSchema = new Schema(
   {
-    voucherType: { type: String, required: true, trim: true }, // Loại voucher
-    category: { type: String, required: true, trim: true }, // Danh mục
-    title: { type: String, required: true, trim: true }, // Tiêu đề
-    validityStart: { type: Date, required: true }, // Ngày bắt đầu hiệu lực
-    validityEnd: { type: Date, required: true, expires: 0 }, // Ngày hết hạn, tự động xóa khi hết hạn
-    description: { type: String }, // Mô tả
-    ownerID: { type: String, required: true }, // Chủ sở hữu
-    sourceProductID: { type: String, trim: true }, // ID sản phẩm nguồn
-    exchangeType: { type: String, required: true }, // Loại trao đổi
-    quantity: { type: Number, required: true, default: 1, min: 0 }, // Số lượng (không âm)
-    currency: { type: String, required: true }, // Loại tiền tệ
-    voucherPrice: { type: Number, required: true, default: 0, min: 0 } // Giá trị voucher (không âm)
+    title: { type: String, required: true, trim: true },            // Tiêu đề voucher
+    voucherType: { type: String, required: true, trim: true },      // Loại voucher (nếu cần phân biệt) / GIẢM GIÁ / QUÀ TẶNG / THẺ QUÀ TẶNG...
+    category: { type: String, trim: true },                         // Danh mục (có thể giữ hoặc bỏ luôn nếu không dùng)  MÁY BAY / DU LỊCH 
+    validityStart: { type: Date, required: true },                  // Ngày bắt đầu
+    validityEnd: { type: Date, required: true, index: { expires: 0 } }, // Ngày kết thúc (tự động xóa)
+    ownerID: { type: Schema.Types.ObjectId, ref: "User", required: true }, // Chủ sở hữu
+    price: { type: Number, default: 0 },                     // Giá trị voucher (nếu có)
+    quantity: { type: Number, default: 1, min: 0 },                 // Số lượng (mặc định là 1)
+    linkanh: { type: String, trim: true },                            // Link ảnh voucher
   },
   { timestamps: true }
 );
