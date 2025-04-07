@@ -7,7 +7,7 @@ const authRoute = require('./routes/authRoute');
 const userRoute = require('./routes/userRoute');
 const passport = require('passport');
 const Momo = require("./routes/payment");
-const Voucher = require("./routes/voucher");
+const Voucher = require("./Routes/voucherRouter");
 const morgan = require('morgan');
 
 // AI Chatbot
