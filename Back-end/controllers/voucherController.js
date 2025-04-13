@@ -30,7 +30,7 @@ exports.createVoucher = async (req, res) => {
 exports.getAllVoucher = async (req, res) => {
   try {
     const vouchers = await VoucherModel.find().sort({ createdAt: -1 });
-    res.status(200).json(vouchers);
+    res.status(200).json({ success: true, data: vouchers });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -84,3 +84,25 @@ exports.searchVoucher = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+/*
+const Fuse = require('fuse.js');
+
+exports.searchVoucher = async (req, res) => {
+  try {
+    const keyword = req.query.q;
+    const vouchers = await VoucherModel.find(); // lấy hết để lọc bên ngoài
+
+    const fuse = new Fuse(vouchers, {
+      keys: ['title', 'voucherType'],
+      threshold: 0.4 // càng nhỏ càng chính xác
+    });
+
+    const results = keyword ? fuse.search(keyword).map(r => r.item) : vouchers;
+
+    res.status(200).json(results);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+*/

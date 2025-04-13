@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/Header.css";
-
+import UserMenu from "./usermenu";  
 function Header() {
   const [user, setUser] = useState(null);  // Giữ tên người dùng trong state
   const navigate = useNavigate();
@@ -33,8 +33,7 @@ function Header() {
         <Link to="/deals" className="discount-btn">Ưu đãi hot</Link>
         {user ? (
           <>
-            <span className="welcome-text">Hi, {user}</span>
-            <button onClick={handleLogout} className="logout-btn">Đăng xuất</button>
+            <UserMenu name={user} onLogout={handleLogout} />
             <script>
               {user && "window.location.reload();"}
             </script>
@@ -43,7 +42,7 @@ function Header() {
         ) : (
           <>
             <Link to="/login" className="login-btn">Đăng nhập</Link>
-            <Link to="/register" className="register-btn">Đăng ký</Link>
+            <Link to="/register" className="register-btn">Đăng ký</Link>//
           </>
         )}
       </nav>

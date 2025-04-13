@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getAllVouchers } from "../services/voucherService";  // Import hàm gọi API từ service
 import VoucherCard from "./VoucherCard";
-import "../styles/VoucherList.css";
+import "../styles/Voucherlist.css";
 
 function VoucherList() {
   const [vouchers, setVouchers] = useState([]);
@@ -30,11 +30,16 @@ function VoucherList() {
       <div className="voucher-list">
         {vouchers.map((voucher) => (
           <VoucherCard
-            key={voucher._id}
-            discount={voucher.discount}
-            title={voucher.title}
-            expiry={voucher.expiry}
-          />
+          key={voucher._id}
+          title={voucher.title}
+          voucherType={voucher.voucherType}
+          category={voucher.category}
+          validityStart={voucher.validityStart}
+          validityEnd={voucher.validityEnd}
+          price={voucher.price}
+          quantity={voucher.quantity}
+          linkanh={voucher.linkanh}
+        />        
         ))}
       </div>
     </div>

@@ -7,6 +7,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Chatbot from "./components/Chatbot";
 import Home from "./pages/Home";
+import User from "./pages/User";
 import "./styles/global.css";
 
 function App() {
@@ -26,12 +27,14 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/" element={isLoggedIn ? <Home /> : <Navigate to="/login" />} />
-          <Route path="/chatbot" element={isLoggedIn ? <Chatbot /> : <Navigate to="/login" />} />
-          <Route path="/deals" element={isLoggedIn ? <Deals /> : <Navigate to="/login" />} />
-          <Route path="/categories" element={isLoggedIn ? <Categories /> : <Navigate to="/login" />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/chatbot" element={ <Chatbot />} />
+          <Route path="/deals" element={<Deals /> } />
+          <Route path="/categories" element={<Categories /> } />
           {/* Route mặc định: Chuyển hướng đến trang chủ nếu vào bất cứ trang nào không hợp lệlệ*/}
           <Route path="*" element={<Navigate to="/" />} />
+          /*user */
+          <Route path="/user" element={<User />} />
         </Routes>
       </div>
       {!hideHeaderAndFooter && <Footer />} {/* Hiển thị Footer nếu không ở trang login/register */}
