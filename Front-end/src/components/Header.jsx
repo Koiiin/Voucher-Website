@@ -42,7 +42,7 @@ function Header() {
         ) : (
           <>
             <Link to="/login" className="login-btn">Đăng nhập</Link>
-            <Link to="/register" className="register-btn">Đăng ký</Link>//
+            <Link to="/register" className="register-btn">Đăng ký</Link>
           </>
         )}
       </nav>
