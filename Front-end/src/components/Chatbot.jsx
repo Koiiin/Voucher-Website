@@ -1,81 +1,55 @@
-import React, { useState } from "react";
-import { sendMessage } from "../services/chatService";
+import React, { useState } from 'react';
+import { getChatResponse } from '../services/chatService'; 
+import '../styles/aiChatbot.css';
 
-const Chatbot = ({ userId }) => {
-  const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState("");
+const Chatbot = () => {
+  const [message, setMessage] = useState('');
+  const [chatHistory, setChatHistory] = useState([]);
 
-  const handleSend = async () => {
-    if (!input.trim()) return;
-    
-    // Thêm tin nhắn người dùng vào giao diện
-    const userMessage = { sender: "user", message: input };
-    setMessages([...messages, userMessage]);
-
-    // Gửi tin nhắn đến chatbot API
-    const botResponse = await sendMessage(input, userId);
-
-    setMessages([...messages, userMessage, { sender: "bot", message: botResponse.message }]);
-
-    setInput(""); 
+  const handleMessageChange = (event) => {
+    setMessage(event.target.value);
   };
 
+  const handleSendMessage = async () => {
+    if (!message) return;
+  
+    // Gọi API để nhận phản hồi từ chatbot
+    const reply = await getChatResponse(message);
+  
+    // Cập nhật kết quả mới lên màn hình (dạng từng cặp user - chatbot)
+    setChatHistory(prev => [
+      ...prev,
+      { role: 'user', content: message },
+      { role: 'assistant', content: reply }
+    ]);
+  
+    setMessage('');
+  };
+  
   return (
-    <div style={styles.chatbox}>
-      <div style={styles.messages}>
-        {messages.map((msg, index) => (
-          <p key={index} style={msg.sender === "user" ? styles.userMsg : styles.botMsg}>
-            {msg.sender === "user" ? "👤" : "🤖"} {msg.message}
-          </p>
+    <div className="chatbot-container">
+      <div className="chatbot-header">Chatbot AI</div>
+
+      <div className="chatbot-messages">
+        {chatHistory.map((msg, index) => (
+          <div key={index} className={`message ${msg.role}`}>
+            {msg.content}
+          </div>
         ))}
       </div>
-      <div style={styles.inputContainer}>
+
+      <div className="chatbot-input">
         <input
           type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
+          value={message}
+          onChange={handleMessageChange}
           placeholder="Nhập tin nhắn..."
-          style={styles.input}
+          onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
         />
-        <button onClick={handleSend} style={styles.button}>Gửi</button>
+        <button onClick={handleSendMessage}>Gửi</button>
       </div>
     </div>
   );
-};
-
-// CSS inline
-const styles = {
-  chatbox: {
-    width: "300px",
-    border: "1px solid #ddd",
-    borderRadius: "10px",
-    padding: "10px",
-    backgroundColor: "#f9f9f9",
-  },
-  messages: {
-    maxHeight: "200px",
-    overflowY: "auto",
-  },
-  userMsg: {
-    textAlign: "right",
-    color: "#007bff",
-  },
-  botMsg: {
-    textAlign: "left",
-    color: "#333",
-  },
-  inputContainer: {
-    display: "flex",
-    marginTop: "10px",
-  },
-  input: {
-    flex: 1,
-    padding: "5px",
-  },
-  button: {
-    marginLeft: "5px",
-    padding: "5px 10px",
-  },
 };
 
 export default Chatbot;

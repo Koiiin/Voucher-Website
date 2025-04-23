@@ -1,38 +1,34 @@
-const OpenAI = require('openai');
+const fetch = require('node-fetch');
 
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-});
+const getChatResponse = async (req, res) => {
+  const { message } = req.body;
 
+  try {
+    const response = await fetch('http://localhost:11434/api/chat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'llama3',
+        messages: [{ role: 'user', content: message }],
+        stream: false  // rất quan trọng để tắt chế độ stream
+      }),
+    });
 
-const suggestVoucher = async (req, res) => {
-    if (req.method !== 'POST') {
-        return res.status(405).json({ message: 'Method not allowed' });
+    if (!response.ok) {
+      throw new Error(`Error: ${response.statusText}`);
     }
 
-    // Nhận lịch sử mua hàng từ request
-    const { history } = req.body;
+    const data = await response.json();
 
-    try {
-        const response = await openai.chat.completions.create({
-            model: "gpt-3.5-turbo",
-            messages: [
-                { role: "system", content: "Bạn là một trợ lý AI giúp gợi ý voucher dựa trên lịch sử mua sắm."},
-                { role: "user", content: `Dựa trên lịch sử này: ${JSON.stringify(history)}, hãy đề xuất 3 voucher phù hợp.`},
-            ],
-            max_tokens: 200,
-            temperature: 0.7
-        });
+    const reply = data.message?.content || 'Không có phản hồi từ chatbot.';
+    res.json({ reply });
 
-        res.status(200).json({
-            suggestions: response.choices[0].message.content
-        });
-    } catch(error) {
-        res.status(500).json({
-            message: 'Lỗi khi gọi API OpenAI',
-            error: error.message
-        });
-    }
-}
+  } catch (error) {
+    console.error('Error in chatbot API:', error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
 
-module.exports = { suggestVoucher };
+module.exports = { getChatResponse };

@@ -1,0 +1,103 @@
+/* Toàn bộ vùng chatbot */
+.chatbot-container {
+    width: 360px;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 3px solid transparent;
+    background: linear-gradient(#fff, #fff) padding-box,
+                linear-gradient(135deg, #5D54A4, #7C78B8) border-box;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  /* Header */
+  .chatbot-header {
+    background: linear-gradient(135deg, #5D54A4, #7C78B8);
+    color: white;
+    text-align: center;
+    padding: 12px;
+    font-weight: bold;
+    font-size: 1.1rem;
+  }
+  
+  /* Vùng tin nhắn */
+  .chatbot-messages {
+    flex: 1;
+    padding: 16px;
+    overflow-y: auto;
+    background-color: #f9f9fb;
+  }
+  
+  /* Một tin nhắn */
+  .message {
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    max-width: 80%;
+  }
+  
+  .message.user {
+    align-self: flex-end;
+    background-color: #e1e1f0;
+    color: #333;
+    padding: 10px 14px;
+    border-radius: 15px 15px 0 15px;
+  }
+  
+  .message.bot {
+    align-self: flex-start;
+    background-color: #ddddef;
+    color: #222;
+    padding: 10px 14px;
+    border-radius: 15px 15px 15px 0;
+  }
+  
+  /* Footer nhập tin nhắn */
+  .chatbot-input {
+    display: flex;
+    border-top: 1px solid #ccc;
+    padding: 10px;
+    background-color: #fff;
+  }
+  
+  .chatbot-input input {
+    flex: 1;
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    padding: 10px 15px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+  
+  .chatbot-input input:focus {
+    border-color: #7C78B8;
+  }
+  
+  .chatbot-input button {
+    background: #5D54A4;
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    margin-left: 8px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .chatbot-input button:hover {
+    background: #7C78B8;
+  }
+  
+  /* Responsive */
+  @media (max-width: 400px) {
+    .chatbot-container {
+      width: 100%;
+      height: 100vh;
+      border-radius: 0;
+    }
+  }
+  

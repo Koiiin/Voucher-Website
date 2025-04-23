@@ -12,7 +12,7 @@ import "./styles/global.css";
 
 function App() {
   // Kiểm tra trạng thái đăng nhập từ sessionStorage
-  const isLoggedIn = !!sessionStorage.getItem("accessToken");
+  //const isLoggedIn = !!sessionStorage.getItem("accessToken");
 
   // Sử dụng useLocation để theo dõi URL hiện tại
   const location = useLocation();
@@ -35,6 +35,8 @@ function App() {
           <Route path="*" element={<Navigate to="/" />} />
           /*user */
           <Route path="/user" element={<User />} />
+          /*Chatbot */
+          <Route path="/chatbot" element={<Chatbot />} />
         </Routes>
       </div>
       {!hideHeaderAndFooter && <Footer />} {/* Hiển thị Footer nếu không ở trang login/register */}

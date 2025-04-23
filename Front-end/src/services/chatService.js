@@ -1,17 +1,19 @@
-// gửi tin nhắn đến chatbot API
-
-import axios from "axios";
-const API_URL = 'https://api.openai.com/v1/chat/completions';
-
-export const sendMessage = async (message, userId) => {
-    try {
-        const response = await axios.post(API_URL, {
-            userId,
-            message,
-        });
-        return response.data;
-    } catch (error) {
-        console.error("Error sending message:", error);
-        return { error: "Failed to send message" };
+// src/services/chatService.js
+export const getChatResponse = async (message) => {
+    const response = await fetch('http://localhost:3000/api/chatbot', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ message }),
+    });
+  
+    if (response.ok) {
+      const data = await response.json();
+      return data.reply;
+    } else {
+      console.error('Error fetching chat response');
+      return 'Sorry, I could not understand your request.';
     }
-};
+  };
+  

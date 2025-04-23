@@ -31,6 +31,7 @@ function Header() {
       <nav>
         <Link to="/categories" className="menu-btn">Danh mục</Link>
         <Link to="/deals" className="discount-btn">Ưu đãi hot</Link>
+        <Link to="/chatbot" className="chatbot-btn">Chatbot</Link>
         {user ? (
           <>
             <UserMenu name={user} onLogout={handleLogout} />
