@@ -37,8 +37,55 @@ function Login() {
       alert("Lỗi kết nối đến server!");
       console.error(error);
     }
-  };
 
+  };
+// đang nhập fb
+const handleFacebookLogin = () => {
+  if (!window.FB) {
+    alert("Facebook SDK chưa được tải!");
+    return;
+  }
+
+  window.FB.login(
+    (response) => {
+      if (response.authResponse) {
+        // Sau khi login thành công, lấy user info
+        window.FB.api("/me?fields=id,name,email", function (userInfo) {
+          console.log("User info:", userInfo);
+
+          // Gửi thông tin người dùng lên backend
+          fetch("http://localhost:3000/api/auth/facebook", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              facebookId: userInfo.id,
+              username: userInfo.name,
+              email: userInfo.email,
+            }),
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              console.log("Login success:", data);
+              localStorage.setItem("accessToken", data.accessToken);
+              localStorage.setItem("userData", JSON.stringify(data));
+              alert("Đăng nhập Facebook thành công!");
+              navigate("/");
+              window.location.reload();
+            })
+            .catch((err) => {
+              console.error("Lỗi khi gửi dữ liệu Facebook về server:", err);
+              alert("Có lỗi xảy ra khi đăng nhập với Facebook!");
+            });
+        });
+      } else {
+        alert("Bạn đã huỷ đăng nhập.");
+      }
+    },
+    { scope: "public_profile,email" }
+  );
+};
   return (
     <div className={`login-page ${fadeIn ? "fade-in" : ""}`}>
       <div className="login-box">
@@ -88,7 +135,7 @@ function Login() {
         </div>
         
         <div className="social-buttons">
-          <button className="facebook-btn">
+          <button className="facebook-btn" onClick={handleFacebookLogin}>
             <i className="fab fa-facebook-f"></i> Facebook
           </button>
           <button className="google-btn">
