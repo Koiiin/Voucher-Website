@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { shouldParseToolCall } = require('openai/lib/ResponsesParser.mjs');
 
 const UserSchema = new mongoose.Schema({
     username: {
@@ -30,7 +31,8 @@ const UserSchema = new mongoose.Schema({
     googleId: {
         type: String,
         unique: true,
-        required: false
+        required: false,
+        sparse: true // Cho phép nhiều bản ghi có giá trị null
     }
 },  { timestamps: true });
 

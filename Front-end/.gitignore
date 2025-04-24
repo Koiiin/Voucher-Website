@@ -1,4 +1,4 @@
-Back-end\.env
 node_modules/
 dist/
-
+.vite/
+.env

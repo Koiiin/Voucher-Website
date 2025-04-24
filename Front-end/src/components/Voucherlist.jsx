@@ -23,6 +23,11 @@ function VoucherList() {
     fetchVouchers();  // Gọi hàm fetch
   }, []);
 
+  useEffect(() => {
+    console.log("Vouchers:", vouchers);
+  }, [vouchers]);
+  
+
   return (
     <div>
       {loading && <p>Đang tải...</p>}
