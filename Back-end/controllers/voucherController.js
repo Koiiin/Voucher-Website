@@ -106,3 +106,23 @@ exports.searchVoucher = async (req, res) => {
 };
 
 */
+
+exports.getValidVouchers = async (req, res) => {
+  try {
+    const currentDate = new Date();
+    const validVouchers = await VoucherModel.find({
+      validityStart: { $lte: currentDate },  
+      validityEnd: { $gte: currentDate },   
+      quantity: { $gt: 0 }                   
+    }).select('title voucherType category price quantity linkanh');
+
+    if (!validVouchers.length) {
+      return res.status(404).json({ message: 'Không có voucher hợp lệ nào!' });
+    }
+
+    res.status(200).json(validVouchers);  // Trả về danh sách voucher hợp lệ
+  } catch (error) {
+    console.error('Error while fetching valid vouchers:', error);
+    res.status(500).json({ error: error.message });
+  }
+};

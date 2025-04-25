@@ -8,6 +8,7 @@ import Footer from "./components/Footer";
 import Chatbot from "./components/Chatbot";
 import Home from "./pages/Home";
 import User from "./pages/User";
+import Cart from "./pages/Cart";
 import "./styles/global.css";
 
 function App() {
@@ -37,6 +38,8 @@ function App() {
           <Route path="/user" element={<User />} />
           /*Chatbot */
           <Route path="/chatbot" element={<Chatbot />} />
+          {/* Giỏ hàng */}
+          <Route path="/cart" element={<Cart />} />
         </Routes>
       </div>
       {!hideHeaderAndFooter && <Footer />} {/* Hiển thị Footer nếu không ở trang login/register */}

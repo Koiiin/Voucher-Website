@@ -6,6 +6,7 @@ import React from "react";
      <section className="banner-section">
        <h1>Chia sẻ và trao đổi voucher</h1>
        <p>Tiết kiệm với hàng ngàn voucher giảm giá và gift card</p>
+       <br></br>
        <button className="banner-btn">Khám phá ngay</button>
      </section>
    );

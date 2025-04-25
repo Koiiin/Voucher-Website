@@ -1,22 +1,22 @@
-
 /* src/styles/Banner.css */
 .banner-section {
   background: linear-gradient(90deg, #5D54A4, #7C78B8);
   color: white;
   text-align: center;
-  padding: 40px;
+  padding: 50px;
   border-radius: 8px;
   margin-bottom: 20px;
   border-bottom: 1px solid #5C5696;
+  width: 100%; 
 }
 
 .banner-section h1 {
-  font-size: 24px;
+  font-size: 28px;
   margin-bottom: 10px;
 }
 
 .banner-section p {
-  font-size: 16px;
+  font-size: 18px;
 }
 
 .banner-btn {
@@ -33,4 +33,3 @@
 .banner-btn:hover {
   background: #5D54A4;
 }
-

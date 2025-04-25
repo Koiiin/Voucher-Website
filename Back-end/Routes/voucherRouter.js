@@ -15,4 +15,7 @@ router.put('/updateVoucher/:id', voucherController.updateVoucher);
 // tim kiem voucher
 router.get('/searchVoucher', voucherController.searchVoucher);
 
+// Lấy các voucher hợp lệ 
+router.get('/getValidVouchers', voucherController.getValidVouchers);
+
 module.exports = router;

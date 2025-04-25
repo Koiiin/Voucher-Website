@@ -23,7 +23,7 @@
   color: #DDD;
 }
 
-.menu-btn, .discount-btn, .login-btn, .register-btn {
+.menu-btn, .discount-btn, .login-btn, .register-btn, .chatbot-btn {
   background: #7C78B8;
   color: white;
   padding: 8px 15px;
@@ -33,11 +33,18 @@
 
 .menu-btn:hover, .discount-btn:hover {
   background: #5D54A4;
+  color: white;
+}
+
+.chatbot-btn:hover {
+  background: #5D54A4;
+  color: white;
 }
 
 .login-btn:hover,
 .register-btn:hover {
   background: #5D54A4;
+  color: white;
 }
 
 

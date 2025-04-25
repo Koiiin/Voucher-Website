@@ -8,6 +8,11 @@ export const login = async (username, password) => {
       username,
       password,
     });
+
+    // Lưu token và username vào sessionStorage
+    sessionStorage.setItem("accessToken", response.data.token);
+    sessionStorage.setItem("username", response.data.username);
+
     return response.data;
   } catch (error) {
     console.error("Login error:", error);
@@ -32,4 +37,8 @@ export const register = async (username, email, password) => {
 export const logout = () => {
   sessionStorage.removeItem("accessToken");
   sessionStorage.removeItem("username");
+};
+
+export const getToken = () => {
+  return sessionStorage.getItem("accessToken");
 };

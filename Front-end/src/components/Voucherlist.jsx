@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { getAllVouchers } from "../services/voucherService";  // Import hàm gọi API từ service
 import VoucherCard from "./VoucherCard";
 import "../styles/Voucherlist.css";
+import { addToCart } from "../services/voucherService";
 
 function VoucherList() {
   const [vouchers, setVouchers] = useState([]);
@@ -27,6 +28,21 @@ function VoucherList() {
     console.log("Vouchers:", vouchers);
   }, [vouchers]);
   
+  const handleGetNow = async (voucherId) => {
+    try {
+      const token = localStorage.getItem("token"); 
+  
+      if (!token) {
+        alert("Bạn cần đăng nhập để thêm vào giỏ hàng.");
+        return;
+      }
+  
+      const response = await addToCart(voucherId, token);
+      alert(response.message);  // Hiển thị thông báo từ server (thành công)
+    } catch (err) {
+      alert(err.response?.data?.message || "Lỗi khi thêm vào giỏ hàng.");
+    }
+  };
 
   return (
     <div>
@@ -36,6 +52,7 @@ function VoucherList() {
         {vouchers.map((voucher) => (
           <VoucherCard
           key={voucher._id}
+          voucherId={voucher._id}
           title={voucher.title}
           voucherType={voucher.voucherType}
           category={voucher.category}
@@ -44,6 +61,7 @@ function VoucherList() {
           price={voucher.price}
           quantity={voucher.quantity}
           linkanh={voucher.linkanh}
+          onGetNow={handleGetNow}
         />        
         ))}
       </div>

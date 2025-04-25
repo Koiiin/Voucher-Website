@@ -1,7 +1,7 @@
 import React from "react";
 import Banner from "../components/Banner";
 import CategoryList from "../components/CategoryList";
-import VoucherList from "../components/Voucherlist"; // Dùng component đã có
+import VoucherList from "../components/Voucherlist"; 
 import "../styles/home.css";
 
 function Home() {
@@ -22,6 +22,10 @@ function Home() {
       <div className="user-joined">
         Người dùng mới tham gia: <strong>12345</strong>
       </div>
+{/* 
+      <div className="chatbot-widget">
+        <ChatbotWidget />
+      </div> */}
     </div>
   );
 }

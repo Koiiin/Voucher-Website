@@ -5,11 +5,14 @@ const cors = require('cors');
 const connectDB = require('./config/database');
 const authRoute = require('./routes/authRoute');
 const userRoute = require('./routes/userRoute');
+const session = require('express-session');
 const passport = require('passport');
 const Momo = require("./routes/payment");
 const Voucher = require("./Routes/voucherRouter");
 const morgan = require('morgan');
 const fetch = require('node-fetch');
+const voucherRouter = require('./Routes/voucherRouter');
+const cartRouter = require('./Routes/cartRoute');
 
 // AI Chatbot
 const chatbotRoutes = require("./Routes/aiRoute");
@@ -20,12 +23,28 @@ require('dotenv').config();
 connectDB();
 app.use(morgan('dev'));
 
-app.use(cors());
+app.use(session({
+    secret: 'SecretKey', // Chuỗi bí mật để mã hóa session
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: false, 
+      httpOnly: true,
+      sameSite: 'lax', 
+    }
+}));
 
-app.use(passport.initialize());
+
+app.use(cors({
+    origin: 'http://localhost:5173', // địa chỉ front-end
+    credentials: true // cho phép gửi cookie từ frontend
+}));
 
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/api/auth', authRoute);
 app.use('/api/user', userRoute);
@@ -34,6 +53,9 @@ app.use("/api", Voucher);
 
 // AI chatbot
 app.use("/api/chatbot", chatbotRoutes);
+app.use("/api/vouchers", voucherRouter);
+
+app.use("/api/cart", cartRouter);
 
 app.listen(process.env.PORT, () => {
     console.log(`Server is running on PORT ${process.env.PORT}`);
