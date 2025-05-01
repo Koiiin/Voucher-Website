@@ -9,6 +9,7 @@ import Chatbot from "./components/Chatbot";
 import Home from "./pages/Home";
 import User from "./pages/User";
 import Cart from "./pages/Cart";
+import CreateV from "./components/CreateV";
 import "./styles/global.css";
 
 function App() {
@@ -40,6 +41,8 @@ function App() {
           <Route path="/chatbot" element={<Chatbot />} />
           {/* Giỏ hàng */}
           <Route path="/cart" element={<Cart />} />
+          {/* Tạo voucher */}
+          <Route path="/create-voucher" element={<CreateV />} />
         </Routes>
       </div>
       {!hideHeaderAndFooter && <Footer />} {/* Hiển thị Footer nếu không ở trang login/register */}
