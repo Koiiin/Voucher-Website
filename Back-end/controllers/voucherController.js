@@ -3,7 +3,7 @@ const VoucherModel = require('../models/voucher');
 // Tạo voucher//T
 exports.createVoucher = async (req, res) => {
   try {
-    const {title, voucherType, category, validityStart, validityEnd, price, quantity, linkanh} = req.body;
+    const {title, voucherType, category, validityStart, validityEnd, price, quantity, linkanh, _id, createdAt, updatedAt, ...rest} = req.body;
     const ownerID = req.user.id; // Lấy ownerID từ token đã xác thực
     if(!title || !voucherType || !validityStart || !validityEnd || !ownerID) {
       return res.status(400).json({ message: 'Vui lòng nhập đầy đủ thông tin!' });
@@ -72,18 +72,42 @@ exports.updateVoucher = async (req, res) => {
 // Tìm kiếm voucher
 exports.searchVoucher = async (req, res) => {
   try {
-    const keyword = req.query.q;
-    const results = await VoucherModel.find({
-      $or: [
-        { title: new RegExp(keyword, 'i') },
-        { voucherType: new RegExp(keyword, 'i') }
+    const keyword = req.query.q || "";
+    const category = req.query.category || "";
+
+    const query = {
+      $and: [
+        {
+          $or: [
+            { title: new RegExp(keyword, "i") },
+            { voucherType: new RegExp(keyword, "i") }
+          ]
+        }
       ]
-    });
+    };
+
+    if (category && category !== "all") {
+      query.$and.push({ category: new RegExp(category, "i") });
+    }
+
+    const results = await VoucherModel.find(query);
     res.status(200).json(results);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
+
+// Lấy danh sách category duy nhất từ DB
+exports.getCategories = async (req, res) => {
+  try {
+    const categories = await VoucherModel.distinct("category", { category: { $ne: "" } });
+    res.status(200).json(categories);
+  } catch (err) {
+    res.status(500).json({ message: "Lỗi khi lấy danh mục", error: err.message });
+  }
+};
+
+
 /*
 const Fuse = require('fuse.js');
 

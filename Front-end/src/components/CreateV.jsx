@@ -47,7 +47,34 @@ const CreateV = () => {
                 <input name="voucherType" placeholder="Loại voucher" onChange={handleChange} required />
             </div>
             <div className="form-group">
-                <input name="category" placeholder="Danh mục" onChange={handleChange} />
+                {/* <input name="category" placeholder="Danh mục" onChange={handleChange} /> */}
+                <select name="category" placeholder="Danh mục" onChange={handleChange} required>
+                    <option value="">--Chọn danh mục--</option>
+                    <option value={"clothes"}>Thời trang</option>
+                    <option value={"food"}>Thực phẩm</option>
+                    <option value={"electronics"}>Điện tử</option>
+                    <option value={"home"}>Nhà cửa</option>
+                    <option value={"travel"}>Du lịch</option>
+                    <option value={"health"}>Sức khỏe</option>
+                    <option value={"sports"}>Thể thao</option>
+                    <option value={"beauty"}>Làm đẹp</option>
+                    <option value={"books"}>Sách</option>
+                    <option value={"toys"}>Đồ chơi</option>
+                    <option value={"gifts"}>Quà tặng</option>
+                    <option value={"pets"}>Thú cưng</option>
+                    <option value={"furniture"}>Nội thất</option>
+                    <option value={"automotive"}>Ô tô</option>
+                    <option value={"accessories"}>Phụ kiện</option>
+                    <option value={"stationery"}>Văn phòng phẩm</option>
+                    <option value={"baby"}>Trẻ em</option>
+                    <option value={"garden"}>Vườn</option>
+                    <option value={"music"}>Âm nhạc</option>
+                    <option value={"movies"}>Phim ảnh</option>
+                    <option value={"games"}>Trò chơi</option>
+                    <option value={"software"}>Phần mềm</option>
+                    <option value={"services"}>Dịch vụ</option>
+                    <option value={"others"}>Khác</option>
+                </select>
                 <input type="number" name="price" placeholder="Giá" onChange={handleChange} />
             </div>
             <div className="form-group">

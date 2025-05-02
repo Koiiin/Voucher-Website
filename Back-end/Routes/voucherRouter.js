@@ -13,7 +13,8 @@ router.delete('/deleteVoucher/:id',authMiddleware.verifyToken , voucherControlle
 router.put('/updateVoucher/:id', voucherController.updateVoucher);
 
 // tim kiem voucher
-router.get('/searchVoucher', voucherController.searchVoucher);
+router.get('/search', voucherController.searchVoucher);
+router.get("/categories", voucherController.getCategories);
 
 // Lấy các voucher hợp lệ 
 router.get('/getValidVouchers', voucherController.getValidVouchers);

@@ -2,12 +2,17 @@ import React from "react";
 import Banner from "../components/Banner";
 import CategoryList from "../components/CategoryList";
 import VoucherList from "../components/Voucherlist"; 
+import SearchBar from "../components/SearchBar";
 import "../styles/home.css";
 
 function Home() {
   return (
     <div className="home-page">
       <Banner />
+
+      <div className="search-bar">
+        <SearchBar />
+      </div>
 
       <section className="category-section">
         <h2>Danh mục voucher</h2>
