@@ -10,6 +10,7 @@ import Home from "./pages/Home";
 import User from "./pages/User";
 import Cart from "./pages/Cart";
 import CreateV from "./components/CreateV";
+import OauthSuccess from "./pages/OauthSuccess"; 
 import "./styles/global.css";
 
 function App() {
@@ -43,6 +44,8 @@ function App() {
           <Route path="/cart" element={<Cart />} />
           {/* Tạo voucher */}
           <Route path="/create-voucher" element={<CreateV />} />
+          <Route path="/oauth-success" element={<OauthSuccess />} /> {/* Đường dẫn cho callback từ Google */}
+          <Route path="/oauth-error" element={<div>Đăng nhập thất bại!</div>} /> {/* Đường dẫn cho lỗi từ Google */}
         </Routes>
       </div>
       {!hideHeaderAndFooter && <Footer />} {/* Hiển thị Footer nếu không ở trang login/register */}

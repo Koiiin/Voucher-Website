@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { shouldParseToolCall } = require('openai/lib/ResponsesParser.mjs');
+// const { shouldParseToolCall } = require('openai/lib/ResponsesParser.mjs');
 
 const UserSchema = new mongoose.Schema({
     username: {

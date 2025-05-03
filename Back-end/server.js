@@ -3,8 +3,8 @@ const app = express();
 const http = require('http');
 const cors = require('cors');
 const connectDB = require('./config/database');
-const authRoute = require('./routes/authRoute');
-const userRoute = require('./routes/userRoute');
+const authRoute = require('./Routes/authRoute');
+const userRoute = require('./Routes/userRoute');
 const session = require('express-session');
 const passport = require('passport');
 const Momo = require("./routes/payment");
@@ -24,14 +24,9 @@ connectDB();
 app.use(morgan('dev'));
 
 app.use(session({
-    secret: 'SecretKey', // Chuỗi bí mật để mã hóa session
+    secret: process.env.JWT_ACCESS_KEY,
     resave: false,
-    saveUninitialized: false,
-    cookie: {
-      secure: false, 
-      httpOnly: true,
-      sameSite: 'lax', 
-    }
+    saveUninitialized: false
 }));
 
 

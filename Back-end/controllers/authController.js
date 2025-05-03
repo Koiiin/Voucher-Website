@@ -110,42 +110,49 @@ exports.login = async (req, res) => {
 };
 
 // -------Đăng nhập bằng gg-----------
-exports.google = passport.authenticate("google", { scope: ["profile", "email"] });
+exports.google = passport.authenticate("google", { scope: ["profile", "email"], session: false });
 
-exports.googleCallback = async (req, res) => {
-    try {
-        const { id, displayName, emails} = req.user;
-        let user = await User.findOne({ googleId: id });
-        if (!user) {
-            user = await User.create({
-                googleId: id,
-                username: emails[0].value.split("@")[0],
-                email: emails[0].value
-            });
+exports.googleCallback = (req, res, next) => {
+    passport.authenticate('google', { session: false }, async (err, user, info) => {
+        if (err) {
+            return res.redirect(`http://localhost:5173/oauth-error?message=${encodeURIComponent("Đăng nhập Google thất bại ❌")}`);
         }
-        const accessToken = exports.generateAccessToken(user);
-        const refreshToken = exports.generateRefreshToken(user);
+        if (!user) {
+            return res.redirect(`http://localhost:5173/oauth-error?message=${encodeURIComponent("Không tìm thấy tài khoản Google!")}`);
+        }
 
-        await RefreshToken.deleteMany({ userId: user.id });
-        await RefreshToken.create({ token: refreshToken, userId: user.id, expiresAt: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000) });
+        try {
+            const existingUser = user;
 
-        res.cookie("refreshToken", refreshToken, { 
-            httpOnly: true, 
-            secure: false, 
-            path: '/', 
-            sameSite: "strict" 
-        });
+            const accessToken = exports.generateAccessToken(existingUser);
+            const refreshToken = exports.generateRefreshToken(existingUser);
 
-        const { password, ...others } = user._doc;
-        res.status(200).json({ 
-            success: true,
-            ...others, 
-            accessToken 
-        });
-    } catch (error) {
-        res.status(500).json({ message: "Lỗi server ❌", error: error.message });
-    }
+            await RefreshToken.deleteMany({ userId: existingUser.id });
+
+            await RefreshToken.create({ 
+                token: refreshToken, 
+                userId: existingUser.id, 
+                expiresAt: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
+            });
+
+            res.cookie("refreshToken", refreshToken, {
+                httpOnly: true,
+                secure: false,
+                path: '/',
+                sameSite: "strict"
+            });
+
+            const redirectUrl = `http://localhost:5173/oauth-success?token=${accessToken}&username=${existingUser.username}`;
+            return res.redirect(redirectUrl);
+
+        } catch (error) {
+            return res.redirect(`http://localhost:5173/oauth-error?message=${encodeURIComponent("Lỗi server ❌")}`);
+        }
+    })(req, res, next);
 };
+
+
+
 //------------------------------
 
 
