@@ -9,17 +9,23 @@ exports.register = async (req, res) => {
     try {
         const { username, email, password } = req.body;
         if (!username || !email || !password) { 
-            return res.status(400).json({ message: 'Vui lòng nhập đầy đủ thông tin!' });
+            return res.status(400).json({ 
+                success: false,
+                message: 'Vui lòng nhập đầy đủ thông tin!' });
         }
 
         const existingUsername = await User.findOne({ username });
         const existingEmail = await User.findOne({ email });
 
         if (existingUsername) {  
-            return res.status(400).json({ message: 'Tên người dùng đã tồn tại!' });
+            return res.status(400).json({ 
+                success: false,
+                message: 'Tên người dùng đã tồn tại!' });
         }
         if (existingEmail) {  
-            return res.status(400).json({ message: 'Email đã tồn tại!' });
+            return res.status(400).json({ 
+                success: false,
+                message: 'Email đã tồn tại!' });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -29,7 +35,7 @@ exports.register = async (req, res) => {
 
         res.status(200).json({ 
             success:  true,
-            message: 'Đăng ký tài khoản thành công! ✅' });
+            message: 'Đăng ký tài khoản thành công! 🎉' });
     } catch (error) {
         res.status(500).json({ message: 'Lỗi server ❌', error: error.message });
     }
