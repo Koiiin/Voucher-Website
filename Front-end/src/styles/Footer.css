@@ -7,7 +7,7 @@
   position: relative;
   width: 100%;
   bottom: 0;
-  height: 90px;
+  margin-top: auto; /* Đẩy footer xuống cuối nếu sử dụng Flexbox */
 }
 
 .footer-top {
