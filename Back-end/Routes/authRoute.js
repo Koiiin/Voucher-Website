@@ -11,12 +11,9 @@ router.post("/refresh", authController.requestRefreshToken) ;
 
 router.post('/logout', middlewareController.verifyToken,  authController.logoutUser) 
 
-router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
-
+router.get('/google', authController.google);
 // Google callback
-router.get('/google/callback', 
-    passport.authenticate('google', { failureRedirect: '/login' }), 
-    authController.google
-);
+router.get('/google/callback', authController.googleCallback);
+
 
 module.exports = router;
