@@ -1,24 +1,30 @@
 const Cart = require("../models/cart");
+const mongoose = require('mongoose');
 
 
 exports.addToCart = async (req, res) => {
   const userId = req.user.id;
   const { voucherId } = req.body;
 
+  console.log('req.user:', req.user);
+  console.log('req.body:', req.body);
+  console.log('userId:', userId);
+  console.log('voucherId:', voucherId);
+
   try {
     let cart = await Cart.findOne({ userId });
 
     if (!cart) {
-      cart = new Cart({ userId, vouchers: [{ voucherId }] });
+      cart = new Cart({ userId, vouchers: [{ voucherId: new mongoose.Types.ObjectId(voucherId) }] });
     } else {
       const existingVoucher = cart.vouchers.find(
-        (item) => item.voucherId.toString() === voucherId
-      );
+        (item) => item.voucherId && item.voucherId.toString() === voucherId
+      );      
 
       if (existingVoucher) {
         existingVoucher.quantity += 1;
       } else {
-        cart.vouchers.push({ voucherId });
+        cart.vouchers.push({ voucherId: new mongoose.Types.ObjectId(voucherId) });
       }
     }
 
@@ -42,7 +48,7 @@ exports.getCart = async (req, res) => {
       return res.status(404).json({ message: "Chưa có giỏ hàng." });
     }
 
-    if (!cart.items || cart.items.length === 0) {
+    if (!cart.vouchers || cart.vouchers.length === 0) {
       return res.status(200).json({ message: "Giỏ hàng của bạn hiện tại trống.", cart });
     }
 

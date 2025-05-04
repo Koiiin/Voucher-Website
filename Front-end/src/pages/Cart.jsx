@@ -20,6 +20,7 @@ function Cart() {
 
         const response = await axios.get(`${API_URL}/cart`, {
           headers: {
+            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
         });
@@ -44,26 +45,34 @@ function Cart() {
       <h2>Giỏ hàng của bạn</h2>
       <div className="cart-items">
         {cartItems.map((item) => (
-          <div className="cart-item" key={item.voucherId._id}> {/* Sử dụng _id làm key */}
-            <img
-              src={item.voucherId.imageUrl || "/default-image.jpg"} // Đảm bảo có ảnh hoặc thay thế ảnh mặc định
-              alt={item.voucherId.title}
-              className="cart-image"
-            />
-            <div className="cart-info">
-              <h3>{item.voucherId.title}</h3>
-              <p>Giá: {item.voucherId.price} VND</p>
-              <p>Loại: {item.voucherId.voucherType}</p>
-              <p>Danh mục: {item.voucherId.category}</p>
-              <p>
-                HSD: {new Date(item.voucherId.validityEnd).toLocaleDateString()}
-              </p>
+          // Kiểm tra nếu voucherId là hợp lệ trước khi render
+          item.voucherId ? (
+            <div className="cart-item" key={item.voucherId._id}> 
+              <img
+                src={item.voucherId.imageUrl || "/default-image.jpg"} // Đảm bảo có ảnh hoặc thay thế ảnh mặc định
+                alt={item.voucherId.title}
+                className="cart-image"
+              />
+              <div className="cart-info">
+                <h3>{item.voucherId.title}</h3>
+                <p>Giá: {item.voucherId.price} VND</p>
+                <p>Loại: {item.voucherId.voucherType}</p>
+                <p>Danh mục: {item.voucherId.category}</p>
+                <p>
+                  HSD: {new Date(item.voucherId.validityEnd).toLocaleDateString()}
+                </p>
+              </div>
             </div>
-          </div>
+          ) : (
+            // Nếu voucherId không hợp lệ, thông báo lỗi
+            <div className="cart-item" key={item._id}>
+              <p>Voucher không hợp lệ hoặc đã bị xóa.</p>
+            </div>
+          )
         ))}
       </div>
     </div>
-  );
+  );  
 }
 
 export default Cart;

@@ -37,6 +37,8 @@ app.use(session({
 
 app.use(cors({
     origin: 'http://localhost:5173', // địa chỉ front-end
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true // cho phép gửi cookie từ frontend
 }));
 
