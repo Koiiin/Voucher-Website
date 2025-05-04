@@ -1,0 +1,62 @@
+/* Deals.css */
+.san-list-container {
+    display: flex;
+    flex-direction: column;
+    width: 15%; /* Chiếm 1/4 chiều rộng màn hình */
+    position: fixed; /* Cố định container ở bên trái */
+    top: 80px; /* Đặt container bên dưới header */
+    left: 10px; /* Căn bên trái */
+    bottom: 100px; /* Căn bên dưới */
+    background-color: #f9f9f9; /* Màu nền nhạt */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1); /* Đổ bóng bên phải */
+    overflow-y: auto; /* Cuộn dọc nếu nội dung vượt quá chiều cao */
+  }
+
+  .san-list-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+  }
+
+  .san-list-title .highlight {
+    color: #28a745; /* Màu xanh lá */
+  }
+
+  .san-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .san-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px dashed #ddd; /* Đường gạch ngang */
+  }
+
+  .san-item:last-child {
+    border-bottom: none; /* Loại bỏ đường gạch ngang cuối cùng */
+  }
+
+  .san-logo {
+    width: 32px;
+    height: 32px;
+    margin-right: 10px;
+    border-radius: 50%; /* Làm tròn logo */
+  }
+
+  .san-name {
+    flex: 1;
+    font-size: 16px;
+    color: #333;
+  }
+
+  .san-count {
+    font-weight: bold;
+    font-size: 16px;
+    color: #333;
+  }
