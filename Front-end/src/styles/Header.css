@@ -5,16 +5,22 @@
   justify-content: space-between;
   align-items: center;
   padding: 15px 40px;
-  background: linear-gradient(90deg, #7267c9, #7C78B8);
-  border-bottom: 1px solid #5C5696;
+  background: #f4f2f2; /* Đặt màu nền trắng */
+  border-bottom: none; /* Loại bỏ đường viền dưới nếu không cần */
   width: 100%;
+  height: 70px;
+  box-shadow: 0 5px 6px rgba(0, 0, 0, 0.1); /* Thêm hiệu ứng đổ bóng */
+  position: sticky; /* Giữ header cố định khi cuộn */
+  top: 0; /* Đặt header ở trên cùng */
+  z-index: 1000; /* Đảm bảo header nằm trên các phần tử khác */
 }
 
-.logo a {
+.logo  {
   font-size: 24px;
   font-weight: bold;
   text-decoration: none;
   color: #FFF;
+  padding-left: 30px;
 }
 
 .header nav a {
@@ -23,29 +29,33 @@
   color: #DDD;
 }
 
-.menu-btn, .discount-btn, .login-btn, .register-btn, .chatbot-btn {
-  background: #7C78B8;
-  color: white;
+.menu-btn, .discount-btn, .login-btn, .register-btn, .chatbot-btn, .cart-btn, .create-voucher-btn {
+  background: #ffffff; /* Nền trắng sáng */
+  color: #000000 !important; /* Màu chữ tối hơn để dễ đọc */
   padding: 8px 15px;
   border-radius: 5px;
-  border: none;
+  border: 1px solid #ddd; /* Đường viền nhẹ */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Hiệu ứng đổ bóng */
+  transition: all 0.3s ease; /* Hiệu ứng mượt khi hover */
 }
 
-.menu-btn:hover, .discount-btn:hover {
-  background: #5D54A4;
-  color: white;
+.menu-btn:hover, .discount-btn:hover, 
+.login-btn:hover, .register-btn:hover, 
+.chatbot-btn:hover, .cart-btn:hover, 
+.create-voucher-btn:hover {
+  background: #f0f0f0; /* Nền sáng hơn khi hover */
+  color: #000000; /* Màu chữ tối hơn để dễ đọc */
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* Tăng đổ bóng khi hover */
+  transform: translateY(-2px); /* Hiệu ứng nổi lên khi hover */
 }
 
-.chatbot-btn:hover {
-  background: #5D54A4;
-  color: white;
+.logo-img {
+  width: 100px;
+  height: auto;
+  border-radius: 5%;
+  transform: scale(1); 
+  transition: transform 0.3s ease;
 }
-
-.login-btn:hover,
-.register-btn:hover {
-  background: #5D54A4;
-  color: white;
+.logo-img:hover {
+  transform: scale(1.5); /* Phóng to logo khi hover */
 }
-
-
-

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import logo from "../assets/logo.png";
 import "../styles/Header.css";
 import UserMenu from "./usermenu";  
 function Header() {
@@ -26,14 +27,16 @@ function Header() {
   return (
     <header className="header">
       <div className="logo">
-        <Link to="/">VouX</Link>
+        <Link to="/">
+          <img src={logo} alt="VouX Logo" className="logo-img" />
+        </Link>
       </div>
       <nav>
         <Link to="/categories" className="menu-btn">Danh mục</Link>
         <Link to="/deals" className="discount-btn">Ưu đãi hot</Link>
         <Link to="/chatbot" className="chatbot-btn">Chatbot</Link>
-        <Link to="/create-voucher">Tạo voucher</Link>
-        <Link to="/cart">🛒 Giỏ hàng</Link>
+        <Link to="/create-voucher" className="create-voucher-btn">Tạo voucher</Link>
+        <Link to="/cart" className="cart-btn">🛒 Giỏ hàng</Link>
         {user ? (
           <>
             <UserMenu name={user} onLogout={handleLogout} />
