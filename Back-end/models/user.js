@@ -33,7 +33,13 @@ const UserSchema = new mongoose.Schema({
         unique: true,
         required: false,
         sparse: true // Cho phép nhiều bản ghi có giá trị null
-    }
+    },
+    facebookId: {
+        type: String,
+        unique: true,
+        required: false,
+        sparse: true // Cho phép nhiều bản ghi có giá trị null
+    },
 },  { timestamps: true });
 
 const User = mongoose.model('User', UserSchema);

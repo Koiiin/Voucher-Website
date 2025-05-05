@@ -14,6 +14,8 @@ router.post('/logout', middlewareController.verifyToken,  authController.logoutU
 router.get('/google', authController.google);
 // Google callback
 router.get('/google/callback', authController.googleCallback);
-
+// fb
+router.get('/facebook' , authController.facebook);
+router.get('/facebook/callback', authController.facebookCallback);
 
 module.exports = router;
