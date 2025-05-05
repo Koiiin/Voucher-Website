@@ -7,7 +7,7 @@
     top: 80px; /* Đặt container bên dưới header */
     left: 10px; /* Căn bên trái */
     bottom: 100px; /* Căn bên dưới */
-    background-color: #f7f1f1; /* Màu nền nhạt */
+    background-color: #f4e9e9; /* Màu nền nhạt */
     padding: 20px;
     border-radius: 20px;
     box-shadow: 0 0 5px #111111; /* Đổ bóng bên phải */
@@ -20,7 +20,7 @@
     margin-bottom: 15px;
   }
 
-  .san-list-title .highlight {
+  .highlight {
     color: #28a745; /* Màu xanh lá */
   }
 
@@ -154,6 +154,7 @@
     box-sizing: border-box;   
     height: calc(100vh - 20px); 
     box-shadow: 0 0 3px #111111;
+    justify-content: center;  /* căn giữa theo chiều ngang */ 
   }
   .deals-page {
     display: flex;
@@ -162,4 +163,33 @@
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
+  }
+
+  .san-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 15px;
+    background-color: #ffffff;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.1s ease;
+    text-align: left;
+    width: 100%;
+  }
+  
+  .san-button.active {
+    color: white;
+    border-color: #202521;
+  }
+  
+  .san-button:hover {
+    background-color: #f0f0f0;
+    border-color: #bbb;
+  }
+
+  .title-main-deals {
+    margin: 15px 0 0 0;
+    text-align: center;
   }
