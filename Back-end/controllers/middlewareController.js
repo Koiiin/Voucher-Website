@@ -18,6 +18,7 @@ exports.verifyToken = (req, res, next) => {
 };
 
 // Xác thực token và kiểm tra quyền admin hoặc chủ tài khoản
+// Middleware xác thực token và kiểm tra quyền (admin hoặc đúng user ID)
 exports.verifyTokenAndAdAuth = (req, res, next) => {
     exports.verifyToken(req, res, () => {
         if (req.user.id == req.params.id || req.user.admin) {
@@ -26,5 +27,22 @@ exports.verifyTokenAndAdAuth = (req, res, next) => {
             return res.status(403).json("You are not allowed to delete others");
         }
     });
+};
+
+// Middleware chỉ xác thực token (cho user đã đăng nhập)
+exports.verifyTokenOnly = (req, res, next) => {
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith("Bearer ")) {
+        const token = authHeader.split(" ")[1];
+        jwt.verify(token, process.env.JWT_ACCESS_KEY, (err, user) => {
+            if (err) {
+                return res.status(403).json("Token is not valid");
+            }
+            req.user = user;
+            next();
+        });
+    } else {
+        return res.status(401).json("You are not authenticated");
+    }
 };
 

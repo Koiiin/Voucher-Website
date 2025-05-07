@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "../services/authService";
 import { handleGoogleLogin } from "../services/authService";
-import SuccessModal from "../components/LoginModal"; // Import modal
+import SuccessModal from "../components/LoginModal"; 
 import "../styles/Login.css";
 
 function Login() {

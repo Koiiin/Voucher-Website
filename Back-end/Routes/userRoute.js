@@ -1,10 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
-const middlewareController = require('../controllers/middlewareController');
+const { verifyTokenOnly, verifyTokenAndAdAuth } = require('../controllers/middlewareController');
 
-router.get('/getall', middlewareController.verifyToken, userController.getAllUser);
+// Admin - Public
+router.get('/', userController.getAllUser);
+router.delete('/:id', userController.deleteUser);
+router.get('/:id/vouchers', userController.getUserVouchers);
 
-router.delete('/:id', middlewareController.verifyTokenAndAdAuth, userController.deleteUser);
+// User - Private - cần token
+router.get('/profile', verifyTokenOnly, userController.getUserProfile);
+router.put('/profile', verifyTokenOnly, userController.updateUserProfile);
 
 module.exports = router;
