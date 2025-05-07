@@ -1,51 +1,121 @@
-/* src/styles/VoucherCard.css */
-
-/* Vẫn giữ nguyên gradient tím, chỉ thêm transform scale hoặc translateY */
 .voucher-card {
-  background: linear-gradient(90deg, #5D54A4, #7C78B8);
-  border: 1px solid #5C5696;
-  border-radius: 6px;
-  padding: 15px;
-  width: 200px;
-  flex-shrink: 0;
-  text-align: center;
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  display: flex;
+  align-items: stretch;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 10px 0;
+  font-family: Arial, sans-serif;
+}
+
+.voucher-left {
+  background-color: #4caf50;
   color: white;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 30%;
+  text-align: center;
+  position: relative;
 }
 
-/* Hiệu ứng hover: nổi nhẹ lên, đổ bóng rõ hơn */
-.voucher-card:hover {
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  transform: translateY(-4px);
-}
-
-.voucher-discount {
-  font-size: 26px;
-  color: #FFD700; /* Màu vàng nổi bật */
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-.voucher-title {
-  font-size: 18px;
-  margin-bottom: 5px;
-}
-
-.voucher-expiry {
-  font-size: 14px;
-  color: #EEE;
+.voucher-left .logo-supplier {
+  background-color: #ffffff;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin-bottom: 10px;
 }
 
-.voucher-btn {
-  background: #7C78B8;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  padding: 8px 12px;
-  cursor: pointer;
+.voucher-left .supplier-logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
 }
 
-.voucher-btn:hover {
-  background: #5D54A4;
+.voucher-left .applicable-to {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.voucher-left .expiry-date {
+  font-size: 14px;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.voucher-left .fa-clock-o {
+  margin-right: 5px;
+}
+
+.voucher-right {
+  padding: 15px;
+  width: 70%;
+  position: relative;
+}
+
+.voucher-right .discount {
+  font-size: 18px;
+  font-weight: bold;
+  color: #4caf50;
+}
+
+.voucher-right .highlight {
+  font-size: 20px;
+  color: #4caf50;
+}
+
+.voucher-right .min-order {
+  font-size: 14px;
+  margin: 5px 0;
+  color: #555;
+}
+
+.voucher-right .note {
+  font-size: 13px;
+  color: #ff5722;
+  margin: 5px 0;
+}
+
+.voucher-right .note-label {
+  font-weight: bold;
+}
+
+.voucher-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.voucher-footer .apply-list {
+  font-size: 14px;
+  color: #007bff;
+  text-decoration: none;
+}
+
+.voucher-footer .apply-list:hover {
+  text-decoration: underline;
+}
+
+.voucher-footer .copy-code {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.voucher-footer .copy-code:hover {
+  background-color: #45a049;
 }

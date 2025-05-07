@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "../services/authService";
 import { handleGoogleLogin } from "../services/authService";
-import SuccessModal from "../components/LoginModal"; 
+import { handleFacebookLogin } from "../services/authService";
+import SuccessModal from "../components/LoginModal"; // Import modal
 import "../styles/Login.css";
 
 function Login() {
@@ -66,48 +67,7 @@ function Login() {
   };
   
 
-  const handleFacebookLogin = () => {
-    if (!window.FB) {
-      alert("Facebook SDK chưa được tải!");
-      return;
-    }
-
-    window.FB.login(
-      (response) => {
-        if (response.authResponse) {
-          window.FB.api("/me?fields=id,name,email", function (userInfo) {
-            fetch("http://localhost:3000/api/auth/facebook", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                facebookId: userInfo.id,
-                username: userInfo.name,
-                email: userInfo.email,
-              }),
-            })
-              .then((res) => res.json())
-              .then((data) => {
-                localStorage.setItem("accessToken", data.accessToken);
-                localStorage.setItem("userData", JSON.stringify(data));
-                alert("Đăng nhập Facebook thành công!");
-                navigate("/");
-                window.location.reload();
-              })
-              .catch((err) => {
-                console.error("Lỗi khi gửi dữ liệu Facebook về server:", err);
-                alert("Có lỗi xảy ra khi đăng nhập với Facebook!");
-              });
-          });
-        } else {
-          alert("Bạn đã huỷ đăng nhập.");
-        }
-      },
-      { scope: "public_profile,email" }
-    );
-  };
-
+  
   const handleCloseModalFB = () => {
     setModalData((prev) => ({ ...prev, show: false }));
     if (modalData.success) {

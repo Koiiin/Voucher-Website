@@ -157,6 +157,48 @@ exports.googleCallback = (req, res, next) => {
     })(req, res, next);
 };
 
+// Đăng nhập bằng Facebook
+exports.facebook = passport.authenticate('facebook', { scope: ['email'] });
+
+// Callback sau khi Facebook xác thực
+exports.facebookCallback = (req, res,next) => {
+  passport.authenticate('facebook', { session: false }, async (err, user, info) => {
+    if (err) {
+      return res.redirect(`http://localhost:5173/oauth-error?message=${encodeURIComponent('Đăng nhập Facebook thất bại ❌')}`);
+    }
+
+    if (!user) {
+      return res.redirect(`http://localhost:5173/oauth-error?message=${encodeURIComponent('Không tìm thấy tài khoản Facebook!')}`);
+    }
+
+    try {
+      const existingUser = user;
+      const accessToken = exports.generateAccessToken(existingUser);
+      const refreshToken = exports.generateRefreshToken(existingUser);
+
+      await RefreshToken.deleteMany({ userId: existingUser.id });
+
+      await RefreshToken.create({ 
+        token: refreshToken, 
+        userId: existingUser.id, 
+        expiresAt: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
+      });
+
+      res.cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        secure: false,
+        path: '/',
+        sameSite: 'strict',
+      });
+
+      const redirectUrl = `http://localhost:5173/oauth-success?token=${accessToken}&username=${existingUser.username}`;
+      return res.redirect(redirectUrl);
+
+    } catch (error) {
+      return res.redirect(`http://localhost:5173/oauth-error?message=${encodeURIComponent('Lỗi server ❌')}`);
+    }
+  })(req, res,next);
+};
 
 
 //------------------------------

@@ -1,51 +1,37 @@
 import React from "react";
-import { addToCart } from "../services/voucherService";
-import { getToken } from "../services/authService"; 
-import "../styles/Voucherlist.css";  // Đảm bảo rằng CSS đã được import
+import "../styles/VoucherCard.css"; // CSS riêng cho VoucherCard
 
-function VoucherCard({
-  voucherId,
-  title,
-  voucherType,
-  category,
-  validityStart,
-  validityEnd,
-  price,
-  quantity,
-  linkanh,
-}) {
-  const handleGetNow = async () => {
-    try {
-      const token = getToken(); 
-      if (!token) {
-        alert("Bạn cần đăng nhập để thêm vào giỏ hàng.");
-        return;
-      }
-
-      const response = await addToCart(voucherId, token);
-      alert(response.message || "Đã thêm vào giỏ hàng!");
-    } catch (error) {
-      alert(error.message || "Lỗi khi thêm vào giỏ hàng.");
-    }
-  };
-
+const VoucherCard = ({ discount, maxDiscount, minOrder, applicableTo, expiryDate, note }) => {
   return (
     <div className="voucher-card">
-      <img src={linkanh} alt={title} className="voucher-image" />
-      <h3>{title}</h3>
-      <p>Loại: {voucherType}</p>
-      <p>Danh mục: {category}</p>
-      <div className="voucher-details">
-        <span>Valid From: {new Date(validityStart).toLocaleDateString()}</span>
-        <span>Valid To: {new Date(validityEnd).toLocaleDateString()}</span>
+      <div className="voucher-left">
+        <div className="logo-supplier">
+          <img
+            className="supplier-logo"
+            src="https://images.piggi.vn/1720708484611-shopee_bg.webp"
+            alt="Shop Logo"
+          />
+        </div>
+        <div className="applicable-to">{applicableTo}</div>
+        <div className="expiry-date">
+          <i className="fa fa-clock-o"></i> HSD: {expiryDate}
+        </div>
       </div>
-      <p className="voucher-price">Giá: {price} VND</p>
-      <p>Số lượng: {quantity}</p>
-      <button className="get-now-button" onClick={handleGetNow}>
-        Get Now
-      </button>
+      <div className="voucher-right">
+        <p className="discount">
+          Giảm <span className="highlight">{discount}</span>
+        </p>
+        <p className="min-order">ĐH tối thiểu: {minOrder}</p>
+        <p className="note">
+          <span className="note-label">Lưu ý:</span> {note}
+        </p>
+        <div className="voucher-footer">
+          <a href="#" className="apply-list">Lấy áp dụng</a>
+          <button className="copy-code">Copy mã</button>
+        </div>
+      </div>
     </div>
   );
-}
+};
 
 export default VoucherCard;

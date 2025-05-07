@@ -18,6 +18,7 @@ const cartRouter = require('./Routes/cartRoute');
 const chatbotRoutes = require("./Routes/aiRoute");
 
 require('./config/passport');
+require('./config/passportFB');
 require('dotenv').config();
 
 connectDB();

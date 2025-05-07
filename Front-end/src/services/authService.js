@@ -47,3 +47,6 @@ export const handleGoogleLogin = () => {
 export const getToken = () => {
   return sessionStorage.getItem("accessToken");
 };
+export const handleFacebookLogin = () => {
+  window.location.href = `${API_URL}/auth/facebook`; // Chuyển hướng đến Facebook OAuth
+}

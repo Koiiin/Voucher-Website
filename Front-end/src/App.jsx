@@ -12,6 +12,8 @@ import Cart from "./pages/Cart";
 import CreateV from "./components/CreateV";
 import OauthSuccess from "./pages/OauthSuccess"; 
 import "./styles/global.css";
+import React, { useEffect } from 'react';
+import ScrollToTop from "./components/ScrollToTop";
 
 function App() {
   // Kiểm tra trạng thái đăng nhập từ sessionStorage
@@ -23,30 +25,54 @@ function App() {
   // Hàm kiểm tra nếu cần ẩn Header và Footer
   const hideHeaderAndFooter = location.pathname === "/login" || location.pathname === "/register";
 
+  // Hàm cuộn lên đầu trang khi người dùng nhấp vào nút "Scroll to Top"
+  useEffect(() => {
+    const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+
+    const handleScroll = () => {
+      if (window.scrollY > 200) {
+        scrollToTopBtn.style.display = 'flex'; // Hiển thị nút khi cuộn xuống
+      } else {
+        scrollToTopBtn.style.display = 'none'; // Ẩn nút khi ở đầu trang
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   return (
     <div className="app-container">
+      <div>
+      {/* Nội dung trang */}
+      <button id="scrollToTopBtn" className="scroll-to-top" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+        ⬆
+      </button>
+      </div>
       {!hideHeaderAndFooter && <Header />} {/* Hiển thị Header nếu không ở trang login/register */}
       <div className="main-content">
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/" element={<Home />} />
-          <Route path="/chatbot" element={ <Chatbot />} />
-          <Route path="/deals" element={<Deals /> } />
-          <Route path="/categories" element={<Categories /> } />
-          {/* Route mặc định: Chuyển hướng đến trang chủ nếu vào bất cứ trang nào không hợp lệlệ*/}
-          <Route path="*" element={<Navigate to="/" />} />
-          /*user */
-          <Route path="/user" element={<User />} />
-          /*Chatbot */
-          <Route path="/chatbot" element={<Chatbot />} />
-          {/* Giỏ hàng */}
-          <Route path="/cart" element={<Cart />} />
-          {/* Tạo voucher */}
-          <Route path="/create-voucher" element={<CreateV />} />
-          <Route path="/oauth-success" element={<OauthSuccess />} /> {/* Đường dẫn cho callback từ Google */}
-          <Route path="/oauth-error" element={<div>Đăng nhập thất bại!</div>} /> {/* Đường dẫn cho lỗi từ Google */}
-        </Routes>
+          <ScrollToTop /> {/* Cuộn lên đầu trang khi điều hướng */}
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/chatbot" element={ <Chatbot />} />
+            <Route path="/deals" element={<Deals /> } />
+            <Route path="/categories" element={<Categories /> } />
+              {/* Route mặc định: Chuyển hướng đến trang chủ nếu vào bất cứ trang nào không hợp lệlệ*/}
+            <Route path="*" element={<Navigate to="/" />} />
+              {/* /*user */ }
+            <Route path="/user" element={<User />} />
+            {/* Giỏ hàng */}
+            <Route path="/cart" element={<Cart />} />
+            {/* Tạo voucher */}
+            <Route path="/create-voucher" element={<CreateV />} />
+            <Route path="/oauth-success" element={<OauthSuccess />} /> {/* Đường dẫn cho callback từ Google */}
+            <Route path="/oauth-error" element={<div>Đăng nhập thất bại!</div>} /> {/* Đường dẫn cho lỗi từ Google */}
+          </Routes>
       </div>
       {!hideHeaderAndFooter && <Footer />} {/* Hiển thị Footer nếu không ở trang login/register */}
     </div>

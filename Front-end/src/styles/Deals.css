@@ -1,17 +1,17 @@
 /* Deals.css */
 .san-list-container {
     display: flex;
-    flex-direction: column;
-    width: 15%; /* Chiếm 1/4 chiều rộng màn hình */
+    flex-direction: column; /* Sắp xếp các phần tử theo chiều dọc */
+    width: 22%; /* Chiếm 1/4 chiều rộng màn hình */
     position: fixed; /* Cố định container ở bên trái */
     top: 80px; /* Đặt container bên dưới header */
     left: 10px; /* Căn bên trái */
     bottom: 100px; /* Căn bên dưới */
-    background-color: #f9f9f9; /* Màu nền nhạt */
+    background-color: #f4e9e9; /* Màu nền nhạt */
     padding: 20px;
-    border-radius: 10px;
-    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1); /* Đổ bóng bên phải */
-    overflow-y: auto; /* Cuộn dọc nếu nội dung vượt quá chiều cao */
+    border-radius: 20px;
+    box-shadow: 0 0 5px #111111; /* Đổ bóng bên phải */
+    box-sizing: border-box; 
   }
 
   .san-list-title {
@@ -20,7 +20,7 @@
     margin-bottom: 15px;
   }
 
-  .san-list-title .highlight {
+  .highlight {
     color: #28a745; /* Màu xanh lá */
   }
 
@@ -28,8 +28,11 @@
     list-style: none;
     padding: 0;
     margin: 0;
+    overflow-y: auto; /* Chỉ cuộn nội dung danh sách */
+    scrollbar-width: thin; /* Làm thanh cuộn nhỏ hơn trên Firefox */
+    scrollbar-color: #ccc #f9f9f9;
   }
-
+  
   .san-item {
     display: flex;
     align-items: center;
@@ -56,7 +59,137 @@
   }
 
   .san-count {
+    margin-right: 10px;
     font-weight: bold;
     font-size: 16px;
     color: #333;
+  }
+
+  .san-filter-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+  .san-filter-container {
+    display: flex;
+    flex-wrap: nowrap; /* Không cho phép các mục xuống dòng */
+    gap: 10px; /* Khoảng cách giữa các mục */
+    margin-top: 0; /* Khoảng cách phía trên container */
+    padding: 10px; /* Khoảng cách bên trong container */
+    background-color: #e2dddd; /* Màu nền nhạt */
+    border-radius: 10px; /* Bo góc container */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
+    overflow-x: auto; /* Cho phép cuộn ngang */
+    white-space: nowrap; /* Đảm bảo các mục không bị xuống dòng */
+    width: 100%;
+    scrollbar-width: none;
+  }
+  
+  .scroll-btn {
+    position: absolute;
+    z-index: 1;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
+  }
+  
+  .scroll-btn:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .left-btn {
+    left: -20px; /* Đặt nút bên trái */
+  }
+  
+  .right-btn {
+    right: -20px; /* Đặt nút bên phải */
+  }
+  .san-filter-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 12px; /* Khoảng cách bên trong từng mục */
+    background-color: #ffffff; /* Màu nền của từng mục */
+    border: 1px solid #ddd; /* Đường viền */
+    border-radius: 5px; /* Bo góc từng mục */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
+    cursor: pointer; /* Con trỏ chuột khi hover */
+    transition: all 0.3s ease; /* Hiệu ứng khi hover */
+    flex-shrink: 0; /* Đảm bảo các mục không co lại khi cuộn ngang */
+  }
+  
+  .san-filter-item:hover {
+    background-color: #aeacac; /* Màu nền khi hover */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); /* Tăng đổ bóng khi hover */
+  }
+  
+  .san-filter-icon {
+    font-size: 20px; /* Kích thước icon */
+    margin-right: 8px; /* Khoảng cách giữa icon và label */
+  }
+  
+  .san-filter-label {
+    font-size: 14px; /* Kích thước chữ */
+    color: #333; /* Màu chữ */
+  }
+  .main-deals-container {
+    flex: 1;
+    border-radius: 20px;
+    position: absolute; /* Đặt vị trí tuyệt đối */
+    right: 10px; /* Căn phải 0px */
+    width: 75%; /* Chiếm 80% chiều rộng màn hình */
+    top: 80px; /* Đặt bên dưới header */
+    padding: 20px; /* Khoảng cách bên trong */
+    background-color: #ffffff; /* Màu nền */
+    overflow-y: auto; /* Cho phép cuộn dọc nếu nội dung vượt quá chiều cao */
+    box-sizing: border-box;   
+    height: calc(100vh - 20px); 
+    box-shadow: 0 0 3px #111111;
+    justify-content: center;  /* căn giữa theo chiều ngang */ 
+  }
+  .deals-page {
+    display: flex;
+    flex-direction: column; /* Sắp xếp các phần tử theo chiều dọc */
+    min-height: 100vh; /* Chiều cao tối thiểu bằng chiều cao màn hình */
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .san-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 15px;
+    background-color: #ffffff;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.1s ease;
+    text-align: left;
+    width: 100%;
+  }
+  
+  .san-button.active {
+    color: white;
+    border-color: #202521;
+  }
+  
+  .san-button:hover {
+    background-color: #f0f0f0;
+    border-color: #bbb;
+  }
+
+  .title-main-deals {
+    margin: 15px 0 0 0;
+    text-align: center;
   }
