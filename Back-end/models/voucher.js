@@ -1,20 +1,56 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose');
 
-  const voucherSchema = new Schema(
-    {
-      title: { type: String, required: true, trim: true },            // Tiêu đề voucher
-      voucherType: { type: String, required: true, trim: true },      // Loại voucher (nếu cần phân biệt) / GIẢM GIÁ / QUÀ TẶNG / THẺ QUÀ TẶNG...
-      category: { type: String, trim: true },                         // Danh mục (có thể giữ hoặc bỏ luôn nếu không dùng)  MÁY BAY / DU LỊCH 
-      validityStart: { type: Date, required: true },                  // Ngày bắt đầu
-      validityEnd: { type: Date, required: true }, // Ngày kết thúc (tự động xóa)
-      ownerID: { type: Schema.Types.ObjectId, ref: "User", required: true }, // Chủ sở hữu
-      price: { type: Number, default: 0 },                     // Giá trị voucher (nếu có)
-      quantity: { type: Number, default: 1, min: 0 },                 // Số lượng (mặc định là 1)
-      linkanh: { type: String, trim: true },                            // Link ảnh voucher
-    },
-    { timestamps: true }
-  );
+const voucherSchema = new mongoose.Schema({
+  id: { type: Number, required: true, unique: true }, // ID từ API gốc
+  title: { type: String, required: true },
+  voucherType: { type: String }, // 'percent', 'amount', v.v.
+  voucherAmount: { type: Number },
+  maxDiscount: { type: Number },
+  minSpend: { type: Number },
+  voucherCode: { type: String, default: '' },
+  startAt: { type: Date },
+  expiredAt: { type: Date },
+  affLink: { type: String },
+  note: { type: String },
+  totalClick: { type: Number, default: 0 },
+  payment: { type: String, default: null },
+  listApplyLink: { type: String, default: '' },
+  useLink: { type: String, default: null },
+  
+  supplier: {
+    title: { type: String },
+    slug: { type: String }
+  },
 
-const VoucherModel = mongoose.model("Voucher", voucherSchema);
-module.exports = VoucherModel;
+  voucherCategory: {
+    id: { type: Number },
+    title: { type: String }
+  },
+
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now }
+});
+
+// Tạo các model tương ứng từng collection riêng biệt
+const ShopeeVoucher = mongoose.model('ShopeeVoucher', voucherSchema, 'shopee_vouchers');
+const LazadaVoucher = mongoose.model('LazadaVoucher', voucherSchema, 'lazada_vouchers');
+const TikiVoucher = mongoose.model('TikiVoucher', voucherSchema, 'tiki_vouchers');
+const DienMayXanhVoucher = mongoose.model('DienMayXanhVoucher', voucherSchema, 'dienmayxanh_vouchers');
+const NguyenKimVoucher = mongoose.model('NguyenKimVoucher', voucherSchema, 'nguyenkim_vouchers');
+const FahasaVoucher = mongoose.model('FahasaVoucher', voucherSchema, 'fahasa_vouchers');
+const SendoVoucher = mongoose.model('SendoVoucher', voucherSchema, 'sendo_vouchers');
+const ShopeeFoodVoucher = mongoose.model('ShopeeFoodVoucher', voucherSchema, 'shopeefood_vouchers');
+const AllVouchers = mongoose.model('AllVouchers', voucherSchema, 'all_vouchers');
+
+// Xuất ra để dùng ở nơi khác
+module.exports = {
+  ShopeeVoucher,
+  LazadaVoucher,
+  TikiVoucher,
+  DienMayXanhVoucher,
+  NguyenKimVoucher,
+  FahasaVoucher,
+  SendoVoucher,
+  ShopeeFoodVoucher,
+  AllVouchers
+};

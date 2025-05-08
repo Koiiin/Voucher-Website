@@ -13,6 +13,7 @@ const morgan = require('morgan');
 const fetch = require('node-fetch');
 const voucherRouter = require('./Routes/voucherRouter');
 const cartRouter = require('./Routes/cartRoute');
+const startVoucherScheduler = require('./services/voucherService');
 
 // AI Chatbot
 const chatbotRoutes = require("./Routes/aiRoute");
@@ -30,11 +31,8 @@ app.use(session({
     saveUninitialized: false
 }));
 
-
 app.use(cors({
     origin: 'http://localhost:5173', // địa chỉ front-end
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true // cho phép gửi cookie từ frontend
 }));
 
@@ -55,6 +53,20 @@ app.use("/api/vouchers", voucherRouter);
 
 app.use("/api/cart", cartRouter);
 
-app.listen(process.env.PORT, () => {
-    console.log(`Server is running on PORT ${process.env.PORT}`);
+const PORT = process.env.PORT || 3000;
+
+// Thêm xử lý lỗi khi port đã được sử dụng
+const server = app.listen(PORT, () => {
+    console.log(`Server is running on PORT ${PORT}`);
+    // Khởi chạy voucher scheduler
+    startVoucherScheduler();
+    console.log('✅ Voucher scheduler đã được khởi chạy');
+}).on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+        console.error(`❌ Port ${PORT} đang được sử dụng. Hãy thử port khác hoặc tắt ứng dụng đang sử dụng port này.`);
+        process.exit(1);
+    } else {
+        console.error('❌ Lỗi khởi động server:', err);
+        process.exit(1);
+    }
 });

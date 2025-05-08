@@ -1,4 +1,4 @@
-const VoucherModel = require('../models/voucher');
+const { AllVouchers } = require('../models/voucher');
 
 // Tạo voucher//T
 exports.createVoucher = async (req, res) => {
@@ -29,10 +29,30 @@ exports.createVoucher = async (req, res) => {
 // Lấy tất cả voucher T
 exports.getAllVoucher = async (req, res) => {
   try {
-    const vouchers = await VoucherModel.find().sort({ createdAt: -1 });
-    res.status(200).json({ success: true, data: vouchers });
+    const vouchers = await AllVouchers.find().sort({ createdAt: -1 });
+    
+    console.log(`Found ${vouchers.length} vouchers`); // Log số lượng voucher
+    
+    if (!vouchers || vouchers.length === 0) {
+      return res.status(200).json({
+        success: true,
+        data: [],
+        message: 'Không có voucher nào'
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: vouchers,
+      message: 'Lấy danh sách voucher thành công'
+    });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Error in getAllVoucher:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Lỗi server khi lấy danh sách voucher',
+      error: error.message
+    });
   }
 };
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getAllVouchers } from "../services/voucherService";  // Import hàm gọi API từ service
+import { getAllVouchers } from "../services/voucherService";
 import VoucherCard from "./VoucherCard";
 import "../styles/Voucherlist.css";
 import { addToCart } from "../services/voucherService";
@@ -12,25 +12,33 @@ function VoucherList() {
   useEffect(() => {
     const fetchVouchers = async () => {
       try {
-        const data = await getAllVouchers();  // Lấy dữ liệu từ service
-        setVouchers(data);  // Lưu dữ liệu vào state
+        const response = await getAllVouchers();
+        // Kiểm tra cấu trúc dữ liệu trả về
+        const data = response.data || response;
+        console.log("Fetched vouchers:", data);
+        
+        if (Array.isArray(data)) {
+          setVouchers(data);
+        } else if (data.data && Array.isArray(data.data)) {
+          setVouchers(data.data);
+        } else {
+          console.error("Invalid data structure:", data);
+          setError("Dữ liệu không hợp lệ");
+        }
       } catch (err) {
-        setError(err.message);  // Lỗi từ service
+        console.error("Error fetching vouchers:", err);
+        setError(err.message || "Không thể tải voucher");
       } finally {
-        setLoading(false);  // Đặt loading là false khi hoàn tất
+        setLoading(false);
       }
     };
 
-    fetchVouchers();  // Gọi hàm fetch
+    fetchVouchers();
   }, []);
 
-  useEffect(() => {
-    console.log("Vouchers:", vouchers);
-  }, [vouchers]);
-  
   const handleGetNow = async (voucherId) => {
     try {
-      const token = localStorage.getItem("token"); 
+      const token = localStorage.getItem("token");
   
       if (!token) {
         alert("Bạn cần đăng nhập để thêm vào giỏ hàng.");
@@ -38,32 +46,55 @@ function VoucherList() {
       }
   
       const response = await addToCart(voucherId, token);
-      alert(response.message);  // Hiển thị thông báo từ server (thành công)
+      alert(response.message || "Thêm vào giỏ hàng thành công");
     } catch (err) {
-      alert(err.response?.data?.message || "Lỗi khi thêm vào giỏ hàng.");
+      alert(err.response?.data?.message || "Lỗi khi thêm vào giỏ hàng");
     }
   };
 
+  if (loading) {
+    return <div className="loading">Đang tải voucher...</div>;
+  }
+
+  if (error) {
+    return <div className="error">Lỗi: {error}</div>;
+  }
+
+  if (!vouchers || vouchers.length === 0) {
+    return <div className="no-vouchers">Không có voucher nào</div>;
+  }
+
   return (
-    <div>
-      {loading && <p>Đang tải...</p>}
-      {error && <p style={{ color: "red" }}>{error}</p>}
+    <div className="voucher-list-container">
       <div className="voucher-list">
-        {vouchers.map((voucher) => (
-          <VoucherCard
-          key={voucher._id}
-          voucherId={voucher._id}
-          title={voucher.title}
-          voucherType={voucher.voucherType}
-          category={voucher.category}
-          validityStart={voucher.validityStart}
-          validityEnd={voucher.validityEnd}
-          price={voucher.price}
-          quantity={voucher.quantity}
-          linkanh={voucher.linkanh}
-          onGetNow={handleGetNow}
-        />        
-        ))}
+        {vouchers.map((voucher) => {
+          // Kiểm tra và đảm bảo dữ liệu voucher hợp lệ
+          if (!voucher || !voucher.id) {
+            console.warn("Invalid voucher data:", voucher);
+            return null;
+          }
+
+          return (
+            <VoucherCard
+              key={voucher.id}
+              voucherId={voucher.id}
+              title={voucher.title || ""}
+              voucherType={voucher.voucherType || ""}
+              voucherAmount={voucher.voucherAmount || ""}
+              maxDiscount={voucher.maxDiscount || ""}
+              minSpend={voucher.minSpend || 0}
+              voucherCode={voucher.voucherCode || ""}
+              startAt={voucher.startAt || ""}
+              expiredAt={voucher.expiredAt || ""}
+              affLink={voucher.affLink || ""}
+              note={voucher.note || ""}
+              totalClick={voucher.totalClick || 0}
+              supplier={voucher.supplier || {}}
+              voucherCategory={voucher.voucherCategory || {}}
+              onGetNow={handleGetNow}
+            />
+          );
+        })}
       </div>
     </div>
   );
