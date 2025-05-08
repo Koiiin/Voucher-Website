@@ -1,11 +1,8 @@
-
 .voucher-list {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* Hiển thị 4 thẻ trên mỗi hàng */
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); /* Tự co giãn cột */
+  gap: 5px;
   padding: 10px;
-  overflow-x: hidden;
   width: 100%;
   box-sizing: border-box;
 }
-

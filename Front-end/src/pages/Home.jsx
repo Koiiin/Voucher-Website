@@ -4,6 +4,7 @@ import CategoryList from "../components/CategoryList";
 import VoucherList from "../components/Voucherlist"; 
 import SearchBar from "../components/SearchBar";
 import "../styles/home.css";
+import { Link } from "react-router-dom";
 
 function Home() {
   return (
@@ -21,7 +22,12 @@ function Home() {
 
       <section className="featured-section">
         <h2>Voucher nổi bật</h2>
-        <VoucherList /> {/* Dùng lại component này */}
+        <VoucherList />
+        <div style={{textAlign: "center", margin: "24px 0"}}>
+          <Link to="/deals">
+            <button className="load-more-btn">Xem thêm voucher</button>
+          </Link>
+        </div>
       </section>
 
       <div className="user-joined">

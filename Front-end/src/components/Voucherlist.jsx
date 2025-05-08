@@ -63,7 +63,7 @@ function VoucherList() {
   if (!vouchers || vouchers.length === 0) {
     return <div className="no-vouchers">Không có voucher nào</div>;
   }
-  const vouchersT_show = vouchers.slice(0, 10);
+  const vouchersT_show = vouchers.slice(0, 15);
 
   return (
     <div className="voucher-list-container">

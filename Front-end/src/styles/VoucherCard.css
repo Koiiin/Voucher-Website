@@ -1,148 +1,156 @@
 .voucher-card {
   display: flex;
-  max-width: 400px; /* Tăng từ 500px lên 600px */
   background-color: #fff;
-  border: 1px solid #ddd;
+  border: 1px solid #a9a8a8;
   border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4% 6% rgba(0, 0, 0, 0.1);
   overflow: hidden;
   box-sizing: border-box;
-  margin-top: 10px;
+  margin-top: 1%;
+  aspect-ratio: 2.5 / 1;
+  max-width: 100%;
+  width: 100%;
   height: auto;
+  font-size: 100%;
 }
-
 
 .voucher-left {
   background: #6A8E5A;
-  color: #fff;
-  padding: 15px;
+  color: #ffffff;
+  padding: 2%;
   display: flex;
   flex-direction: column;
-  align-items: center; /* Căn giữa nội dung */
+  align-items: center;
   justify-content: center;
-  min-width: 120px;
+  width: 30%;
   position: relative;
   border-radius: 12px 0 0 12px;
-  /* Hiệu ứng răng cưa mịn hơn */
-  clip-path: polygon(
-    0 0,
-    95% 0,
-    100% 10%,
-    100% 90%,
-    95% 100%,
-    0 100%,
-    0 0
-  );
+  overflow: visible;
 }
+
+.voucher-left::after {
+  content: "";
+  position: absolute;
+  right: -12px;
+  top: 0;
+  width: 24px;
+  height: 100%;
+  background: url("data:image/svg+xml;utf8,<svg width='24' height='240' viewBox='0 0 24 240' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M0 0 Q12 10 0 20 Q12 30 0 40 Q12 50 0 60 Q12 70 0 80 Q12 90 0 100 Q12 110 0 120 Q12 130 0 140 Q12 150 0 160 Q12 170 0 180 Q12 190 0 200 Q12 210 0 220 Q12 230 0 240 L24 240 L24 0 Z' fill='%23fff'/></svg>") no-repeat;
+  background-size: 100% 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
 
 .logo-supplier {
   background: #fff;
   border-radius: 50%;
-  width: 40px; /* Tăng kích thước logo */
-  height: 40px;
+  width: 40%;
+  aspect-ratio: 1 / 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 8px;
+  margin-bottom: 8%;
 }
 
 .supplier-logo {
-  width: 32px;
-  height: 32px;
+  width: 80%;
+  height: auto;
   border-radius: 50%;
 }
 
 .applicable-to {
-  font-size: 14px; /* Giảm kích thước chữ */
+  font-size: 90%;
   font-weight: 700;
-  margin-bottom: 5px;
+  margin-bottom: 5%;
   text-align: center;
 }
 
 .expiry-date {
-  font-size: 12px; /* Giảm kích thước chữ */
+  font-size: 80%;
   font-weight: 500;
-  color: #fff;
+  color: #ffffff;
   display: flex;
   align-items: center;
   opacity: 0.9;
 }
 
 .fa-clock-o {
-  margin-right: 5px;
+  margin-right: 0%;
 }
 
 .voucher-right {
-  padding: 15px;
-  width: 100%;
+  padding: 2%;
+  width: 70%;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
 .discount {
-  font-size: 18px; /* Kích thước chữ giống hình */
+  font-size: 110%;
   font-weight: 600;
   color: #6A8E5A;
   margin-bottom: 0;
 }
 
 .highlight {
-  font-size: 28px; /* Kích thước chữ cho phần giảm giá */
-  color: #2e7d32; /* Màu xanh giống hình */
+  font-size: 160%;
+  color: #2e7d32;
   font-weight: 700;
 }
 
 .min-order {
-  font-size: 15px;
-  font-weight: 600;
+  font-size: 100%;
+  font-weight: 700;
   color: #222;
   margin: 0;
 }
 
 .note {
-  font-size: 13px;
-  color: #e74c3c;
-  margin: 6px 0 0 0;
+  font-size: 80%;
+  color: #000000;
+  margin: 4% 0 0 0;
   white-space: pre-line;
 }
 
 .note-label {
+  color: #e74c3c;
   font-weight: 700;
 }
 
 .voucher-footer {
   display: flex;
   align-items: center;
-  justify-content: space-between; /* Căn đều hai nút */
-  margin-top: 10px;
+  justify-content: space-between;
+  margin-top: 3%;
+  flex-wrap: wrap;
 }
 
 .apply-list {
-  font-size: 14px;
+  font-size: 85%;
   color: #6A8E5A;
   background: #fff;
   border: 1px solid #6A8E5A;
   border-radius: 6px;
-  padding: 4px 12px;
+  padding: 2% 5%;
   font-weight: 500;
 }
 
 .copy-code {
-  min-width: 120px;
-  background: #2e7d32; /* Màu xanh giống hình */
+  min-width: 30%;
+  background: #46633a;
   color: #fff;
   border: none;
-  padding: 8px 18px;
+  padding: 3% 5%;
   border-radius: 8px;
-  font-size: 16px;
+  font-size: 100%;
   font-weight: 700;
   cursor: pointer;
   transition: background 0.2s;
-  margin-left: 10px;
-  
+  margin-left: 5%;
 }
 
 .copy-code:hover {
-  background: #466b3c;
+  background: #67af54;
 }

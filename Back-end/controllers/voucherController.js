@@ -29,7 +29,7 @@ exports.createVoucher = async (req, res) => {
 // Lấy tất cả voucher T
 exports.getAllVoucher = async (req, res) => {
   try {
-    const vouchers = await AllVouchers.find().sort({ createdAt: -1 });
+    const vouchers = await AllVouchers.find().sort({ createdAt: -1 }).limit(100);
     
     console.log(`Found ${vouchers.length} vouchers`); // Log số lượng voucher
     

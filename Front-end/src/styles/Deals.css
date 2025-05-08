@@ -21,7 +21,7 @@
   }
 
   .highlight {
-    color: #28a745; /* Màu xanh lá */
+    color: #28a745;
   }
 
   .san-list {
@@ -192,4 +192,9 @@
   .title-main-deals {
     margin: 15px 0 0 0;
     text-align: center;
+  }
+
+  h2 .highlight, h3 .highlight {
+    font-size: 1.2em !important;
+    font-weight: 600;
   }

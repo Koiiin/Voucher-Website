@@ -30,7 +30,7 @@ const VoucherCard = ({
         </div>
         <div className="applicable-to">{supplier?.title || voucherCategory?.title}</div>
         <div className="expiry-date">
-          <i className="fa fa-clock-o"></i> HSD:{" "}
+          <i className="fa fa-clock-o"></i>⏱ HSD:{" "}
           {expiredAt
             ? new Date(expiredAt).toLocaleDateString("vi-VN", {
                 day: "2-digit",
@@ -48,8 +48,8 @@ const VoucherCard = ({
               : `${voucherAmount?.toLocaleString()}đ`}
           </span>
         </p>
-        <p className="min-order">
-          ĐH tối thiểu: {minSpend ? Number(minSpend).toLocaleString() + "đ" : "--"}
+        <p >
+          <span style={{ fontSize: '90%' }}>ĐH tối thiểu: </span> <span className="min-order">{minSpend ? Number(minSpend).toLocaleString() + "đ" : "--"}</span>
         </p>
         <p className="note">
           <span className="note-label">Lưu ý:</span> {shortNote}

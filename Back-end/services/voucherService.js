@@ -34,7 +34,7 @@ function startVoucherScheduler() {
   runScheduler();
 
   // Gọi lại mỗi 10 phút = 600000 ms
-  const schedulerInterval = setInterval(runScheduler, 10 * 60 * 1000);
+  const schedulerInterval = setInterval(runScheduler, 1000 * 60 * 1000);
 
   // Xử lý khi tắt server
   process.on('SIGTERM', () => {
