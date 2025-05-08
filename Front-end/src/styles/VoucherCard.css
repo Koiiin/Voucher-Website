@@ -1,51 +1,36 @@
 .voucher-card {
   display: flex;
-  align-items: stretch;
-  background: #fff;
-  border-radius: 0 12px 12px 0;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  margin: 10px 0;
-  font-family: Arial, sans-serif;
+  max-width: 400px; /* Tăng từ 500px lên 600px */
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  border-left: 0;
+  box-sizing: border-box;
+  margin-top: 10px;
+  height: auto;
 }
+
 
 .voucher-left {
   background: #6A8E5A;
   color: #fff;
-  padding: 20px 18px 20px 16px;
+  padding: 15px;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center; /* Căn giữa nội dung */
   justify-content: center;
   min-width: 120px;
   position: relative;
   border-radius: 12px 0 0 12px;
-  /* Hiệu ứng răng cưa */
+  /* Hiệu ứng răng cưa mịn hơn */
   clip-path: polygon(
     0 0,
-    100% 0,
-    100% 100%,
+    95% 0,
+    100% 10%,
+    100% 90%,
+    95% 100%,
     0 100%,
-    0 95%,
-    10% 90%,
-    0 85%,
-    10% 80%,
-    0 75%,
-    10% 70%,
-    0 65%,
-    10% 60%,
-    0 55%,
-    10% 50%,
-    0 45%,
-    10% 40%,
-    0 35%,
-    10% 30%,
-    0 25%,
-    10% 20%,
-    0 15%,
-    10% 10%,
-    0 5%,
     0 0
   );
 }
@@ -53,92 +38,111 @@
 .logo-supplier {
   background: #fff;
   border-radius: 50%;
-  width: 38px;
-  height: 38px;
+  width: 40px; /* Tăng kích thước logo */
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 10px;
-}
-.supplier-logo {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-}
-.applicable-to {
-  font-size: 16px;
-  font-weight: bold;
   margin-bottom: 8px;
 }
+
+.supplier-logo {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+
+.applicable-to {
+  font-size: 14px; /* Giảm kích thước chữ */
+  font-weight: 700;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
 .expiry-date {
-  font-size: 13px;
-  margin-top: 8px;
+  font-size: 12px; /* Giảm kích thước chữ */
+  font-weight: 500;
+  color: #fff;
   display: flex;
   align-items: center;
   opacity: 0.9;
 }
+
 .fa-clock-o {
   margin-right: 5px;
 }
 
 .voucher-right {
-  padding: 18px 20px 18px 20px;
+  padding: 15px;
   width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
+
 .discount {
-  font-size: 20px;
-  font-weight: bold;
+  font-size: 18px; /* Kích thước chữ giống hình */
+  font-weight: 600;
   color: #6A8E5A;
-  margin-bottom: 2px;
+  margin-bottom: 0;
 }
+
 .highlight {
-  font-size: 26px;
-  color: #388e3c;
+  font-size: 28px; /* Kích thước chữ cho phần giảm giá */
+  color: #2e7d32; /* Màu xanh giống hình */
+  font-weight: 700;
 }
+
 .min-order {
   font-size: 15px;
+  font-weight: 600;
   color: #222;
-  margin-bottom: 4px;
+  margin: 0;
 }
+
 .note {
   font-size: 13px;
   color: #e74c3c;
-  margin-bottom: 6px;
+  margin: 6px 0 0 0;
   white-space: pre-line;
 }
+
 .note-label {
-  font-weight: bold;
+  font-weight: 700;
 }
+
 .voucher-footer {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-top: 8px;
+  justify-content: space-between; /* Căn đều hai nút */
+  margin-top: 10px;
 }
+
 .apply-list {
-  font-size: 13px;
+  font-size: 14px;
   color: #6A8E5A;
-  background: #f5fff5;
+  background: #fff;
   border: 1px solid #6A8E5A;
   border-radius: 6px;
-  padding: 3px 10px;
+  padding: 4px 12px;
   font-weight: 500;
-  margin-right: 8px;
 }
+
 .copy-code {
-  background: #466b3c;
+  min-width: 120px;
+  background: #2e7d32; /* Màu xanh giống hình */
   color: #fff;
   border: none;
   padding: 8px 18px;
-  border-radius: 6px;
-  font-size: 15px;
-  font-weight: 600;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 700;
   cursor: pointer;
   transition: background 0.2s;
+  margin-left: 10px;
+  
 }
+
 .copy-code:hover {
-  background: #6A8E5A;
+  background: #466b3c;
 }

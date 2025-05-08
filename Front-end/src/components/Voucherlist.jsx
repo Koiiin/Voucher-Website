@@ -63,11 +63,12 @@ function VoucherList() {
   if (!vouchers || vouchers.length === 0) {
     return <div className="no-vouchers">Không có voucher nào</div>;
   }
+  const vouchersT_show = vouchers.slice(0, 10);
 
   return (
     <div className="voucher-list-container">
       <div className="voucher-list">
-        {vouchers.map((voucher) => {
+        {vouchersT_show.map((voucher) => {
           // Kiểm tra và đảm bảo dữ liệu voucher hợp lệ
           if (!voucher || !voucher.id) {
             console.warn("Invalid voucher data:", voucher);

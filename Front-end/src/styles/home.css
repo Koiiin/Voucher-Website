@@ -24,13 +24,7 @@
   margin-bottom: 10px;
 }
 
-.voucher-list {
-  display: flex;
-  gap: 15px;
-  flex-wrap: nowrap;   
-  overflow-x: auto;    
-  padding-bottom: 10px;
-}
+
 
 .user-joined {
   text-align: center;
