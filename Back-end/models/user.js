@@ -45,7 +45,7 @@ const RatingSchema = new mongoose.Schema({
       type : String,
       required: false,
       minlength: 8,
-      maxlength: 30
+      maxlength: 100
     },
     admin: {
       type: Boolean,
