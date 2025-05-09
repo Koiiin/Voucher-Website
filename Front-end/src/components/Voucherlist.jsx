@@ -36,21 +36,6 @@ function VoucherList() {
     fetchVouchers();
   }, []);
 
-  const handleGetNow = async (voucherId) => {
-    try {
-      const token = localStorage.getItem("token");
-  
-      if (!token) {
-        alert("Bạn cần đăng nhập để thêm vào giỏ hàng.");
-        return;
-      }
-  
-      const response = await addToCart(voucherId, token);
-      alert(response.message || "Thêm vào giỏ hàng thành công");
-    } catch (err) {
-      alert(err.response?.data?.message || "Lỗi khi thêm vào giỏ hàng");
-    }
-  };
 
   if (loading) {
     return <div className="loading">Đang tải voucher...</div>;
@@ -92,7 +77,6 @@ function VoucherList() {
               totalClick={voucher.totalClick || 0}
               supplier={voucher.supplier || {}}
               voucherCategory={voucher.voucherCategory || {}}
-              onGetNow={handleGetNow}
             />
           );
         })}

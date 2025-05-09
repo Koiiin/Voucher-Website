@@ -10,6 +10,7 @@ router.get('/:id/vouchers', userController.getUserVouchers);
 
 // User - Private - cần token
 router.get('/profile', verifyTokenOnly, userController.getUserProfile);
+router.post('/addVoucherToCart', verifyTokenOnly, userController.addVoucherToCart);
 router.put('/profile', verifyTokenOnly, userController.updateUserProfile);
 
 module.exports = router;

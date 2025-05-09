@@ -10,16 +10,27 @@ const VoucherCard = ({
   expiredAt,
   note,
   affLink,
-  onGetNow
+  onAddToCart
 }) => {
   // Cắt note nếu quá dài
   const maxNoteLength = 48;
-  const shortNote = note && note.length > maxNoteLength
-    ? note.slice(0, maxNoteLength) + "... Xem chi tiết"
-    : note;
+
+  const shortNote =
+    note && note.length > maxNoteLength ? (
+      <>
+        {note.slice(0, maxNoteLength)}...
+        <span className="see-more"> Xem chi tiết</span>
+      </>
+    ) : (
+      note
+    );
+
 
   return (
     <div className="voucher-card">
+      <button className="add-to-cart-btn" onClick={onAddToCart} title="Thêm vào giỏ hàng">
+        🛒
+      </button>
       <div className="voucher-left">
         <div className="logo-supplier">
           <img

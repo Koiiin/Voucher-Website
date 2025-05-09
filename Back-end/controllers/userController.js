@@ -77,3 +77,23 @@ exports.getUserVouchers = async (req, res) => {
         res.status(500).json({ message: 'Lỗi server ❌', error: error.message });
     }
 };
+
+exports.addVoucherToCart = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { voucherId } = req.body;
+    if (!voucherId) {
+      return res.status(400).json({ success: false, message: "Thiếu voucherId" });
+    }
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ success: false, message: "Không tìm thấy user" });
+    if (user.vouchers.includes(voucherId)) {
+      return res.status(400).json({ success: false, message: "Voucher đã có trong giỏ hàng" });
+    }
+    user.vouchers.push(voucherId);
+    await user.save();
+    res.json({ success: true, message: "Đã thêm voucher vào giỏ hàng" });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Lỗi server", error: error.message });
+  }
+};
