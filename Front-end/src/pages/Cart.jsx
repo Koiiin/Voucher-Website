@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { getToken } from "../services/authService";
+import { authRequest } from "../services/authService";
 import "../styles/Cart.css";
-
-const API_URL = import.meta.env.VITE_APP_API_URL;
+import VoucherCard from "../components/VoucherCard";
 
 function Cart() {
   const [cartItems, setCartItems] = useState([]);
@@ -12,19 +10,13 @@ function Cart() {
   useEffect(() => {
     const fetchCart = async () => {
       try {
-        const token = getToken();
-        if (!token) {
-          alert("Bạn cần đăng nhập để xem giỏ hàng.");
-          return;
-        }
-
-        const response = await axios.get(`${API_URL}/cart`, {
+        const response = await authRequest({
+          url: "/cart",
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
           },
         });
-
         setCartItems(response.data.cart.vouchers || []); // Cập nhật dữ liệu đúng
       } catch (error) {
         console.error("Lỗi khi tải giỏ hàng:", error);
@@ -44,32 +36,18 @@ function Cart() {
     <div className="cart-page">
       <h2>Giỏ hàng của bạn</h2>
       <div className="cart-items">
-        {cartItems.map((item) => (
-          // Kiểm tra nếu voucherId là hợp lệ trước khi render
+        {cartItems.map((item, idx) =>
           item.voucherId ? (
-            <div className="cart-item" key={item.voucherId._id}> 
-              <img
-                src={item.voucherId.imageUrl || "/default-image.jpg"} // Đảm bảo có ảnh hoặc thay thế ảnh mặc định
-                alt={item.voucherId.title}
-                className="cart-image"
-              />
-              <div className="cart-info">
-                <h3>{item.voucherId.title}</h3>
-                <p>Giá: {item.voucherId.price} VND</p>
-                <p>Loại: {item.voucherId.voucherType}</p>
-                <p>Danh mục: {item.voucherId.category}</p>
-                <p>
-                  HSD: {new Date(item.voucherId.validityEnd).toLocaleDateString()}
-                </p>
-              </div>
-            </div>
+            <VoucherCard
+              key={item.voucherId._id || idx}
+              {...item.voucherId}
+            />
           ) : (
-            // Nếu voucherId không hợp lệ, thông báo lỗi
-            <div className="cart-item" key={item._id}>
+            <div className="cart-item" key={item._id || idx}>
               <p>Voucher không hợp lệ hoặc đã bị xóa.</p>
             </div>
           )
-        ))}
+        )}
       </div>
     </div>
   );  

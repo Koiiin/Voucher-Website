@@ -14,6 +14,7 @@ const fetch = require('node-fetch');
 const voucherRouter = require('./Routes/voucherRouter');
 const cartRouter = require('./Routes/cartRoute');
 const startVoucherScheduler = require('./services/voucherService');
+const cookieParser = require('cookie-parser');
 
 // AI Chatbot
 const chatbotRoutes = require("./Routes/aiRoute");
@@ -24,6 +25,7 @@ require('dotenv').config();
 
 connectDB();
 app.use(morgan('dev'));
+app.use(cookieParser());
 
 app.use(session({
     secret: process.env.JWT_ACCESS_KEY,

@@ -63,7 +63,7 @@ function VoucherList() {
           return (
             <VoucherCard
               key={voucher.id}
-              voucherId={voucher.id}
+              id={voucher.id}
               title={voucher.title || ""}
               voucherType={voucher.voucherType || ""}
               voucherAmount={voucher.voucherAmount || ""}

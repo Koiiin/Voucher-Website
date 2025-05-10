@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getToken } from "./authService"
+import { getToken, authRequest } from "./authService"
 
 const API_URL = import.meta.env.VITE_APP_API_URL; 
 
@@ -7,13 +7,11 @@ const API_URL = import.meta.env.VITE_APP_API_URL;
 
 export const createVoucher = async (voucherData) => {
   try {
-    const token = getToken();
-    const response = await axios.post(`${API_URL}/createVoucher`, voucherData, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+    const response = await authRequest({
+      url: "/createVoucher",
+      method: "POST",
+      data: voucherData,
     });
-
     if (response.data.success) {
       return response.data.data;
     } else {
@@ -39,18 +37,13 @@ export const getAllVouchers = async () => {
   }
 };
 
-export const addToCart = async (voucherId, token) => {
+export const addToCart = async (voucherId) => {
   try {
-    const response = await axios.post(
-      `${API_URL}/cart/add`,
-      { voucherId },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
+    const response = await authRequest({
+      url: "/cart/add",
+      method: "POST",
+      data: { voucherId },
+    });
     return response.data;
   } catch (error) {
     console.error("Lỗi khi thêm vào giỏ hàng:", error);

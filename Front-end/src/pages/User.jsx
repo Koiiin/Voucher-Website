@@ -1,23 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { getToken } from '../services/authService';
-import axios from 'axios';
+import { authRequest } from '../services/authService';
 import '../styles/User.css'; 
-const API_URL = import.meta.env.VITE_APP_API_URL;
 
 const User = () => {
     const [user, setUser] = useState(null);
     const [error, setError] = useState(null);
-    const token = getToken();
-    console.log("User Token:", token);
 
     useEffect(() => {
         const fetchUserProfile = async () => {
             try {
-                const response = await axios.get(`${API_URL}/user/profile`, {
-                    headers: { Authorization: `Bearer ${token}` }
+                const response = await authRequest({
+                    url: "/user/profile",
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
                 });
-
-                console.log("User Profile Data:", response.data);
                 setUser(response.data);
             } catch (error) {
                 setError("Failed to load profile. Please try again later.");
@@ -26,7 +24,7 @@ const User = () => {
         };
 
         fetchUserProfile();
-    }, [token]);
+    }, []);
 
     if (!user) {
       return (

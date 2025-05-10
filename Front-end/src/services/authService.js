@@ -47,6 +47,44 @@ export const handleGoogleLogin = () => {
 export const getToken = () => {
   return sessionStorage.getItem("accessToken");
 };
+
 export const handleFacebookLogin = () => {
   window.location.href = `${API_URL}/auth/facebook`; // Chuyển hướng đến Facebook OAuth
 }
+
+// Hàm gọi API có tự động refresh token nếu accessToken hết hạn
+export const authRequest = async (config) => {
+  try {
+    // Gắn accessToken vào header nếu có
+    const token = getToken();
+    if (token) {
+      config.headers = {
+        ...config.headers,
+        Authorization: `Bearer ${token}`,
+      };
+    }
+    // Gọi API
+    return await axios({ ...config, baseURL: API_URL, withCredentials: true });
+  } catch (error) {
+    // Nếu lỗi 403, 401 thìthì refresh token
+    if (error.response && (error.response.status === 401 || error.response.status === 403) && !config._retry) {
+      config._retry = true;
+      try {
+        const res = await axios.post(`${API_URL}/auth/refresh`, {}, { withCredentials: true });
+        if (res.status === 200 && res.data.accessToken) {
+          sessionStorage.setItem("accessToken", res.data.accessToken);
+          // Gắn accessToken mới vào header và thử lại request cũ
+          config.headers = {
+            ...config.headers,
+            Authorization: `Bearer ${res.data.accessToken}`,
+          };
+          return await axios({ ...config, baseURL: API_URL, withCredentials: true });
+        }
+      } catch (refreshError) {
+        sessionStorage.removeItem("accessToken");
+        window.location.href = "/login";
+      }
+    }
+    throw error;
+  }
+};

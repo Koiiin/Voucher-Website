@@ -1,17 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { addToCart } from "../services/voucherService";
+import { getToken } from "../services/authService";
 import "../styles/VoucherCard.css"; // CSS riêng cho VoucherCard
 
 const VoucherCard = ({
-  voucherCategory,
-  supplier,
+  id,
+  title,
   voucherType,
   voucherAmount,
+  maxDiscount,
   minSpend,
+  voucherCode,
+  startAt,
   expiredAt,
-  note,
   affLink,
-  onAddToCart
+  note,
+  totalClick,
+  supplier,
+  voucherCategory,
 }) => {
+  const [isAdding, setIsAdding] = useState(false);
+  const navigate = useNavigate();
+  
   // Cắt note nếu quá dài
   const maxNoteLength = 48;
 
@@ -25,11 +36,34 @@ const VoucherCard = ({
       note
     );
 
+  const handleAddToCart = async () => {
+    const token = getToken();
+    if (!token) {
+      alert("Vui lòng đăng nhập để thêm voucher vào giỏ hàng!");
+      navigate("/login");
+      return;
+    }
+
+    try {
+      setIsAdding(true);
+      await addToCart(id, token);
+      alert("Đã thêm voucher vào giỏ hàng!");
+    } catch (error) {
+      alert(error.message || "Không thể thêm voucher vào giỏ hàng!");
+    } finally {
+      setIsAdding(false);
+    }
+  };
 
   return (
     <div className="voucher-card">
-      <button className="add-to-cart-btn" onClick={onAddToCart} title="Thêm vào giỏ hàng">
-        🛒
+      <button 
+        className="add-to-cart-btn" 
+        onClick={handleAddToCart} 
+        title="Thêm vào giỏ hàng"
+        disabled={isAdding}
+      >
+        {isAdding ? "..." : "🛒"}
       </button>
       <div className="voucher-left">
         <div className="logo-supplier">
@@ -59,8 +93,11 @@ const VoucherCard = ({
               : `${voucherAmount?.toLocaleString()}đ`}
           </span>
         </p>
-        <p >
-          <span style={{ fontSize: '90%' }}>ĐH tối thiểu: </span> <span className="min-order">{minSpend ? Number(minSpend).toLocaleString() + "đ" : "--"}</span>
+        <p>
+          <span style={{ fontSize: '90%' }}>ĐH tối thiểu: </span>{" "}
+          <span className="min-order">
+            {minSpend ? Number(minSpend).toLocaleString() + "đ" : "--"}
+          </span>
         </p>
         <p className="note">
           <span className="note-label">Lưu ý:</span> {shortNote}
