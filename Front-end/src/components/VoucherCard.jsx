@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { addToCart } from "../services/voucherService";
-import { getToken } from "../services/authService";
+import { getToken, authRequest } from "../services/authService";
 import "../styles/VoucherCard.css"; // CSS riêng cho VoucherCard
 
 const VoucherCard = ({
   id,
+  _id,
   title,
   voucherType,
   voucherAmount,
@@ -19,8 +20,9 @@ const VoucherCard = ({
   totalClick,
   supplier,
   voucherCategory,
+  isInCart = false, // prop này để biết nếu hiển thị trong giỏ hàng
 }) => {
-  const [isAdding, setIsAdding] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
   const navigate = useNavigate();
   
   // Cắt note nếu quá dài
@@ -36,6 +38,7 @@ const VoucherCard = ({
       note
     );
 
+  // Hàm thêm vào giỏ hàng
   const handleAddToCart = async () => {
     const token = getToken();
     if (!token) {
@@ -45,25 +48,56 @@ const VoucherCard = ({
     }
 
     try {
-      setIsAdding(true);
-      await addToCart(id, token);
+      setIsProcessing(true);
+      // Ưu tiên sử dụng _id nếu có, nếu không thì dùng id
+      await addToCart(_id || id, token);
       alert("Đã thêm voucher vào giỏ hàng!");
     } catch (error) {
       alert(error.message || "Không thể thêm voucher vào giỏ hàng!");
     } finally {
-      setIsAdding(false);
+      setIsProcessing(false);
+    }
+  };
+
+  // Hàm xóa khỏi giỏ hàng
+  const handleRemoveFromCart = async () => {
+    const token = getToken();
+    
+    try {
+      setIsProcessing(true);
+      // Gọi API xóa voucher khỏi giỏ hàng
+      const response = await authRequest({
+        url: "/cart/remove",
+        method: "POST",
+        data: { 
+          voucherId: _id || id 
+        },
+      });
+      
+      if (response.data.success) {
+        alert("Đã xóa voucher khỏi giỏ hàng!");
+        // Refresh trang sau khi xóa
+        window.location.reload();
+      } else {
+        throw new Error(response.data.message || "Không thể xóa khỏi giỏ hàng!");
+      }
+    } catch (error) {
+      alert(error.message || "Không thể xóa khỏi giỏ hàng!");
+    } finally {
+      setIsProcessing(false);
     }
   };
 
   return (
-    <div className="voucher-card">
+    <div className={`voucher-card`}>
+      {/* Nút thêm/xóa khỏi giỏ hàng */}
       <button 
-        className="add-to-cart-btn" 
-        onClick={handleAddToCart} 
-        title="Thêm vào giỏ hàng"
-        disabled={isAdding}
+        className={`cart-action-btn ${isInCart ? 'remove-btn' : 'add-btn'}`}
+        onClick={isInCart ? handleRemoveFromCart : handleAddToCart}
+        title={isInCart ? "Xóa khỏi giỏ hàng" : "Thêm vào giỏ hàng"}
+        disabled={isProcessing}
       >
-        {isAdding ? "..." : "🛒"}
+        {isProcessing ? "..." : isInCart ? "🗑️" : "🛒"}
       </button>
       <div className="voucher-left">
         <div className="logo-supplier">

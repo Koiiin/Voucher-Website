@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { authRequest } from "../services/authService";
 import "../styles/Cart.css";
-import VoucherCard from "../components/VoucherCard";
+import VoucherList from "../components/Voucherlist";
 
 function Cart() {
   const [cartItems, setCartItems] = useState([]);
@@ -30,25 +30,11 @@ function Cart() {
   }, []);
 
   if (loading) return <p>Đang tải giỏ hàng...</p>;
-  if (cartItems.length === 0) return <p>Giỏ hàng của bạn đang trống.</p>;
 
   return (
     <div className="cart-page">
       <h2>Giỏ hàng của bạn</h2>
-      <div className="cart-items">
-        {cartItems.map((item, idx) =>
-          item.voucherId ? (
-            <VoucherCard
-              key={item.voucherId._id || idx}
-              {...item.voucherId}
-            />
-          ) : (
-            <div className="cart-item" key={item._id || idx}>
-              <p>Voucher không hợp lệ hoặc đã bị xóa.</p>
-            </div>
-          )
-        )}
-      </div>
+      <VoucherList vouchersData={cartItems} isCartDisplay={true} />
     </div>
   );  
 }

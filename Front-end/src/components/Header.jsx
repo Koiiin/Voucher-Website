@@ -27,9 +27,15 @@ function Header() {
   return (
     <header className="header">
       <div className="logo">
-        <Link to="/">
-          <img src={logo} alt="VouX Logo" className="logo-img" />
-        </Link>
+        <img
+          src={logo}
+          alt="VouX Logo"
+          className="logo-img"
+          style={{ cursor: "pointer" }}
+          onClick={() => {
+            window.location.href = "/"; // Chuyển về trang chủ và reload lại trang
+          }}
+        />
       </div>
       <nav>
         <Link to="/categories" className="menu-btn">Danh mục</Link>

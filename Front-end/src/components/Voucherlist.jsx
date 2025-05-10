@@ -2,18 +2,25 @@ import React, { useState, useEffect } from "react";
 import { getAllVouchers } from "../services/voucherService";
 import VoucherCard from "./VoucherCard";
 import "../styles/Voucherlist.css";
-import { addToCart } from "../services/voucherService";
 
-function VoucherList() {
+// Thêm prop vouchersData để có thể sử dụng lại component
+function VoucherList({ vouchersData = null, isCartDisplay = false }) {
   const [vouchers, setVouchers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    // Nếu có dữ liệu truyền vào, sử dụng luôn
+    if (vouchersData) {
+      setVouchers(vouchersData);
+      setLoading(false);
+      return;
+    }
+
+    // Nếu không có dữ liệu, fetch từ API
     const fetchVouchers = async () => {
       try {
         const response = await getAllVouchers();
-        // Kiểm tra cấu trúc dữ liệu trả về
         const data = response.data || response;
         console.log("Fetched vouchers:", data);
         
@@ -34,8 +41,7 @@ function VoucherList() {
     };
 
     fetchVouchers();
-  }, []);
-
+  }, [vouchersData]);
 
   if (loading) {
     return <div className="loading">Đang tải voucher...</div>;
@@ -46,37 +52,51 @@ function VoucherList() {
   }
 
   if (!vouchers || vouchers.length === 0) {
-    return <div className="no-vouchers">Không có voucher nào</div>;
+    return <div className="no-vouchers">
+      {isCartDisplay ? "Giỏ hàng của bạn đang trống." : "Không có voucher nào"}
+    </div>;
   }
-  const vouchersT_show = vouchers.slice(0, 15);
+
+  // Chỉ giới hạn 15 voucher khi hiển thị danh sách thông thường, 
+  // không giới hạn khi hiển thị giỏ hàng
+  const vouchersToShow = isCartDisplay ? vouchers : vouchers.slice(0, 15);
 
   return (
     <div className="voucher-list-container">
-      <div className="voucher-list">
-        {vouchersT_show.map((voucher) => {
-          // Kiểm tra và đảm bảo dữ liệu voucher hợp lệ
-          if (!voucher || !voucher.id) {
-            console.warn("Invalid voucher data:", voucher);
-            return null;
+      <div className={`voucher-list${vouchersToShow.length === 1 ? " single-voucher" : ""}`}>
+        {vouchersToShow.map((voucher, idx) => {
+          // Xử lý trường hợp voucher có thể khác nhau khi là từ giỏ hàng
+          const voucherData = isCartDisplay && voucher.voucherId ? voucher.voucherId : voucher;
+          
+          // Kiểm tra dữ liệu hợp lệ
+          if (!voucherData || (!voucherData.id && !voucherData._id)) {
+            console.warn("Invalid voucher data:", voucherData);
+            return (
+              <div className="cart-item" key={idx}>
+                <p>Voucher không hợp lệ hoặc đã bị xóa.</p>
+              </div>
+            );
           }
 
           return (
             <VoucherCard
-              key={voucher.id}
-              id={voucher.id}
-              title={voucher.title || ""}
-              voucherType={voucher.voucherType || ""}
-              voucherAmount={voucher.voucherAmount || ""}
-              maxDiscount={voucher.maxDiscount || ""}
-              minSpend={voucher.minSpend || 0}
-              voucherCode={voucher.voucherCode || ""}
-              startAt={voucher.startAt || ""}
-              expiredAt={voucher.expiredAt || ""}
-              affLink={voucher.affLink || ""}
-              note={voucher.note || ""}
-              totalClick={voucher.totalClick || 0}
-              supplier={voucher.supplier || {}}
-              voucherCategory={voucher.voucherCategory || {}}
+              key={voucherData.id || voucherData._id || idx}
+              id={voucherData.id}
+              _id={voucherData._id}
+              title={voucherData.title || ""}
+              voucherType={voucherData.voucherType || ""}
+              voucherAmount={voucherData.voucherAmount || ""}
+              maxDiscount={voucherData.maxDiscount || ""}
+              minSpend={voucherData.minSpend || 0}
+              voucherCode={voucherData.voucherCode || ""}
+              startAt={voucherData.startAt || ""}
+              expiredAt={voucherData.expiredAt || ""}
+              affLink={voucherData.affLink || ""}
+              note={voucherData.note || ""}
+              totalClick={voucherData.totalClick || 0}
+              supplier={voucherData.supplier || {}}
+              voucherCategory={voucherData.voucherCategory || {}}
+              isInCart={isCartDisplay}
             />
           );
         })}

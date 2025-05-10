@@ -37,12 +37,17 @@ export const getAllVouchers = async () => {
   }
 };
 
-export const addToCart = async (voucherId) => {
+export const addToCart = async (voucherId, token) => {
+  // Thêm kiểm tra
+  if (!voucherId) {
+    throw new Error("Voucher ID không được để trống!");
+  }
+  
   try {
     const response = await authRequest({
       url: "/cart/add",
       method: "POST",
-      data: { voucherId },
+      data: { voucherId: voucherId.toString() }, // Chuyển sang chuỗi để đảm bảo
     });
     return response.data;
   } catch (error) {

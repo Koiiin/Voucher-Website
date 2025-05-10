@@ -6,3 +6,10 @@
   width: 100%;
   box-sizing: border-box;
 }
+
+.voucher-list.single-voucher {
+  grid-template-columns: 1fr;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
