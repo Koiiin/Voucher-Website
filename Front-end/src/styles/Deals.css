@@ -2,10 +2,10 @@
 .san-list-container {
     display: flex;
     flex-direction: column; /* Sắp xếp các phần tử theo chiều dọc */
-    width: 22%; /* Chiếm 1/4 chiều rộng màn hình */
+    width: 25%; /* Chiếm 1/4 chiều rộng màn hình */
     position: fixed; /* Cố định container ở bên trái */
-    top: 80px; /* Đặt container bên dưới header */
-    left: 10px; /* Căn bên trái */
+    top: 90px; /* Đặt container bên dưới header */
+    left: 20px; /* Căn bên trái */
     bottom: 100px; /* Căn bên dưới */
     background-color: #f4e9e9; /* Màu nền nhạt */
     padding: 20px;
@@ -141,29 +141,30 @@
     font-size: 14px; /* Kích thước chữ */
     color: #333; /* Màu chữ */
   }
-  .main-deals-container {
-    flex: 1;
-    border-radius: 20px;
-    position: absolute; /* Đặt vị trí tuyệt đối */
-    right: 10px; /* Căn phải 0px */
-    width: 75%; /* Chiếm 80% chiều rộng màn hình */
-    top: 80px; /* Đặt bên dưới header */
-    padding: 20px; /* Khoảng cách bên trong */
-    background-color: #ffffff; /* Màu nền */
-    overflow-y: auto; /* Cho phép cuộn dọc nếu nội dung vượt quá chiều cao */
-    box-sizing: border-box;   
-    height: calc(100vh - 20px); 
-    box-shadow: 0 0 3px #111111;
-    justify-content: center;  /* căn giữa theo chiều ngang */ 
-  }
   .deals-page {
     display: flex;
-    flex-direction: column; /* Sắp xếp các phần tử theo chiều dọc */
-    min-height: 100vh; /* Chiều cao tối thiểu bằng chiều cao màn hình */
-    max-width: 1200px;
+    flex-direction: column;
+    min-height: 100vh;
+    min-width: 100%;
     margin: 0 auto;
     padding: 20px;
   }
+  
+  .main-deals-container {
+    flex: 1;
+    width: 72%;
+    margin-left: auto;
+    margin-right: 10px;
+    background-color: #ffffff;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 0 3px #111111;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    position: relative; /* <-- Không dùng absolute */
+  }
+  
 
   .san-button {
     display: flex;
@@ -190,11 +191,32 @@
   }
 
   .title-main-deals {
-    margin: 15px 0 0 0;
+    margin: 0px 0 0 0;
     text-align: center;
   }
 
   h2 .highlight, h3 .highlight {
     font-size: 1.2em !important;
     font-weight: 600;
+  }
+
+  .show-more-home-btn {
+    padding: 12px 32px;
+    border: 2px solid #28a745;
+    border-radius: 24px;
+    background: #fff;
+    color: #28a745;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin: 0 auto;
+    display: inline-block;
+    transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.15s;
+    box-shadow: 0 2px 8px #28a74511;
+  }
+  .show-more-home-btn:hover {
+    background: #28a745;
+    color: #fff;
+    border-color: #28a745;
+    transform: translateY(2px) scale(1.04);
   }

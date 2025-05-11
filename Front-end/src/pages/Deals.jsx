@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
-import voucherData from '../assets/vouchers.json'; // Dữ liệu voucher
+import { useSearchParams, useNavigate } from 'react-router-dom';
+import { getVouchersByPlatform, getVoucherCountByPlatform } from '../services/voucherService';
+import VoucherList from '../components/Voucherlist.jsx';
 
 // Logo các sàn
 import shopeeLogo from "../img/san/shopee.png";
@@ -51,21 +53,80 @@ const lazada = [
   { label: "Dịch Vụ", icon: "💧" },
 ];
 
+const platformList = [
+  { name: 'Tất cả các sàn', logo: Logo, param: 'all' },
+  { name: 'Shopee', logo: shopeeLogo, param: 'shopee' },
+  { name: 'Lazada', logo: lazadaLogo, param: 'lazada' },
+  { name: 'Tiki', logo: tikiLogo, param: 'tiki' },
+  { name: 'Sendo', logo: sendoLogo, param: 'sendo' },
+  { name: 'Shopee Food', logo: shopeefoodLogo, param: 'shopeefood' },
+  { name: 'Nguyễn Kim', logo: nguyenKimLogo, param: 'nguyen-kim' },
+  { name: 'Điện Máy Xanh', logo: dienMayXanhLogo, param: 'dien-may-xanh' },
+  { name: 'Fahasa', logo: fahasaLogo, param: 'fahasa' },
+];
+
+const platformMap = {
+  'all': 'Tất cả các sàn',
+  'shopee': 'Shopee',
+  'lazada': 'Lazada',
+  'tiki': 'Tiki',
+  'sendo': 'Sendo',
+  'shopeefood': 'Shopee Food',
+  'nguyen-kim': 'Nguyễn Kim',
+  'dien-may-xanh': 'Điện Máy Xanh',
+  'fahasa': 'Fahasa'
+};
+
+const getPlatformFromUrl = (param) => platformMap[param] || 'Tất cả các sàn';
+
+const getUrlFromPlatform = (platform) => {
+  const found = Object.entries(platformMap).find(([key, value]) => value === platform);
+  return found ? found[0] : 'all';
+};
+
 const Deals = () => {
-  const [selectedPlatform, setSelectedPlatform] = useState("Tất cả các sàn");
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const [selectedPlatform, setSelectedPlatform] = useState('Tất cả các sàn');
   const [filteredVouchers, setFilteredVouchers] = useState([]);
-  const [activeTab, setActiveTab] = useState("Tất cả");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [platformCounts, setPlatformCounts] = useState({});
   const filterContainerRef = useRef(null);
 
-  // Khi selectedPlatform thay đổi, lọc lại voucher
+  // Fetch số lượng voucher từng sàn khi load trang
   useEffect(() => {
-    const filtered = voucherData.filter(v => v.platform === selectedPlatform);
-    setFilteredVouchers(filtered);
-  }, [selectedPlatform]);
+    const fetchCounts = async () => {
+      const counts = {};
+      for (const p of platformList) {
+        try {
+          const count = await getVoucherCountByPlatform(p.param);
+          counts[p.param] = count;
+        } catch {
+          counts[p.param] = 0;
+        }
+      }
+      setPlatformCounts(counts);
+    };
+    fetchCounts();
+  }, []);
 
-  const handlePlatformClick = (platformName) => {
-    setSelectedPlatform(platformName);
-    window.scrollTo({ top: 0, behavior: 'smooth' }); // Cuộn lên đầu trang
+  useEffect(() => {
+    const platformParam = searchParams.get('platform') || 'all';
+    setSelectedPlatform(getPlatformFromUrl(platformParam));
+    setLoading(true);
+    setError(null);
+    getVouchersByPlatform(platformParam)
+      .then(data => setFilteredVouchers(data))
+      .catch(err => setError(err.message))
+      .finally(() => setLoading(false));
+  }, [searchParams]);
+
+  const handlePlatformClick = (platform) => {
+    setSelectedPlatform(platform);
+    const urlParam = getUrlFromPlatform(platform);
+    navigate(`?platform=${urlParam}`);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const scrollLeft = () => {
@@ -77,37 +138,26 @@ const Deals = () => {
   };
 
   return (
-    <div className='deals-page'>
+    <div className="deals-page">
       <div className="san-list-container">
         <h3 className="san-list-title">Lọc theo <span className="highlight">Sàn</span></h3>
         <ul className="san-list">
-          {[
-            { name: 'Tất cả các sàn', logo: Logo },
-            { name: 'Shopee', logo: shopeeLogo },
-            { name: 'Lazada', logo: lazadaLogo },
-            { name: 'Tiki', logo: tikiLogo },
-            { name: 'Sendo', logo: sendoLogo },
-            { name: 'Shopee Food', logo: shopeefoodLogo },
-            { name: 'Nguyễn Kim', logo: nguyenKimLogo },
-            { name: 'Điện Máy Xanh', logo: dienMayXanhLogo },
-            { name: 'Fahasa', logo: fahasaLogo },
-          ].map(({ name, logo }, index) => (
-            <li key={index} className="san-item">
+          {platformList.map((p, idx) => (
+            <li key={idx} className="san-item">
               <button
-                className={`san-button ${selectedPlatform === name ? 'active' : ''}`}
-                onClick={() => handlePlatformClick(name)}
+                className={`san-button ${selectedPlatform === p.name ? 'active' : ''}`}
+                onClick={() => handlePlatformClick(p.name)}
               >
-                <img src={logo} alt={name} className="san-logo" />
-                <span className="san-name">{name}</span>
-                <span className="san-count">123</span>
+                <img src={p.logo} alt={p.name} className="san-logo" />
+                <span className="san-name">{p.name}</span>
+                <span className="san-count">{platformCounts[p.param] ?? ''}</span>
               </button>
             </li>
           ))}
         </ul>
       </div>
-
-      <div className='main-deals-container'>
-        {selectedPlatform === "Shopee" || selectedPlatform === "Lazada" ? (
+      <div className="main-deals-container">
+        {(selectedPlatform === "Shopee" || selectedPlatform === "Lazada") && (
           <div className="san-filter-wrapper">
             <button className="scroll-btn left-btn" onClick={scrollLeft}>◀</button>
             <div className="san-filter-container" ref={filterContainerRef}>
@@ -120,18 +170,17 @@ const Deals = () => {
             </div>
             <button className="scroll-btn right-btn" onClick={scrollRight}>▶</button>
           </div>
-        ) : null}
-
-        <h2 className='title-main-deals'>Danh sách mã giảm giá <span className='highlight'>{selectedPlatform}</span></h2>
-        <div className="voucher-list">
-          {filteredVouchers.map((v, i) => (
-            <div key={i} className="voucher-card">
-              <p><strong>{v.title}</strong></p>
-              <p>{v.description}</p>
-              <p>Platform: {v.platform}</p>
-            </div>
-          ))}
-        </div>
+        )}
+        <h2 className="title-main-deals">
+          Danh sách mã giảm giá <span className="highlight">{selectedPlatform}</span>
+        </h2>
+        {loading ? (
+          <div className="loading">Đang tải...</div>
+        ) : error ? (
+          <div className="error">{error}</div>
+        ) : (
+          <VoucherList vouchersData={filteredVouchers} />
+        )}
       </div>
     </div>
   );

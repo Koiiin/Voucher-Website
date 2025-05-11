@@ -19,4 +19,9 @@ router.get("/categories", voucherController.getCategories);
 // Lấy các voucher hợp lệ 
 router.get('/getValidVouchers', voucherController.getValidVouchers);
 
+// Lấy voucher theo platform
+router.get('/getVouchersByPlatform/:platform', voucherController.getVouchersByPlatform);
+// API trả về số lượng voucher theo sàn
+router.get('/getVoucherCountByPlatform/:platform', voucherController.getVoucherCountByPlatform);
+
 module.exports = router;

@@ -170,3 +170,45 @@ exports.getValidVouchers = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+// Lấy voucher theo platform
+exports.getVouchersByPlatform = async (req, res) => {
+  try {
+    const platform = req.params.platform;
+    let query = {};
+    if (platform !== 'all') {
+      query = { 'supplier.slug': platform };
+    }
+    const vouchers = await AllVouchers.find(query)
+      .sort({ createdAt: -1 })
+      .limit(100);
+
+    res.status(200).json({
+      success: true,
+      data: vouchers,
+      message: 'Lấy danh sách voucher thành công'
+    });
+  } catch (error) {
+    console.error('Error in getVouchersByPlatform:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Lỗi server khi lấy danh sách voucher',
+      error: error.message
+    });
+  }
+};
+
+// API trả về số lượng voucher theo sàn
+exports.getVoucherCountByPlatform = async (req, res) => {
+  try {
+    const platform = req.params.platform;
+    let query = {};
+    if (platform !== 'all') {
+      query = { 'supplier.slug': platform };
+    }
+    const count = await AllVouchers.countDocuments(query);
+    res.json({ success: true, count });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Lỗi server', error: error.message });
+  }
+};

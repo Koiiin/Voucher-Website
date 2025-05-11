@@ -8,6 +8,7 @@ function VoucherList({ vouchersData = null, isCartDisplay = false }) {
   const [vouchers, setVouchers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [visibleCount, setVisibleCount] = useState(10);
 
   useEffect(() => {
     // Nếu có dữ liệu truyền vào, sử dụng luôn
@@ -43,6 +44,10 @@ function VoucherList({ vouchersData = null, isCartDisplay = false }) {
     fetchVouchers();
   }, [vouchersData]);
 
+  useEffect(() => {
+    setVisibleCount(10);
+  }, [vouchersData]);
+
   if (loading) {
     return <div className="loading">Đang tải voucher...</div>;
   }
@@ -57,13 +62,19 @@ function VoucherList({ vouchersData = null, isCartDisplay = false }) {
     </div>;
   }
 
-  // Chỉ giới hạn 15 voucher khi hiển thị danh sách thông thường, 
-  // không giới hạn khi hiển thị giỏ hàng
-  const vouchersToShow = isCartDisplay ? vouchers : vouchers.slice(0, 15);
+  // Giới hạn số lượng voucher hiển thị tùy theo trang
+  let vouchersToShow = vouchers;
+  if (!isCartDisplay) {
+    if (window.location.pathname === '/' || window.location.pathname === '/home') {
+      vouchersToShow = vouchers.slice(0, 15);
+    } else if (window.location.pathname.startsWith('/deals')) {
+      vouchersToShow = vouchers.slice(0, visibleCount);
+    }
+  }
 
   return (
     <div className="voucher-list-container">
-      <div className={`voucher-list${vouchersToShow.length === 1 ? " single-voucher" : ""}`}>
+      <div className={`voucher-list${vouchersToShow.length === 1 || vouchersToShow.length === 2 ? " single-voucher" : ""}`}>
         {vouchersToShow.map((voucher, idx) => {
           // Xử lý trường hợp voucher có thể khác nhau khi là từ giỏ hàng
           const voucherData = isCartDisplay && voucher.voucherId ? voucher.voucherId : voucher;
@@ -101,6 +112,17 @@ function VoucherList({ vouchersData = null, isCartDisplay = false }) {
           );
         })}
       </div>
+      {/* Nút xem thêm */}
+      {!isCartDisplay && window.location.pathname.startsWith('/deals') && vouchersToShow.length < vouchers.length && (
+        <div style={{ textAlign: "center", margin: "24px 0" }}>
+          <button
+            className="show-more-home-btn"
+            onClick={() => setVisibleCount(visibleCount + 10)}
+          >
+            Xem thêm Voucher
+          </button>
+        </div>
+      )}
     </div>
   );
 }
