@@ -41,7 +41,7 @@ const FahasaVoucher = mongoose.model('FahasaVoucher', voucherSchema, 'fahasa_vou
 const SendoVoucher = mongoose.model('SendoVoucher', voucherSchema, 'sendo_vouchers');
 const ShopeeFoodVoucher = mongoose.model('ShopeeFoodVoucher', voucherSchema, 'shopeefood_vouchers');
 const AllVouchers = mongoose.model('AllVouchers', voucherSchema, 'all_vouchers');
-
+//const User_vouchers = mongoose.model('UserVoucher', voucherSchema, 'user_vouchers');
 // Xuất ra để dùng ở nơi khác
 module.exports = {
   ShopeeVoucher,
