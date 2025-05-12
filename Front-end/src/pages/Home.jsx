@@ -1,6 +1,6 @@
 import React from "react";
 import Banner from "../components/Banner";
-import CategoryList from "../components/CategoryList";
+// import CategoryList from "../components/CategoryList";
 import VoucherList from "../components/Voucherlist"; 
 import SearchBar from "../components/SearchBar";
 import "../styles/home.css";
@@ -15,10 +15,10 @@ function Home() {
         <SearchBar />
       </div>
 
-      <section className="category-section">
+      {/* <section className="category-section">
         <h2>Danh mục voucher</h2>
         <CategoryList />
-      </section>
+      </section> */}
 
       <section className="featured-section">
         <h2>Voucher nổi bật</h2>
