@@ -3,9 +3,9 @@ import React from "react";
  
  function Banner() {
    return (
-     <section className="banner-section">
+     <section className="container">
        <h1>Chia sẻ và trao đổi voucher</h1>
-       <p>Tiết kiệm với hàng ngàn voucher giảm giá và gift card</p>
+       <h1>Tiết kiệm với hàng ngàn voucher giảm giá và gift card</h1>
        <br></br>
        <button className="banner-btn">Khám phá ngay</button>
      </section>
