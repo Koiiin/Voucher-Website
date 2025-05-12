@@ -179,7 +179,7 @@ exports.getVouchersByPlatform = async (req, res) => {
     if (platform !== 'all') {
       query = { 'supplier.slug': platform };
     }
-    const vouchers = await VoucherModel.find(query)
+    const vouchers = await AllVouchers.find(query)
       .sort({ createdAt: -1 })
       .limit(100);
 
@@ -206,7 +206,7 @@ exports.getVoucherCountByPlatform = async (req, res) => {
     if (platform !== 'all') {
       query = { 'supplier.slug': platform };
     }
-    const count = await VoucherModel.countDocuments(query);
+    const count = await AllVouchers.countDocuments(query);
     res.json({ success: true, count });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Lỗi server', error: error.message });
