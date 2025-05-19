@@ -6,7 +6,7 @@ exports.createVoucher = async (req, res) => {
     const {title, voucherType, category, validityStart, validityEnd, price, quantity, minSpend, linkanh, _id, createdAt, updatedAt, ...rest} = req.body;
     const ownerID = req.user.id; // Lấy ownerID từ token đã xác thực
     if(!title || !voucherType || !validityStart || !validityEnd || !ownerID) {
-      return res.status(400).json({ message: 'Vui lòng nhập đầy đủ thông tin!' });
+      return res.status(400).json({ success: false, message: 'Vui lòng nhập đầy đủ thông tin!' });
     }
     const newVoucher = new VoucherModel({
       title, // tieu de voucher
@@ -20,9 +20,9 @@ exports.createVoucher = async (req, res) => {
       minSpend: minSpend || 0 // Set default value to 0 if not provided
     });
     await newVoucher.save();
-    res.status(201).json({ message: 'Tạo voucher thành công!', voucher: newVoucher });
+    res.status(201).json({ success: true, voucher: newVoucher });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).json({ success: false, error: error.message });
   }
 };
 //T

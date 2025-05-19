@@ -23,11 +23,20 @@ const VoucherCard = ({
   isInCart = false, // prop này để biết nếu hiển thị trong giỏ hàng
 }) => {
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
   const navigate = useNavigate();
   
   // Cắt note nếu quá dài
   const maxNoteLength = 48;
 
+  if(note === null || note === "") {
+    note = (
+      <>
+        ...
+        <span className="see-more"> Xem chi tiết</span>
+      </>
+    );
+  }
   const shortNote =
     note && note.length > maxNoteLength ? (
       <>
@@ -88,14 +97,22 @@ const VoucherCard = ({
     }
   };
 
+  const handleCardClick = () => {
+    setIsExpanded((prev) => !prev);
+  };
+
   return (
-    <div className={`voucher-card`}>
+    <div className={`voucher-card ${isExpanded ? 'expanded' : ''}`} onClick={handleCardClick} style={{ cursor: "pointer" }}> 
       {/* Nút thêm/xóa khỏi giỏ hàng */}
       <button 
         className={`cart-action-btn ${isInCart ? 'remove-btn' : 'add-btn'}`}
-        onClick={isInCart ? handleRemoveFromCart : handleAddToCart}
+        onClick={(e) => {
+          e.stopPropagation(); // chặn lan sự kiện
+          isInCart ? handleRemoveFromCart() : handleAddToCart();
+        }}
         title={isInCart ? "Xóa khỏi giỏ hàng" : "Thêm vào giỏ hàng"}
         disabled={isProcessing}
+        
       >
         {isProcessing ? "..." : isInCart ? "🗑️" : "🛒"}
       </button>
@@ -130,7 +147,7 @@ const VoucherCard = ({
         <p>
           <span style={{ fontSize: '90%' }}>ĐH tối thiểu: </span>{" "}
           <span className="min-order">
-            {minSpend ? Number(minSpend).toLocaleString() + "đ" : "--"}
+            {minSpend ? Number(minSpend).toLocaleString() + "đ" : "0đ"}
           </span>
         </p>
         <p className="note">
@@ -143,6 +160,34 @@ const VoucherCard = ({
           </a>
         </div>
       </div>
+       {/* thêm nếu bấm vào voucher xem chi tiết */}
+       {isExpanded && (
+        <div className="voucher-detail">
+          <p className="discount">
+            Giảm{" "}
+            <span className="highlight">
+              {voucherType === "percent"
+                ? `${voucherAmount}%`
+                : `${voucherAmount?.toLocaleString()}đ`}
+            </span>
+          </p>
+          <p>
+            <span style={{ fontSize: '90%' }}>ĐH tối thiểu: </span>{" "}
+            <span className="min-order">
+              {minSpend ? Number(minSpend).toLocaleString() + "đ" : "0đ"}
+            </span>
+          </p>
+          <p className="note">
+            <span className="note-label">Lưu ý:</span> {shortNote}
+          </p>
+          <div className="voucher-footer">
+            <span className="apply-list">#Lưu trên banner</span>
+            <a href={affLink || "#"} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
+              <button className="copy-code">Đến Banner</button>
+            </a>
+          </div>
+        </div>
+       )}
     </div>
   );
 };

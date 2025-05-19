@@ -29,17 +29,18 @@ const CreateV = () => {
         e.preventDefault();
         try {
             const response = await createVoucher(formData);
-            if (response) {
+            if (response.success) {
                 alert("Tạo voucher thành công!");
-                navigate("/");
+                // navigate("/");
+            } else {
+                alert(response.message || "Có lỗi xảy ra khi tạo voucher!");
             }
         } catch (error) {
             console.error("Lỗi khi tạo voucher:", error);
             if (error.response?.status === 403) {
-                // Xử lý lỗi 403 - Unauthorized
                 alert("Bạn không có quyền tạo voucher!");
             } else {
-                alert("Có lỗi xảy ra khi tạo voucher!");
+                alert(error.response?.data?.message || "Có lỗi xảy ra khi tạo voucher!");
             }
         }
     };

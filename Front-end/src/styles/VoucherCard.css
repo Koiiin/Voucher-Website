@@ -226,3 +226,12 @@
   background: #e74c3c;
   color: #fff;
 }
+
+.voucher-detail {
+  padding: 2%;
+  width: 0%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+

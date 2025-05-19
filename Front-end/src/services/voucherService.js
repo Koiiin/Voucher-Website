@@ -12,13 +12,10 @@ export const createVoucher = async (voucherData) => {
       method: "POST",
       data: voucherData,
     });
-    if (response.data.success) {
-      return response.data.data;
-    } else {
-      throw new Error("Không thể tạo voucher!");
-    }
+    return response.data;  
   } catch (error) {
     console.error("Lỗi tạo voucher:", error);
+    throw error;  // Throw error để component có thể catch
   }
 };
 
