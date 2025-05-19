@@ -6,13 +6,13 @@ import "../styles/CreateV.css";
 const CreateV = () => {
     const [formData, setFormData] = React.useState({
         title: "",
-        voucherType: "",
+        voucherType: "", 
         category: "",
         validityStart: "",
         validityEnd: "",
         price: 0,
         quantity: 1,
-        linkanh: "",
+        minSpend: 0,
     });
 
     const navigate = useNavigate();
@@ -28,11 +28,19 @@ const CreateV = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await createVoucher(formData);
-            navigate("/");
-        } 
-        catch (err) {
-            setError(err.message);
+            const response = await createVoucher(formData);
+            if (response) {
+                alert("Tạo voucher thành công!");
+                navigate("/");
+            }
+        } catch (error) {
+            console.error("Lỗi khi tạo voucher:", error);
+            if (error.response?.status === 403) {
+                // Xử lý lỗi 403 - Unauthorized
+                alert("Bạn không có quyền tạo voucher!");
+            } else {
+                alert("Có lỗi xảy ra khi tạo voucher!");
+            }
         }
     };
 
@@ -83,7 +91,7 @@ const CreateV = () => {
             </div>
             <div className="form-group">
                 <input type="number" name="quantity" placeholder="Số lượng" onChange={handleChange} />
-                <input name="linkanh" placeholder="Link ảnh" onChange={handleChange} />
+                <input type="number" name="minSpend" placeholder="Số tiền tối thiểu" onChange={handleChange} />
             </div>
             <button className="submit-btn" type="submit">Tạo</button>
         </form>

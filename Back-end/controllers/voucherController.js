@@ -3,21 +3,21 @@ const { AllVouchers } = require('../models/voucher');
 // Tạo voucher//T
 exports.createVoucher = async (req, res) => {
   try {
-    const {title, voucherType, category, validityStart, validityEnd, price, quantity, linkanh, _id, createdAt, updatedAt, ...rest} = req.body;
+    const {title, voucherType, category, validityStart, validityEnd, price, quantity, minSpend, linkanh, _id, createdAt, updatedAt, ...rest} = req.body;
     const ownerID = req.user.id; // Lấy ownerID từ token đã xác thực
     if(!title || !voucherType || !validityStart || !validityEnd || !ownerID) {
       return res.status(400).json({ message: 'Vui lòng nhập đầy đủ thông tin!' });
     }
     const newVoucher = new VoucherModel({
-      title,
-      voucherType,
-      category,
-      validityStart,
-      validityEnd,
-      ownerID,
-      price,
+      title, // tieu de voucher
+      voucherType, // loai voucher
+      category, // danh muc
+      validityStart, // ngay bat dau
+      validityEnd, // ngay ket thuc
+      ownerID, // id nguoi tao voucher
+      price, // gia voucher
       quantity,
-      linkanh
+      minSpend: minSpend || 0 // Set default value to 0 if not provided
     });
     await newVoucher.save();
     res.status(201).json({ message: 'Tạo voucher thành công!', voucher: newVoucher });

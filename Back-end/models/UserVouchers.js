@@ -10,11 +10,11 @@ const voucherSchema = new Schema(
     validityEnd: { type: Date, required: true, index: { expires: 0 } }, // Ngày kết thúc (tự động xóa)
     ownerID: { type: Schema.Types.ObjectId, ref: "User", required: true }, // Chủ sở hữu
     price: { type: Number, default: 0 },                     // Giá trị voucher (nếu có)
-    quantity: { type: Number, default: 1, min: 0 },                 // Số lượng (mặc định là 1)
-    linkanh: { type: String, trim: true },                            // Link ảnh voucher
+    quantity: { type: Number, default: 1, min: 0 },                 // Số lượng (mặc định là 1)                       
+    minSpend: { type: Number, default: 0 }, // Số tiền tối thiểu để sử dụng voucher
   },
   { timestamps: true }
 );
 
-const VoucherModel = mongoose.model("Voucher", voucherSchema);
+const VoucherModel = mongoose.model("UserVoucher", voucherSchema);
 module.exports = VoucherModel;
