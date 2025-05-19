@@ -83,51 +83,37 @@ exports.addToCart = async (req, res) => {
 
 exports.getCart = async (req, res) => {
   try {
-    // Kiểm tra user
-    if (!req.user || !req.user.id) {
-      return res.status(401).json({ 
-        success: false, 
-        message: "Vui lòng đăng nhập để xem giỏ hàng!" 
-      });
-    }
-
     const userId = req.user.id;
-    
-    // Lấy giỏ hàng kèm theo thông tin voucher
-    const cart = await Cart.findOne({ userId })
-      .populate({
-        path: 'vouchers.voucherId',
-        model: 'AllVouchers'
-      });
+    let cart = await Cart.findOne({ userId });
 
     if (!cart) {
-      return res.status(200).json({ 
-        success: true,
-        message: "Chưa có giỏ hàng.",
-        cart: { vouchers: [] }
-      });
+      return res.status(200).json({ success: true, cart: { vouchers: [] } });
     }
 
-    if (!cart.vouchers || cart.vouchers.length === 0) {
-      return res.status(200).json({ 
-        success: true,
-        message: "Giỏ hàng của bạn hiện tại trống.", 
-        cart 
-      });
+    // Lấy danh sách voucherId hiện có trong cart
+    const voucherIds = cart.vouchers.map(v => v.voucherId);
+
+    // Lấy các voucher còn tồn tại trong DB
+    const validVouchers = await AllVouchers.find({ _id: { $in: voucherIds } });
+    const validVoucherIds = validVouchers.map(v => v._id.toString());
+
+    // Lọc ra các voucherId không còn tồn tại
+    const filteredVouchers = cart.vouchers.filter(v =>
+      validVoucherIds.includes(v.voucherId.toString())
+    );
+
+    // Nếu có voucher không tồn tại, cập nhật lại cart
+    if (filteredVouchers.length !== cart.vouchers.length) {
+      cart.vouchers = filteredVouchers;
+      await cart.save();
     }
 
-    res.status(200).json({ 
-      success: true,
-      message: "Lấy giỏ hàng thành công",
-      cart: cart
-    });
+    // Populate voucher info nếu cần
+    await cart.populate("vouchers.voucherId");
+
+    res.status(200).json({ success: true, cart });
   } catch (error) {
-    console.error("Lỗi khi lấy giỏ hàng:", error);
-    res.status(500).json({ 
-      success: false,
-      message: "Lỗi server khi lấy giỏ hàng.", 
-      error: error.message 
-    });
+    res.status(500).json({ success: false, message: "Lỗi khi lấy giỏ hàng", error: error.message });
   }
 };
 

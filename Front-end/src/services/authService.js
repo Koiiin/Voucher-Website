@@ -66,14 +66,13 @@ export const authRequest = async (config) => {
     // Gọi API
     return await axios({ ...config, baseURL: API_URL, withCredentials: true });
   } catch (error) {
-    // Nếu lỗi 403, 401 thìthì refresh token
+    // Chỉ refresh token khi lỗi 401/403
     if (error.response && (error.response.status === 401 || error.response.status === 403) && !config._retry) {
       config._retry = true;
       try {
         const res = await axios.post(`${API_URL}/auth/refresh`, {}, { withCredentials: true });
         if (res.status === 200 && res.data.accessToken) {
           sessionStorage.setItem("accessToken", res.data.accessToken);
-          // Gắn accessToken mới vào header và thử lại request cũ
           config.headers = {
             ...config.headers,
             Authorization: `Bearer ${res.data.accessToken}`,
@@ -81,10 +80,12 @@ export const authRequest = async (config) => {
           return await axios({ ...config, baseURL: API_URL, withCredentials: true });
         }
       } catch (refreshError) {
+        // Chỉ đăng xuất khi refresh token cũng hết hạn
         sessionStorage.removeItem("accessToken");
         window.location.href = "/login";
       }
     }
+    // Các lỗi khác (400, 422, 500...) chỉ throw error, KHÔNG đăng xuất
     throw error;
   }
 };

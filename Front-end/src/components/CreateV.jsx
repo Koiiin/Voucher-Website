@@ -2,8 +2,11 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { createVoucher } from "../services/voucherService";
 import "../styles/CreateV.css";
+import Toast from "./toast";
 
 const CreateV = () => {
+    const [toast, setToast] = React.useState({ message: "", type: "info" });
+
     const [formData, setFormData] = React.useState({
         title: "",
         voucherType: "", 
@@ -28,19 +31,22 @@ const CreateV = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            if(formData.validityStart > formData.validityEnd){
+                setToast({ message: "Ngày bắt đầu không thể lớn hơn ngày kết thúc!", type: "error" });
+                return;
+            }
             const response = await createVoucher(formData);
             if (response.success) {
-                alert("Tạo voucher thành công!");
-                // navigate("/");
+                setToast({ message: "Tạo voucher thành công!", type: "success" });
             } else {
-                alert(response.message || "Có lỗi xảy ra khi tạo voucher!");
+                setToast({ message: response.message || "Có lỗi xảy ra khi tạo voucher!", type: "error" });
             }
         } catch (error) {
             console.error("Lỗi khi tạo voucher:", error);
             if (error.response?.status === 403) {
-                alert("Bạn không có quyền tạo voucher!");
+                setToast({ message: "Đăng nhập để tạo voucher!", type: "error" });
             } else {
-                alert(error.response?.data?.message || "Có lỗi xảy ra khi tạo voucher!");
+                setToast({ message: error.response?.data?.message || "Có lỗi xảy ra khi tạo voucher!", type: "error" });
             }
         }
     };
@@ -48,6 +54,12 @@ const CreateV = () => {
 
     return (
         <div>
+        <Toast
+            message={toast.message}
+            type={toast.type}
+            onClose={() => setToast({ message: "" })}
+            duration={2000}
+        />
         {error && <p style={{ color: "red" }}>{error}</p>}
         <form className="voucher-form" onSubmit={handleSubmit}>
             <h2 className="form-title">Tạo Voucher</h2>

@@ -22,7 +22,7 @@ exports.createVoucher = async (req, res) => {
     await newVoucher.save();
     res.status(201).json({ success: true, voucher: newVoucher });
   } catch (error) {
-    res.status(400).json({ success: false, error: error.message });
+    res.status(400).json({ success: false, message: error.message });
   }
 };
 //T

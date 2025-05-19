@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { addToCart } from "../services/voucherService";
 import { getToken, authRequest } from "../services/authService";
+import Toast from "./toast";
 import "../styles/VoucherCard.css"; // CSS riêng cho VoucherCard
 
 const VoucherCard = ({
@@ -25,6 +26,7 @@ const VoucherCard = ({
   const [isProcessing, setIsProcessing] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const navigate = useNavigate();
+  const [toast, setToast] = useState({ message: "", type: "info" });
   
   // Cắt note nếu quá dài
   const maxNoteLength = 48;
@@ -51,18 +53,31 @@ const VoucherCard = ({
   const handleAddToCart = async () => {
     const token = getToken();
     if (!token) {
-      alert("Vui lòng đăng nhập để thêm voucher vào giỏ hàng!");
+      setToast({ message: "Vui lòng đăng nhập để thêm voucher vào giỏ hàng!", type: "error" });
       navigate("/login");
       return;
     }
 
     try {
       setIsProcessing(true);
-      // Ưu tiên sử dụng _id nếu có, nếu không thì dùng id
+
+      // 1. Fetch giỏ hàng để kiểm tra voucher đã có chưa
+      const cartRes = await authRequest({ url: "/cart", method: "GET" });
+      const cartItems = cartRes.data.cart?.vouchers || [];
+      const cartVoucherIds = cartItems
+        .map(item => item.voucherId?._id || item.voucherId?.id)
+        .filter(Boolean);
+
+      if (cartVoucherIds.includes(_id || id)) {
+        setToast({ message: "Voucher này đã có trong giỏ hàng!", type: "info" });
+        return;
+      }
+
+      // 2. Nếu chưa có thì mới thêm vào giỏ hàng
       await addToCart(_id || id, token);
-      alert("Đã thêm voucher vào giỏ hàng!");
+      setToast({ message: "Đã thêm voucher vào giỏ hàng!", type: "success" });
     } catch (error) {
-      alert(error.message || "Không thể thêm voucher vào giỏ hàng!");
+      setToast({ message: error.message || "Không thể thêm voucher vào giỏ hàng!", type: "error" });
     } finally {
       setIsProcessing(false);
     }
@@ -84,14 +99,13 @@ const VoucherCard = ({
       });
       
       if (response.data.success) {
-        alert("Đã xóa voucher khỏi giỏ hàng!");
-        // Refresh trang sau khi xóa
-        window.location.reload();
+        setToast({ message: "Đã xóa voucher khỏi giỏ hàng!", type: "error" });
+        setTimeout(() => window.location.reload(), 1500);
       } else {
-        throw new Error(response.data.message || "Không thể xóa khỏi giỏ hàng!");
+        setToast({ message: response.data.message || "Không thể xóa khỏi giỏ hàng!", type: "error" });
       }
     } catch (error) {
-      alert(error.message || "Không thể xóa khỏi giỏ hàng!");
+      setToast({ message: error.message || "Không thể xóa khỏi giỏ hàng!", type: "error" });
     } finally {
       setIsProcessing(false);
     }
@@ -103,6 +117,12 @@ const VoucherCard = ({
 
   return (
     <div className={`voucher-card ${isExpanded ? 'expanded' : ''}`} onClick={handleCardClick} style={{ cursor: "pointer" }}> 
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        onClose={() => setToast({ message: "" })}
+        duration={2000}
+      />
       {/* Nút thêm/xóa khỏi giỏ hàng */}
       <button 
         className={`cart-action-btn ${isInCart ? 'remove-btn' : 'add-btn'}`}
