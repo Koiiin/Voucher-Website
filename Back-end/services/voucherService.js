@@ -53,16 +53,7 @@ async function runScheduler() {
 
   // Xóa dữ liệu cũ trước khi lấy dữ liệu mới
   await deleteAllVouchers();
-
-  for (const supplier of suppliers) {
-    try {
-      console.log(`🔍 Đang lấy dữ liệu từ: ${supplier}`);
-      await FetchAndSaveVouchers(supplier);
-      console.log(`✅ Hoàn tất: ${supplier}`);
-    } catch (err) {
-      console.error(`❌ Lỗi khi lấy dữ liệu ${supplier}:`, err.message);
-    }
-  }
+  await FetchAndSaveVouchers();
 
   console.log('✅ Kết thúc chu kỳ\n');
 }
