@@ -12,10 +12,13 @@ import Cart from "./pages/Cart";
 import CreateV from "./components/CreateV";
 import OauthSuccess from "./pages/OauthSuccess"; 
 import "./styles/global.css";
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import ScrollToTop from "./components/ScrollToTop";
+import Toast from "./components/toast";
 
 function App() {
+  const [toast, setToast] = useState({ message: "", type: "info" });
+
   // Kiểm tra trạng thái đăng nhập từ sessionStorage
   //const isLoggedIn = !!sessionStorage.getItem("accessToken");
 
@@ -55,19 +58,25 @@ function App() {
       {!hideHeaderAndFooter && <Header />} {/* Hiển thị Header nếu không ở trang login/register */}
       <div className="main-content">
           <ScrollToTop /> {/* Cuộn lên đầu trang khi điều hướng */}
+          <Toast
+            message={toast.message}
+            type={toast.type}
+            onClose={() => setToast({ message: "" })}
+            duration={2000}
+          />
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Home setToast={setToast} />} />
             <Route path="/chatbot" element={ <Chatbot />} />
-            <Route path="/deals" element={<Deals /> } />
+            <Route path="/deals" element={<Deals setToast={setToast} /> } />
             <Route path="/categories" element={<Categories /> } />
               {/* Route mặc định: Chuyển hướng đến trang chủ nếu vào bất cứ trang nào không hợp lệlệ*/}
             <Route path="*" element={<Navigate to="/" />} />
               {/* /*user */ }
             <Route path="/user" element={<User />} />
             {/* Giỏ hàng */}
-            <Route path="/cart" element={<Cart />} />
+            <Route path="/cart" element={<Cart setToast={setToast} />} />
             {/* Tạo voucher */}
             <Route path="/create-voucher" element={<CreateV />} />
             <Route path="/oauth-success" element={<OauthSuccess />} /> {/* Đường dẫn cho callback từ Google */}

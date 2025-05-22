@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useSearchParams, useNavigate, useLocation } from 'react-router-dom';
 import { getVouchersByPlatform, getVoucherCountByPlatform } from '../services/voucherService';
 import VoucherList from '../components/Voucherlist.jsx';
 
@@ -16,42 +16,6 @@ import Logo from "../assets/icon.png";
 
 import "../styles/Deals.css"; // CSS riêng cho Deals
 
-// Các bộ lọc theo từng sàn
-const shopee = [
-  { label: "Tất cả", icon: "📋" },
-  { label: "Toàn Sàn", icon: "☑️" },
-  { label: "Shopee Choice", icon: "🛍️" },
-  { label: "Shop nổi bật", icon: "🌼" },
-  { label: "Shopee Live", icon: "📺" },
-  { label: "Voucher Xtra", icon: "🎟️" },
-  { label: "Đời Sống", icon: "🏠" },
-  { label: "Freeship", icon: "🚚" },
-  { label: "Tiêu Dùng", icon: "🛒" },
-  { label: "Shopee Video", icon: "🎥" },
-  { label: "Chọn Lọc", icon: "🔍" },
-  { label: "Quốc tế", icon: "🌐" },
-  { label: "Shopee Mall", icon: "🛒" },
-  { label: "Điện Tử", icon: "💻" },
-  { label: "Thời Trang", icon: "👗" },
-  { label: "Shop triển vọng", icon: "⭐" },
-];
-
-const lazada = [
-  { label: "Tất cả", icon: "📋" },
-  { label: "Toàn Sàn", icon: "☑️" },
-  { label: "Sắc Đẹp", icon: "💄" },
-  { label: "Đối Tác Thanh Toán", icon: "🤝" },
-  { label: "LazChoice", icon: "🏷️" },
-  { label: "Chọn Lọc", icon: "🔍" },
-  { label: "Thời Trang", icon: "👗" },
-  { label: "Gia Dụng", icon: "🏠" },
-  { label: "Điện Tử", icon: "💻" },
-  { label: "Bách Hóa Online", icon: "🛒" },
-  { label: "Nhà Cửa Đời Sống", icon: "🏡" },
-  { label: "Nhà Sách Online", icon: "📚" },
-  { label: "Mẹ & Bé", icon: "🍼" },
-  { label: "Dịch Vụ", icon: "💧" },
-];
 
 const platformList = [
   { name: 'Tất cả các sàn', logo: Logo, param: 'all' },
@@ -84,15 +48,21 @@ const getUrlFromPlatform = (platform) => {
   return found ? found[0] : 'all';
 };
 
-const Deals = () => {
+const Deals = (props) => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const [selectedPlatform, setSelectedPlatform] = useState('Tất cả các sàn');
   const [filteredVouchers, setFilteredVouchers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [platformCounts, setPlatformCounts] = useState({});
-  const filterContainerRef = useRef(null);
+
+  useEffect(() => {
+    if (!searchParams.get('platform')) {
+      navigate(`${location.pathname}?platform=all`, { replace: true });
+    }
+  }, [searchParams, navigate, location.pathname]);
 
   // Fetch số lượng voucher từng sàn khi load trang
   useEffect(() => {
@@ -116,6 +86,7 @@ const Deals = () => {
     setSelectedPlatform(getPlatformFromUrl(platformParam));
     setLoading(true);
     setError(null);
+    
     getVouchersByPlatform(platformParam)
       .then(data => setFilteredVouchers(data))
       .catch(err => setError(err.message))
@@ -127,14 +98,6 @@ const Deals = () => {
     const urlParam = getUrlFromPlatform(platform);
     navigate(`?platform=${urlParam}`);
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const scrollLeft = () => {
-    filterContainerRef.current?.scrollBy({ left: -300, behavior: 'smooth' });
-  };
-
-  const scrollRight = () => {
-    filterContainerRef.current?.scrollBy({ left: 300, behavior: 'smooth' });
   };
 
   return (
@@ -157,20 +120,6 @@ const Deals = () => {
         </ul>
       </div>
       <div className="main-deals-container">
-        {(selectedPlatform === "Shopee" || selectedPlatform === "Lazada") && (
-          <div className="san-filter-wrapper">
-            <button className="scroll-btn left-btn" onClick={scrollLeft}>◀</button>
-            <div className="san-filter-container" ref={filterContainerRef}>
-              {(selectedPlatform === "Shopee" ? shopee : lazada).map((item, index) => (
-                <div key={index} className="san-filter-item">
-                  <span className="san-filter-icon">{item.icon}</span>
-                  <span className="san-filter-label">{item.label}</span>
-                </div>
-              ))}
-            </div>
-            <button className="scroll-btn right-btn" onClick={scrollRight}>▶</button>
-          </div>
-        )}
         <h2 className="title-main-deals">
           Danh sách mã giảm giá <span className="highlight">{selectedPlatform}</span>
         </h2>
@@ -179,7 +128,7 @@ const Deals = () => {
         ) : error ? (
           <div className="error">{error}</div>
         ) : (
-          <VoucherList vouchersData={filteredVouchers} />
+          <VoucherList vouchersData={filteredVouchers} setToast={props.setToast} />
         )}
       </div>
     </div>

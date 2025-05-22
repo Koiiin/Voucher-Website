@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { getAllVouchers } from "../services/voucherService";
 import VoucherCard from "./VoucherCard";
 import "../styles/Voucherlist.css";
 
 // Thêm prop vouchersData để có thể sử dụng lại component
-function VoucherList({ vouchersData = null, isCartDisplay = false }) {
+function VoucherList({ vouchersData = null, isCartDisplay = false, setToast }) {
   const [vouchers, setVouchers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [visibleCount, setVisibleCount] = useState(10);
+  const [expandedIdx, setExpandedIdx] = useState(null);
+  const [cardPos, setCardPos] = useState({ top: 0, left: 0, width: 0 });
+  const containerRef = useRef(null);
 
   useEffect(() => {
     // Nếu có dữ liệu truyền vào, sử dụng luôn
@@ -72,8 +75,19 @@ function VoucherList({ vouchersData = null, isCartDisplay = false }) {
     }
   }
 
+  const handleCardClick = (event, idx) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const containerRect = containerRef.current.getBoundingClientRect();
+    setCardPos({
+      top: rect.top - containerRect.top,
+      left: rect.left - containerRect.left,
+      width: rect.width
+    });
+    setExpandedIdx(idx === expandedIdx ? null : idx);
+  };
+
   return (
-    <div className="voucher-list-container">
+    <div className="voucher-list-container" ref={containerRef} style={{ position: "relative" }}>
       <div className={`voucher-list${vouchersToShow.length === 1 || vouchersToShow.length === 2 ? " single-voucher" : ""}`}>
         {vouchersToShow.map((voucher, idx) => {
           // Xử lý trường hợp voucher có thể khác nhau khi là từ giỏ hàng
@@ -108,6 +122,21 @@ function VoucherList({ vouchersData = null, isCartDisplay = false }) {
               supplier={voucherData.supplier || {}}
               voucherCategory={voucherData.voucherCategory || {}}
               isInCart={isCartDisplay}
+              setToast={setToast}
+              isExpanded={expandedIdx === idx}
+              handleCardClick={e => handleCardClick(e, idx)}
+              cardPos={cardPos}
+              style={
+                expandedIdx === idx
+                  ? {
+                      position: "absolute",
+                      top: cardPos.top,
+                      left: cardPos.left,
+                      width: cardPos.width,
+                      zIndex: 1000
+                    }
+                  : {}
+              }
             />
           );
         })}

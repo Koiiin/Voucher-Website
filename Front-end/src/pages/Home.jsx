@@ -6,7 +6,7 @@ import SearchBar from "../components/SearchBar";
 import "../styles/home.css";
 import { Link } from "react-router-dom";
 
-function Home() {
+function Home(props) {
   return (
     <div className="home-page">
       <Banner />
@@ -22,7 +22,7 @@ function Home() {
 
       <section className="featured-section">
         <h2>Voucher nổi bật</h2>
-        <VoucherList />
+        <VoucherList setToast={props.setToast} />
         <div style={{textAlign: "center", margin: "24px 0"}}>
           <Link to="/deals">
             <button className="load-more-btn">Xem thêm voucher</button>

@@ -117,19 +117,31 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 8px 12px; /* Khoảng cách bên trong từng mục */
-    background-color: #ffffff; /* Màu nền của từng mục */
-    border: 1px solid #ddd; /* Đường viền */
-    border-radius: 5px; /* Bo góc từng mục */
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
-    cursor: pointer; /* Con trỏ chuột khi hover */
-    transition: all 0.3s ease; /* Hiệu ứng khi hover */
-    flex-shrink: 0; /* Đảm bảo các mục không co lại khi cuộn ngang */
+    padding: 8px 12px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
   }
   
   .san-filter-item:hover {
-    background-color: #aeacac; /* Màu nền khi hover */
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); /* Tăng đổ bóng khi hover */
+    background-color: #f0f0f0;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+  
+  .san-filter-item.active {
+    background-color: #6A8E5A;
+    color: white;
+    border-color: #6A8E5A;
+    box-shadow: 0 4px 8px rgba(106, 142, 90, 0.3);
+  }
+  
+  .san-filter-item.active:hover {
+    background-color: #5a7d4a;
   }
   
   .san-filter-icon {

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Photo Booth - Chụp và Lưu Ảnh</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+            background-color: #f0f0f0;
+            color: #333;
+        }
+        #videoContainer {
+            border: 2px solid #333;
+            margin-bottom: 10px;
+            background-color: #000;
+            position: relative; /* Cho thông báo lỗi camera */
+            width: 640px; /* Kích thước cố định cho container */
+            height: 480px;
+        }
+        #video {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+        #photoCanvas {
+            display: none; /* Canvas trung gian không cần hiển thị */
+        }
+        #takePhotoButton {
+            padding: 12px 25px;
+            font-size: 18px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            transition: background-color 0.3s ease;
+        }
+        #takePhotoButton:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        #takePhotoButton:not(:disabled):hover {
+            background-color: #45a049;
+        }
+        #capturedPhotoContainer {
+            margin-top: 20px;
+            text-align: center;
+        }
+        #capturedPhoto {
+            border: 3px solid #5cb85c;
+            max-width: 90%;
+            max-height: 400px; /* Giới hạn chiều cao ảnh xem trước */
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        #statusMessage {
+            margin-bottom: 10px;
+            font-size: 16px;
+            color: #555;
+            min-height: 24px; /* Để không bị nhảy layout khi text thay đổi */
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Web Photo Booth</h2>
+    <p id="statusMessage">Đang khởi tạo camera...</p>
+
+    <div id="videoContainer">
+        <video id="video" width="640" height="480" autoplay playsinline></video>
+    </div>
+
+    <button id="takePhotoButton" disabled>Chụp Ảnh</button>
+
+    <canvas id="photoCanvas"></canvas> <div id="capturedPhotoContainer" class="hidden">
+        <h3>Ảnh đã chụp (sẽ tự động tải xuống):</h3>
+        <img id="capturedPhoto" alt="Ảnh bạn vừa chụp">
+    </div>
+
+    <script>
+        const video = document.getElementById('video');
+        const takePhotoButton = document.getElementById('takePhotoButton');
+        const photoCanvas = document.getElementById('photoCanvas');
+        const capturedPhotoImg = document.getElementById('capturedPhoto');
+        const capturedPhotoContainer = document.getElementById('capturedPhotoContainer');
+        const statusMessage = document.getElementById('statusMessage');
+
+        const constraints = {
+            video: {
+                width: { ideal: 1280, max: 1920 }, // Yêu cầu độ phân giải cao hơn một chút
+                height: { ideal: 720, max: 1080 },
+                facingMode: "user" // Ưu tiên camera trước
+            },
+            audio: false
+        };
+
+        async function initCamera() {
+            takePhotoButton.disabled = true;
+            statusMessage.textContent = "Đang yêu cầu quyền truy cập camera...";
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia(constraints);
+                video.srcObject = stream;
+                video.onloadedmetadata = () => {
+                    // Kích thước canvas sẽ được đặt khi chụp để khớp với kích thước thực tế của video
+                    takePhotoButton.disabled = false;
+                    statusMessage.textContent = "Sẵn sàng chụp!";
+                    console.log(`Camera resolution: ${video.videoWidth}x${video.videoHeight}`);
+                };
+                video.onplay = () => {
+                     // Đôi khi onloadedmetadata không đủ, onplay đảm bảo video thực sự đang chạy
+                    takePhotoButton.disabled = false;
+                    statusMessage.textContent = "Sẵn sàng chụp!";
+                };
+            } catch (err) {
+                console.error("Lỗi truy cập webcam: ", err);
+                let message = "Không thể truy cập webcam. ";
+                if (err.name === "NotAllowedError" || err.name === "PermissionDeniedError") {
+                    message += "Bạn đã từ chối quyền truy cập camera. Vui lòng kiểm tra cài đặt trình duyệt và cho phép trang web này sử dụng camera.";
+                } else if (err.name === "NotFoundError" || err.name === "DevicesNotFoundError") {
+                    message += "Không tìm thấy camera trên thiết bị của bạn.";
+                } else if (err.name === "NotReadableError" || err.name === "TrackStartError") {
+                    message += "Không thể đọc dữ liệu từ camera. Camera có thể đang được sử dụng bởi ứng dụng khác hoặc có lỗi phần cứng.";
+                } else if (err.name === "OverconstrainedError" || err.name === "ConstraintNotSatisfiedError") {
+                    message += `Không thể đáp ứng các yêu cầu về camera (ví dụ: độ phân giải ${constraints.video.width.ideal}x${constraints.video.height.ideal}). Thử với cài đặt mặc định.`;
+                    // Thử lại với constraints tối giản hơn
+                    try {
+                        const fallbackStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+                        video.srcObject = fallbackStream;
+                        video.onloadedmetadata = () => {
+                             takePhotoButton.disabled = false;
+                             statusMessage.textContent = "Sẵn sàng chụp (với cài đặt camera mặc định)!";
+                        };
+                    } catch (fallbackErr) {
+                        message += " Thử lại với cài đặt mặc định cũng thất bại.";
+                        statusMessage.textContent = message;
+                    }
+                }
+                else {
+                    message += "Đã xảy ra lỗi không xác định: " + err.message;
+                }
+                if (statusMessage.textContent !== "Sẵn sàng chụp (với cài đặt camera mặc định)!") { // Chỉ cập nhật nếu fallback không thành công
+                   statusMessage.textContent = message;
+                }
+                takePhotoButton.disabled = true;
+            }
+        }
+
+        takePhotoButton.addEventListener('click', () => {
+            if (video.srcObject && video.readyState >= 3) { // readyState >=3 (HAVE_FUTURE_DATA) or 4 (HAVE_ENOUGH_DATA)
+                // Đặt kích thước canvas bằng kích thước thực tế của video
+                photoCanvas.width = video.videoWidth;
+                photoCanvas.height = video.videoHeight;
+
+                const context = photoCanvas.getContext('2d');
+                context.drawImage(video, 0, 0, photoCanvas.width, photoCanvas.height);
+
+                const dataUrl = photoCanvas.toDataURL('image/png'); // Bạn có thể dùng 'image/jpeg' nếu muốn
+                capturedPhotoImg.src = dataUrl;
+                capturedPhotoContainer.classList.remove('hidden');
+
+                // Tạo tên file với timestamp
+                const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
+                const filename = `webcam-photo-${timestamp}.png`;
+
+                // Tạo và kích hoạt link tải xuống
+                const link = document.createElement('a');
+                link.href = dataUrl;
+                link.download = filename;
+                document.body.appendChild(link); // Cần thêm vào DOM để hoạt động trên Firefox
+                link.click();
+                document.body.removeChild(link); // Dọn dẹp link sau khi click
+
+                statusMessage.textContent = `Đã chụp và tải xuống ${filename}`;
+            } else {
+                statusMessage.textContent = "Webcam chưa sẵn sàng hoặc không có luồng video. Vui lòng đợi hoặc thử làm mới trang.";
+                alert("Webcam chưa sẵn sàng. Hãy đảm bảo bạn đã cấp quyền và camera đang hoạt động.");
+            }
+        });
+
+        // Khởi chạy camera khi trang tải xong
+        window.addEventListener('load', initCamera);
+    </script>
+
+</body>
+</html>

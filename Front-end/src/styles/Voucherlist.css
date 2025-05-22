@@ -1,4 +1,6 @@
 .voucher-list {
+  position: relative;
+  overflow: visible; /* Cho phép voucher expand tràn ra ngoài */
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); /* Tự co giãn cột */
   gap: 5px;

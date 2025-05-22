@@ -12,11 +12,12 @@ const voucherSchema = new mongoose.Schema({
   expiredAt: { type: Date },
   affLink: { type: String },
   note: { type: String },
-  totalClick: { type: Number, default: 0 },
+  totalClick: { type: String, default: null },
   payment: { type: String, default: null },
   listApplyLink: { type: String, default: '' },
   useLink: { type: String, default: null },
-  
+  usageTerms: { type: String, default: null },
+  avatar: { type: String, default: null },
   supplier: {
     title: { type: String },
     slug: { type: String }

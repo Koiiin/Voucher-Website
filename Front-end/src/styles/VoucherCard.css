@@ -13,6 +13,19 @@
   height: auto;
   font-size: 100%;
   position: relative;
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.voucher-card.expanded {
+  aspect-ratio: unset !important;
+  overflow: visible !important;
+  z-index: 100;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  height: auto;
+  width: 100%;
+  left: 0;
+  right: 0;
 }
 
 .voucher-left {
@@ -27,6 +40,11 @@
   position: relative;
   border-radius: 12px 0 0 12px;
   overflow: visible;
+  transition: all 0.3s ease-in-out;
+}
+
+.voucher-card.expanded .voucher-left {
+  display: none;
 }
 
 .voucher-left::after {
@@ -86,6 +104,14 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  transition: all 0.3s ease-in-out;
+}
+
+.voucher-card.expanded .voucher-right {
+  width: 100%;
+  padding: 3%;
+  background: #fff;
+  border-radius: 12px;
 }
 
 .discount {
@@ -229,9 +255,20 @@
 
 .voucher-detail {
   padding: 2%;
-  width: 0%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.3s ease-in-out;
+}
+
+.voucher-card.expanded .voucher-detail {
+  opacity: 1;
+  max-height: 500px;
+  margin-top: 10px;
+  border-top: 1px solid #eee;
 }
 

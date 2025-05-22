@@ -3,7 +3,7 @@ import { authRequest } from "../services/authService";
 import "../styles/Cart.css";
 import VoucherList from "../components/Voucherlist";
 
-function Cart() {
+function Cart(props) {
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -34,7 +34,7 @@ function Cart() {
   return (
     <div className="cart-page">
       <h2>Giỏ hàng của bạn</h2>
-      <VoucherList vouchersData={cartItems} isCartDisplay={true} />
+      <VoucherList vouchersData={cartItems} isCartDisplay={true} setToast={props.setToast} />
     </div>
   );  
 }

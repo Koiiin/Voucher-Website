@@ -29,10 +29,17 @@ exports.createVoucher = async (req, res) => {
 // Lấy tất cả voucher T
 exports.getAllVoucher = async (req, res) => {
   try {
-    const vouchers = await AllVouchers.find().sort({ createdAt: -1 }).limit(100);
-    
+    let vouchers = await AllVouchers.find().limit(100);
+
+    // Sắp xếp theo totalClick giảm dần (totalClick là string, default null)
+    vouchers = vouchers.sort((a, b) => {
+      const clickA = parseInt(a.totalClick) || 0;
+      const clickB = parseInt(b.totalClick) || 0;
+      return clickB - clickA;
+    });
+
     console.log(`Found ${vouchers.length} vouchers`); // Log số lượng voucher
-    
+
     if (!vouchers || vouchers.length === 0) {
       return res.status(200).json({
         success: true,
@@ -180,7 +187,6 @@ exports.getVouchersByPlatform = async (req, res) => {
       query = { 'supplier.slug': platform };
     }
     const vouchers = await AllVouchers.find(query)
-      .sort({ createdAt: -1 })
       .limit(100);
 
     res.status(200).json({

@@ -2,8 +2,37 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { addToCart } from "../services/voucherService";
 import { getToken, authRequest } from "../services/authService";
-import Toast from "./toast";
 import "../styles/VoucherCard.css"; // CSS riêng cho VoucherCard
+
+import shopeeLogo from "../img/san/shopee.png";
+import lazadaLogo from "../img/san/lazada.png";
+import tikiLogo from "../img/san/tiki.png";
+import sendoLogo from "../img/san/sendo.png";
+import nguyenKimLogo from "../img/san/nguyenkim.png";
+import dienMayXanhLogo from "../img/san/dienmayxanh.png";
+import fahasaLogo from "../img/san/fahasa.png";
+import shopeefoodLogo from "../img/san/shopeefood.png";
+
+const getPlatformLogo = (slug) => {
+  switch (slug?.toLowerCase()) {
+    case 'shopee':
+      return shopeeLogo;
+    case 'lazada':
+      return lazadaLogo;
+    case 'tiki':
+      return tikiLogo;
+    case 'sendo':
+      return sendoLogo;
+    case 'nguyen-kim':
+      return nguyenKimLogo;
+    case 'dien-may-xanh':
+      return dienMayXanhLogo;
+    case 'fahasa':
+      return fahasaLogo;
+    case 'shopeefood':
+      return shopeefoodLogo;
+  }
+};
 
 const VoucherCard = ({
   id,
@@ -18,15 +47,17 @@ const VoucherCard = ({
   expiredAt,
   affLink,
   note,
+  usageTerms,
   totalClick,
   supplier,
   voucherCategory,
   isInCart = false, // prop này để biết nếu hiển thị trong giỏ hàng
+  setToast // nhận props setToast từ cha
 }) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [cardPos, setCardPos] = useState({ top: 0, left: 0, width: 0 });
   const navigate = useNavigate();
-  const [toast, setToast] = useState({ message: "", type: "info" });
   
   // Cắt note nếu quá dài
   const maxNoteLength = 48;
@@ -111,40 +142,29 @@ const VoucherCard = ({
     }
   };
 
-  const handleCardClick = () => {
+  const handleCardClick = (e) => {
+    if (!isExpanded) {
+      const rect = e.currentTarget.getBoundingClientRect();
+      setCardPos({
+        top: rect.top + window.scrollY,
+        left: rect.left + window.scrollX,
+        width: rect.width
+      });
+    }
     setIsExpanded((prev) => !prev);
   };
 
   return (
     <div className={`voucher-card ${isExpanded ? 'expanded' : ''}`} onClick={handleCardClick} style={{ cursor: "pointer" }}> 
-      <Toast
-        message={toast.message}
-        type={toast.type}
-        onClose={() => setToast({ message: "" })}
-        duration={2000}
-      />
-      {/* Nút thêm/xóa khỏi giỏ hàng */}
-      <button 
-        className={`cart-action-btn ${isInCart ? 'remove-btn' : 'add-btn'}`}
-        onClick={(e) => {
-          e.stopPropagation(); // chặn lan sự kiện
-          isInCart ? handleRemoveFromCart() : handleAddToCart();
-        }}
-        title={isInCart ? "Xóa khỏi giỏ hàng" : "Thêm vào giỏ hàng"}
-        disabled={isProcessing}
-        
-      >
-        {isProcessing ? "..." : isInCart ? "🗑️" : "🛒"}
-      </button>
       <div className="voucher-left">
         <div className="logo-supplier">
           <img
             className="supplier-logo"
-            src={supplier?.avatar || "https://images.piggi.vn/1720708484611-shopee_bg.webp"}
-            alt="Shop Logo"
+            src={getPlatformLogo(supplier?.slug)}
+            alt={"Shop Logo"}
           />
         </div>
-        <div className="applicable-to">{supplier?.title || voucherCategory?.title}</div>
+        <div className="applicable-to">{voucherCategory?.title}</div>
         <div className="expiry-date">
           <i className="fa fa-clock-o"></i>⏱ HSD:{" "}
           {expiredAt
@@ -155,34 +175,9 @@ const VoucherCard = ({
             : "--/--"}
         </div>
       </div>
-      <div className="voucher-right">
-        <p className="discount">
-          Giảm{" "}
-          <span className="highlight">
-            {voucherType === "percent"
-              ? `${voucherAmount}%`
-              : `${voucherAmount?.toLocaleString()}đ`}
-          </span>
-        </p>
-        <p>
-          <span style={{ fontSize: '90%' }}>ĐH tối thiểu: </span>{" "}
-          <span className="min-order">
-            {minSpend ? Number(minSpend).toLocaleString() + "đ" : "0đ"}
-          </span>
-        </p>
-        <p className="note">
-          <span className="note-label">Lưu ý:</span> {shortNote}
-        </p>
-        <div className="voucher-footer">
-          <span className="apply-list">#Lưu trên banner</span>
-          <a href={affLink || "#"} target="_blank" rel="noopener noreferrer">
-            <button className="copy-code">Đến Banner</button>
-          </a>
-        </div>
-      </div>
-       {/* thêm nếu bấm vào voucher xem chi tiết */}
-       {isExpanded && (
-        <div className="voucher-detail">
+      {/* Chỉ hiển thị khi chưa expanded */}
+      {!isExpanded && (
+        <div className="voucher-right">
           <p className="discount">
             Giảm{" "}
             <span className="highlight">
@@ -202,12 +197,61 @@ const VoucherCard = ({
           </p>
           <div className="voucher-footer">
             <span className="apply-list">#Lưu trên banner</span>
+            <a href={affLink || "#"} target="_blank" rel="noopener noreferrer">
+              <button className="copy-code">Đến Banner</button>
+            </a>
+          </div>
+        </div>
+      )}
+      {/* Hiển thị khi expanded */}
+      {isExpanded && (
+        <div className="voucher-right voucher-detail">
+          <p className="discount">
+            Giảm{" "}
+            <span className="highlight">
+              {voucherType === "percent"
+                ? `${voucherAmount}%`
+                : `${voucherAmount?.toLocaleString()}đ`}
+            </span>
+          </p>
+          <p>
+            <span style={{ fontSize: '90%' }}>ĐH tối thiểu: </span>{" "}
+            <span className="min-order">
+              {minSpend ? Number(minSpend).toLocaleString() + "đ" : "0đ"}
+            </span>
+          </p>
+          <p>
+            <span style={{ fontSize: '90%' }}>Ngành hàng:</span> <span style={{ fontWeight: 'bold' }}>{voucherCategory?.title}</span>
+          </p>
+          {usageTerms && (
+            <p>
+              <span style={{ fontSize: '90%' }}>Điều kiện sử dụng:</span> <span style={{ fontWeight: 'bold' }}>{usageTerms}</span>
+            </p>
+          )}
+          <p className="note">
+            <span className="note-label">Lưu ý:</span> {note}
+          </p>
+          <div className="voucher-footer">
+            <span className="apply-list">#Lưu trên banner</span>
             <a href={affLink || "#"} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
               <button className="copy-code">Đến Banner</button>
             </a>
           </div>
         </div>
-       )}
+      )}
+      {/* Nút thêm/xóa khỏi giỏ hàng */}
+      <button 
+        className={`cart-action-btn ${isInCart ? 'remove-btn' : 'add-btn'}`}
+        onClick={(e) => {
+          e.stopPropagation(); // chặn lan sự kiện
+          isInCart ? handleRemoveFromCart() : handleAddToCart();
+        }}
+        title={isInCart ? "Xóa khỏi giỏ hàng" : "Thêm vào giỏ hàng"}
+        disabled={isProcessing}
+        
+      >
+        {isProcessing ? "..." : isInCart ? "🗑️" : "🛒"}
+      </button>
     </div>
   );
 };
