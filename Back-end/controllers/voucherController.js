@@ -3,7 +3,7 @@ const { AllVouchers } = require('../models/voucher');
 // Tạo voucher//T
 exports.createVoucher = async (req, res) => {
   try {
-    const {title, voucherType, category, validityStart, validityEnd, price, quantity, minSpend, linkanh, _id, createdAt, updatedAt, ...rest} = req.body;
+    const {title, voucherType, category, validityStart, validityEnd, price, quantity, minSpend, _id, createdAt, updatedAt, ...rest} = req.body;
     const ownerID = req.user.id; // Lấy ownerID từ token đã xác thực
     if(!title || !voucherType || !validityStart || !validityEnd || !ownerID) {
       return res.status(400).json({ success: false, message: 'Vui lòng nhập đầy đủ thông tin!' });
@@ -26,6 +26,17 @@ exports.createVoucher = async (req, res) => {
   }
 };
 //T
+//lay tat ca voucher cua nguoi dung c 
+exports.getUserVouchers = async (req, res) => {
+  try {
+    const vouchers = await VoucherModel.find();
+    res.status(200).json({ success: true, data: vouchers });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+}
+
+
 // Lấy tất cả voucher T
 exports.getAllVoucher = async (req, res) => {
   try {
@@ -62,6 +73,7 @@ exports.getAllVoucher = async (req, res) => {
     });
   }
 };
+
 
 // Xóa voucher //T
 exports.deleteVoucher = async (req, res) => {

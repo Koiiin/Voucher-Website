@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-route
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Deals from "./pages/Deals";
-import Categories from "./pages/Categories";
+import UserVoucher from "./pages/Categories";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Chatbot from "./components/Chatbot";
@@ -70,7 +70,7 @@ function App() {
             <Route path="/" element={<Home setToast={setToast} />} />
             <Route path="/chatbot" element={ <Chatbot />} />
             <Route path="/deals" element={<Deals setToast={setToast} /> } />
-            <Route path="/categories" element={<Categories /> } />
+            <Route path="/UserVoucher" element={<UserVoucher /> } />
               {/* Route mặc định: Chuyển hướng đến trang chủ nếu vào bất cứ trang nào không hợp lệlệ*/}
             <Route path="*" element={<Navigate to="/" />} />
               {/* /*user */ }

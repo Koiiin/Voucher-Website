@@ -38,7 +38,7 @@ function Header() {
         />
       </div>
       <nav>
-        <Link to="/categories" className="menu-btn">Mua bán</Link>
+        <Link to="/userVoucher" className="menu-btn">Mua bán</Link>
         <Link to="/deals" className="discount-btn">Ưu đãi hot</Link>
         <Link to="/chatbot" className="chatbot-btn">Chatbot</Link>
         <Link to="/create-voucher" className="create-voucher-btn">Tạo voucher</Link>

@@ -23,5 +23,8 @@ router.get('/getValidVouchers', voucherController.getValidVouchers);
 router.get('/getVouchersByPlatform/:platform', voucherController.getVouchersByPlatform);
 // API trả về số lượng voucher theo sàn
 router.get('/getVoucherCountByPlatform/:platform', voucherController.getVoucherCountByPlatform);
+//lay tat ca voucher cua nguoi dung c 
+router.get('/getUserVouchers', voucherController.getUserVouchers);
+
 
 module.exports = router;

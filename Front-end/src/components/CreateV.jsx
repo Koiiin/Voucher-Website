@@ -34,6 +34,9 @@ const CreateV = () => {
             if(formData.validityStart > formData.validityEnd){
                 setToast({ message: "Ngày bắt đầu không thể lớn hơn ngày kết thúc!", type: "error" });
                 return;
+            } else if(new Date(formData.validityStart).getTime() < Date.now()){
+                setToast({ message: "Ngày bắt đầu không thể nhỏ hơn ngày hiện tại!", type: "error" });
+                return;
             }
             const response = await createVoucher(formData);
             if (response.success) {

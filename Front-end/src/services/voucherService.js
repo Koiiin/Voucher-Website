@@ -19,6 +19,21 @@ export const createVoucher = async (voucherData) => {
   }
 };
 
+// lấy voucher của người dùng
+export const getUserVouchers = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/getUserVouchers`);
+    if (response.data.success) {
+      return response.data.data;
+    } else {
+      throw new Error("Không thể tải danh sách voucher!");
+    }
+  } catch (error) {
+    console.error(error);
+    throw new Error("Lỗi kết nối đến server!");
+  }
+};
+
 // lấy voucher 
 export const getAllVouchers = async () => {
   try {

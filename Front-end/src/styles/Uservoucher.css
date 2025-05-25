@@ -1,0 +1,76 @@
+ 
+ .user-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 16px;
+  margin: 10px 0;
+  background-color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.user-card:hover {
+  transform: scale(1.01);
+}
+
+.user-card-left {
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+}
+
+.user-card-left h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #f53d2d;
+}
+
+.user-card-left p {
+  margin: 4px 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.user-card-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  width: 40%;
+}
+
+.discount {
+  color: #00bfa5;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.button-group {
+  margin-top: 8px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.save-button,
+.banner-button {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: none;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.save-button {
+  background-color: #fff;
+  color: #00bfa5;
+  border: 1px solid #00bfa5;
+}
+
+.banner-button {
+  background-color: #00bfa5;
+  color: white;
+}
