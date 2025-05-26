@@ -2,7 +2,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border: 1px solid #ddd;
+  border: 1px solid #000000;
   border-radius: 12px;
   padding: 16px;
   margin: 10px 0;
@@ -45,6 +45,13 @@
   color: #00bfa5;
   font-weight: bold;
   font-size: 18px;
+}
+
+.discount-amount {
+  font-size: 28px;
+  color: #00bfa5;
+  font-weight: bold;
+  margin: 0 2px;
 }
 
 .button-group {

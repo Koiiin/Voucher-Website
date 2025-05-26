@@ -1,13 +1,30 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/Uservoucher.css";
+import axios from "axios";
 
 const UserCard = ({ voucher, onClick }) => {
   const navigate = useNavigate();
 
-  const handleBuyClick = (e) => {
-    e.stopPropagation(); // Prevent triggering the parent onClick
-    navigate('/'); // Navigate to home page
+  const handleBuyClick = async (e) => {
+    e.stopPropagation();
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/payment/momo", // Đổi lại đúng URL backend nếu cần
+        {
+          voucherData: voucher,
+          // userInfo: user, // Nếu có thông tin user, truyền thêm vào đây
+        }
+      );
+      const payUrl = response.data.payUrl;
+      if (payUrl) {
+        window.open(payUrl, '_blank');
+      } else {
+        alert("Không lấy được link thanh toán từ MoMo!");
+      }
+    } catch (error) {
+      alert("Có lỗi khi tạo thanh toán: " + (error.response?.data?.error || error.message));
+    }
   };
 
   return (
@@ -20,7 +37,7 @@ const UserCard = ({ voucher, onClick }) => {
         <p>HSD: {new Date(voucher.validityEnd).toLocaleDateString()}</p>
       </div>
       <div className="user-card-right">
-        <p className="discount">Giảm {voucher.price} đ</p>
+        <p className="discount">Giảm <span className="discount-amount">{voucher.price}</span> đ</p>
         <p>Đơn hàng tối thiểu: {voucher.minSpend}đ</p>
         <p>Số lượng: {voucher.quantity}</p>
         <div className="button-group">
