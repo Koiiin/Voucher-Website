@@ -1,5 +1,4 @@
- 
- .user-card {
+.user-card {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -73,4 +72,5 @@
 .banner-button {
   background-color: #00bfa5;
   color: white;
+  cursor: pointer;
 }

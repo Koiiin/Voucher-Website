@@ -1,0 +1,22 @@
+.container {
+  margin-top: 80px; /* Adjust this value based on your header height */
+}
+
+.voucher-grid {
+  position: relative;
+  overflow: visible;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 5px;
+  padding: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .voucher-grid {
+    grid-template-columns: 1fr;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+}
