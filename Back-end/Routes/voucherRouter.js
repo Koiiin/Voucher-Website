@@ -25,6 +25,7 @@ router.get('/getVouchersByPlatform/:platform', voucherController.getVouchersByPl
 router.get('/getVoucherCountByPlatform/:platform', voucherController.getVoucherCountByPlatform);
 //lay tat ca voucher cua nguoi dung c 
 router.get('/getUserVouchers', voucherController.getUserVouchers);
-
+//Lay voucher theo id
+router.get('/getVoucherById/:id', authMiddleware.verifyToken ,voucherController.getVoucherById);
 
 module.exports = router;

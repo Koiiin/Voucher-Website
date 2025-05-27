@@ -1,5 +1,7 @@
 const VoucherModel = require('../models/UserVouchers');
 const { AllVouchers } = require('../models/voucher');
+const mongoose = require('mongoose');
+
 // Tạo voucher//T
 exports.createVoucher = async (req, res) => {
   try {
@@ -35,7 +37,23 @@ exports.getUserVouchers = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 }
-
+// Lấy voucher theo ID
+exports.getVoucherById = async (req, res) => { 
+  try {
+    const ownerId = mongoose.Types.ObjectId.isValid(req.params.id) ? new mongoose.Types.ObjectId(req.params.id) : null;
+    if (!ownerId) {
+      return res.status(400).json({ success: false, message: 'ID không hợp lệ' });
+    }
+    const vouchers = await VoucherModel.find({ ownerID: ownerId });
+    if (!vouchers || vouchers.length === 0) {
+      return res.status(404).json({ success: false, message: 'Không tìm thấy voucher nào' });   
+    }
+    res.status(200).json({ success: true, data: vouchers });
+  } catch (error) {
+    console.error('Error fetching voucher by ID:', error);
+    res.status(500).json({ success: false, message: 'Lỗi server khi lấy voucher', error: error.message });
+  }
+};
 
 // Lấy tất cả voucher T
 exports.getAllVoucher = async (req, res) => {
