@@ -96,20 +96,28 @@ exports.getAllVoucher = async (req, res) => {
 // Xóa voucher //T
 exports.deleteVoucher = async (req, res) => {
   try {
+    console.log("User:", req.user);
+    console.log("Deleting voucher ID:", req.params.id);
+
     const voucher = await VoucherModel.findById(req.params.id);
-    if (!voucher) return res.status(404).json({ message: 'Voucher không tồn tại' });
+    if (!voucher) {
+      console.log("Voucher not found");
+      return res.status(404).json({ message: 'Voucher không tồn tại' });
+    }
+
     if (voucher.ownerID.toString() !== req.user.id) {
+      console.log("Not owner. UserID:", req.user.id, "OwnerID:", voucher.ownerID);
       return res.status(403).json({ message: 'Bạn không có quyền xóa voucher này' });
     }
-    
+
     await VoucherModel.findByIdAndDelete(req.params.id);
     res.status(200).json({ message: 'Xóa thành công' });
-   
   } catch (error) {
+    console.error("Lỗi khi xóa:", error);
     res.status(500).json({ error: error.message });
-    console.log("loi khi xoa ");
   }
 };
+
 
 // Cập nhật voucher
 exports.updateVoucher = async (req, res) => {

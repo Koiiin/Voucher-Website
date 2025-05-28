@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom"; // Import useNavigate
 import "../styles/Login.css"; // Sử dụng chung CSS với Login
 import { register } from "../services/authService"; 

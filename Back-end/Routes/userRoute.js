@@ -5,8 +5,8 @@ const { verifyTokenOnly, verifyTokenAndAdAuth } = require('../controllers/middle
 
 // Admin - Public
 router.get('/', userController.getAllUser);
-router.delete('/:id', userController.deleteUser);
 router.get('/:id/vouchers', userController.getUserVouchers);
+router.delete('/:id', userController.deleteUser);
 
 // User - Private - cần token
 router.get('/profile', verifyTokenOnly, userController.getUserProfile);

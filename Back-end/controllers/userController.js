@@ -1,5 +1,7 @@
 const User = require('../models/user');
 const Voucher = require('../models/voucher');
+const UserVoucher = require('../models/UserVouchers'); 
+const mongoose = require('mongoose');
 
 exports.getAllUser = async (req, res) => {
     try {
@@ -33,8 +35,8 @@ exports.getUserProfile = async (req, res) => {
         const userId = req.user.id;
         const user = await User.findById(userId)
             .select('-password')
-            .populate('vouchers') // Populates the vouchers array (if exists)
-            .populate('ratings.fromUser', 'username avatarUrl'); // Populates the user who gave the rating
+            // .populate('vouchers') // Populates the vouchers array (if exists)
+            // .populate('ratings.fromUser', 'username avatarUrl'); // Populates the user who gave the rating
         
         if (!user) return res.status(404).json({ message: 'Không tìm thấy user!' });
 
@@ -66,14 +68,23 @@ exports.updateUserProfile = async (req, res) => {
 
 exports.getUserVouchers = async (req, res) => {
     try {
-        const userId = req.user.id;
-        const vouchers = await Voucher.find({ ownerID: userId });
+        const userId = req.params.id;
 
-        if (!vouchers) return res.status(404).json({ message: 'Không tìm thấy voucher của người dùng!' });
+        if (!mongoose.Types.ObjectId.isValid(userId)) {
+            return res.status(400).json({ message: 'ID người dùng không hợp lệ!' });
+        }
 
-        res.status(200).json(vouchers);
-    } 
-    catch (error) {
+        const objectUserId = new mongoose.Types.ObjectId(userId);
+
+        const vouchers = await UserVoucher.find({ ownerID: objectUserId });
+
+        if (!vouchers || vouchers.length === 0) {
+            return res.status(404).json({ message: 'Không tìm thấy voucher của người dùng!' });
+        }
+
+        res.status(200).json({ success: true, data: vouchers });
+    } catch (error) {
+        console.error('[getUserVouchers] ❌', error);
         res.status(500).json({ message: 'Lỗi server ❌', error: error.message });
     }
 };
