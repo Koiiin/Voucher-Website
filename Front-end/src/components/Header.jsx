@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 import "../styles/Header.css";
-import UserMenu from "./usermenu";  
+import UserMenu from "./Usermenu";  
 function Header() {
   const [user, setUser] = useState(null);  // Giữ tên người dùng trong state
   const navigate = useNavigate();
