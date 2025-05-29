@@ -1,25 +1,35 @@
 const VoucherModel = require('../models/UserVouchers');
 const { AllVouchers } = require('../models/voucher');
 const mongoose = require('mongoose');
+const User = require('../models/user');
 
 // Tạo voucher//T
 exports.createVoucher = async (req, res) => {
   try {
-    const {title, voucherType, category, validityStart, validityEnd, price, quantity, minSpend, _id, createdAt, updatedAt, ...rest} = req.body;
-    const ownerID = req.user.id; // Lấy ownerID từ token đã xác thực
-    if(!title || !voucherType || !validityStart || !validityEnd || !ownerID) {
+    const { title, voucherType, category, validityStart, validityEnd, price, quantity, minSpend } = req.body;
+    const ownerId = req.user.id;
+
+    // Lấy username của user từ DB
+    const user = await User.findById(ownerId).select('username');
+    if (!user) {
+      return res.status(400).json({ success: false, message: 'Không tìm thấy user!' });
+    }
+    const ownerUsername = user.username;
+
+    if (!title || !voucherType || !validityStart || !validityEnd || !ownerId) {
       return res.status(400).json({ success: false, message: 'Vui lòng nhập đầy đủ thông tin!' });
     }
     const newVoucher = new VoucherModel({
-      title, // tieu de voucher
-      voucherType, // loai voucher
-      category, // danh muc
-      validityStart, // ngay bat dau
-      validityEnd, // ngay ket thuc
-      ownerID, // id nguoi tao voucher
-      price, // gia voucher
+      title,
+      voucherType,
+      category,
+      validityStart,
+      validityEnd,
+      ownerId,
+      ownerUsername, // Bổ sung trường này
+      price,
       quantity,
-      minSpend: minSpend || 0 // Set default value to 0 if not provided
+      minSpend: minSpend || 0
     });
     await newVoucher.save();
     res.status(201).json({ success: true, voucher: newVoucher });
@@ -44,7 +54,7 @@ exports.getVoucherById = async (req, res) => {
     if (!ownerId) {
       return res.status(400).json({ success: false, message: 'ID không hợp lệ' });
     }
-    const vouchers = await VoucherModel.find({ ownerID: ownerId });
+    const vouchers = await VoucherModel.find({ ownerId }); // Đổi từ ownerID -> ownerId
     if (!vouchers || vouchers.length === 0) {
       return res.status(404).json({ success: false, message: 'Không tìm thấy voucher nào' });   
     }
@@ -105,8 +115,8 @@ exports.deleteVoucher = async (req, res) => {
       return res.status(404).json({ message: 'Voucher không tồn tại' });
     }
 
-    if (voucher.ownerID.toString() !== req.user.id) {
-      console.log("Not owner. UserID:", req.user.id, "OwnerID:", voucher.ownerID);
+    if (voucher.ownerId.toString() !== req.user.id) { // Đổi từ ownerID -> ownerId
+      console.log("Not owner. UserID:", req.user.id, "OwnerID:", voucher.ownerId);
       return res.status(403).json({ message: 'Bạn không có quyền xóa voucher này' });
     }
 

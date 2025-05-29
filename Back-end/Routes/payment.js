@@ -3,6 +3,8 @@ const axios = require("axios");
 const crypto = require("crypto");
 const dotenv = require("dotenv");
 const VoucherTransaction = require("../models/VoucherTransaction");
+const UserVoucher = require("../models/UserVouchers");
+const mongoose = require('mongoose');
 
 dotenv.config();
 const router = express.Router();
@@ -44,7 +46,8 @@ router.post("/payment/momo", async (req, res) => {
     console.log("--------------------SIGNATURE----------------")
     console.log(signature);
 
-    var expiryTime = Math.floor(Date.now() / 1000) + 600;
+    // Giảm thời gian hết hạn xuống 10 phút (600 giây)
+    var expiryTime = Math.floor(Date.now() / 1000) + 600; 
 
     // Lưu giao dịch vào database (nếu cần)
     try {
@@ -116,5 +119,104 @@ router.post("/payment/momo", async (req, res) => {
     reqmomo.write(requestBody);
     reqmomo.end();
 });
+
+// Thêm route check payment status
+router.get("/payment/status/:orderId", async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const transaction = await VoucherTransaction.findOne({ orderId });
+    
+    if (!transaction) {
+      return res.status(404).json({ 
+        message: "Không tìm thấy giao dịch",
+        orderId 
+      });
+    }
+
+    if (transaction.status === 'completed') {
+      // Tìm voucher gốc
+      const originalVoucher = await UserVoucher.findById(transaction.voucher._id);
+      
+      if (originalVoucher && originalVoucher.quantity > 0) {
+        // Tạo voucher mới cho người mua
+        const newVoucher = new UserVoucher({
+          ...originalVoucher.toObject(),
+          _id: new mongoose.Types.ObjectId(),
+          ownerId: transaction.userInfo.userId,
+          quantity: 1
+        });
+
+        // Giảm số lượng voucher gốc
+        originalVoucher.quantity -= 1;
+
+        await Promise.all([
+          newVoucher.save(),
+          originalVoucher.save()
+        ]);
+
+        return res.json({ 
+          status: transaction.status,
+          message: 'Thanh toán thành công! Voucher đã được thêm vào tài khoản của bạn'
+        });
+      }
+    } else if (transaction.status === 'pending') {
+      const now = new Date();
+      const createdAt = new Date(transaction.createdAt);
+      const diffMinutes = (now - createdAt) / 1000 / 60;
+
+      // Timeout sau 10 phút 
+      if (diffMinutes > 10) {
+        transaction.status = 'timeout';
+        await transaction.save();
+        return res.json({ 
+          status: 'timeout',
+          message: 'Giao dịch đã hết hạn'
+        });
+      }
+    }
+
+    res.json({ 
+      status: transaction.status,
+      message: getStatusMessage(transaction.status)
+    });
+
+  } catch (error) {
+    console.error("Error checking payment status:", error);
+    res.status(500).json({ message: "Lỗi server" });
+  }
+});
+
+// Thêm route để hủy giao dịch khi đóng tab
+router.post("/payment/cancel/:orderId", async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const transaction = await VoucherTransaction.findOne({ orderId });
+    
+    if (!transaction) {
+      return res.status(404).json({ message: "Không tìm thấy giao dịch" });
+    }
+
+    if (transaction.status === 'pending') {
+      transaction.status = 'canceled';
+      await transaction.save();
+    }
+
+    res.json({ status: 'canceled', message: 'Đã hủy giao dịch' });
+  } catch (error) {
+    console.error("Error canceling payment:", error);
+    res.status(500).json({ message: "Lỗi server" });
+  }
+});
+
+function getStatusMessage(status) {
+  switch(status) {
+    case 'completed': return 'Thanh toán thành công';
+    case 'pending': return 'Đang chờ thanh toán';
+    case 'failed': return 'Thanh toán thất bại'; 
+    case 'canceled': return 'Đã hủy thanh toán';
+    case 'timeout': return 'Giao dịch hết hạn';
+    default: return 'Không xác định';
+  }
+}
 
 module.exports = router;

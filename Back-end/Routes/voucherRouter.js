@@ -27,5 +27,32 @@ router.get('/getVoucherCountByPlatform/:platform', voucherController.getVoucherC
 router.get('/getUserVouchers', voucherController.getUserVouchers);
 //Lay voucher theo id
 router.get('/getVoucherById/:id', authMiddleware.verifyToken ,voucherController.getVoucherById);
+// Lấy voucher đã mua theo username
+router.get('/vouchers/purchased/user/:username', async (req, res) => {
+  try {
+    const { username } = req.params;
+    const vouchers = await VoucherModel.find({ 
+      ownerUsername: username,
+      purchaseType: 'paid'
+    });
+    res.json(vouchers);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Lấy voucher miễn phí đã lưu theo username
+router.get('/vouchers/saved/user/:username', async (req, res) => {
+  try {
+    const { username } = req.params;
+    const vouchers = await VoucherModel.find({ 
+      ownerUsername: username,
+      purchaseType: 'free'
+    });
+    res.json(vouchers);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
 
 module.exports = router;

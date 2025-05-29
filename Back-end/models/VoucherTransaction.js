@@ -1,12 +1,19 @@
 const mongoose = require("mongoose");
 
 const VoucherTransactionSchema = new mongoose.Schema({
-    orderID: { type: String, required: true, unique: true },
-    buyerID: { type: String, required: true },
-    voucherID: { type: String, required: true },
-    price: { type: Number, required: true },
-    status: { type: String, enum: ["pending", "paid", "failed"], default: "pending" },
-    createdAt: { type: Date, default: Date.now }
+  orderId: { type: String, required: true, unique: true },
+  transactionId: { type: String }, // ID giao dịch từ MoMo
+  buyerId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  voucherId: { type: mongoose.Schema.Types.ObjectId, ref: "UserVoucher" },
+  amount: { type: Number, required: true },
+  status: {
+    type: String,
+    enum: ["pending", "completed", "failed", "canceled"],
+    default: "pending",
+  },
+  paymentMethod: { type: String, default: "momo" },
+  paymentTime: { type: Date },
+  createdAt: { type: Date, default: Date.now },
 });
 
 module.exports = mongoose.model("VoucherTransaction", VoucherTransactionSchema);

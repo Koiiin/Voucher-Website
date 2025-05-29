@@ -108,3 +108,13 @@ exports.addVoucherToCart = async (req, res) => {
     res.status(500).json({ success: false, message: "Lỗi server", error: error.message });
   }
 };
+
+exports.getUserById = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id).select('username');
+    if (!user) return res.status(404).json({ message: 'Không tìm thấy user!' });
+    res.status(200).json({ username: user.username });
+  } catch (error) {
+    res.status(500).json({ message: 'Lỗi server', error: error.message });
+  }
+};

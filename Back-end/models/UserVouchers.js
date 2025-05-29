@@ -8,7 +8,8 @@ const voucherSchema = new Schema(
     category: { type: String, trim: true },                         // Danh mục (có thể giữ hoặc bỏ luôn nếu không dùng)  MÁY BAY / DU LỊCH 
     validityStart: { type: Date, required: true },                  // Ngày bắt đầu
     validityEnd: { type: Date, required: true, index: { expires: 0 } }, // Ngày kết thúc (tự động xóa)
-    ownerID: { type: Schema.Types.ObjectId, ref: "User", required: true }, // Chủ sở hữu
+    ownerId: { type: Schema.Types.ObjectId, ref: "User", required: true }, // Chủ sở hữu (đổi từ ownerID -> ownerId)
+    ownerUsername: { type: String, required: true }, // Username của chủ sở hữu
     price: { type: Number, default: 0 },                     // Giá trị voucher (nếu có)
     quantity: { type: Number, default: 1, min: 0 },                 // Số lượng (mặc định là 1)                       
     minSpend: { type: Number, default: 0 }, // Số tiền tối thiểu để sử dụng voucher

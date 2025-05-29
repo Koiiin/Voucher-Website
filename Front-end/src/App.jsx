@@ -11,6 +11,7 @@ import User from "./pages/User";
 import Cart from "./pages/Cart";
 import CreateV from "./components/CreateV";
 import OauthSuccess from "./pages/OauthSuccess"; 
+import PaymentStatus from "./pages/PaymentStatus";
 import "./styles/global.css";
 import React, { useEffect, useState } from 'react';
 import ScrollToTop from "./components/ScrollToTop";
@@ -81,6 +82,7 @@ function App() {
             <Route path="/create-voucher" element={<CreateV />} />
             <Route path="/oauth-success" element={<OauthSuccess />} /> {/* Đường dẫn cho callback từ Google */}
             <Route path="/oauth-error" element={<div>Đăng nhập thất bại!</div>} /> {/* Đường dẫn cho lỗi từ Google */}
+            <Route path="/payment/:status" element={<PaymentStatus />} />
           </Routes>
       </div>
       {!hideHeaderAndFooter && <Footer />} {/* Hiển thị Footer nếu không ở trang login/register */}
