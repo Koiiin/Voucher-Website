@@ -32,7 +32,7 @@ app.use(session({
     saveUninitialized: false
 }));
 app.use(cors({
-    origin: 'https://voux.id.vn',
+    origin: 'http://localhost:5173',
     credentials: true
 }));
 app.use(express.urlencoded({extended: true}));
