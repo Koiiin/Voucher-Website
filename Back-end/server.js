@@ -23,6 +23,7 @@ require('./config/passport');
 require('./config/passportFB');
 require('dotenv').config();
 
+const path = require('path'); 
 // Middleware setup
 app.use(morgan('dev'));
 app.use(cookieParser());
@@ -39,7 +40,8 @@ app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 app.use(passport.initialize());
 app.use(passport.session());
-
+// thme 
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
 // Routes
 app.use('/api/auth', authRoute);
 app.use('/api/user', userRoute);
