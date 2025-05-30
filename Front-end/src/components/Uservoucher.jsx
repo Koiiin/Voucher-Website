@@ -72,7 +72,7 @@ const UserCard = ({ voucher, onClick }) => {
             
             checkCount++;
             const statusRes = await axios.get(
-              `http://localhost:3000/api/payment/status/${response.data.orderId}`
+              `https://voucher-website-ba.onrender.com/api/payment/status/${response.data.orderId}`
             );
             
             if (statusRes.data.status !== 'pending') {
