@@ -25,8 +25,9 @@ const UserCard = ({ voucher, onClick }) => {
       const decodedToken = JSON.parse(atob(token.split('.')[1]));
       const userId = decodedToken.id;
 
+      // Thêm headers vào request
       const response = await axios.post(
-        "`https://voucher-website-ba.onrender.com/api/payment/momo",
+        "https://voucher-website-ba.onrender.com/api/payment/momo",
         {
           voucherData: {
             _id: voucher._id,
@@ -37,6 +38,12 @@ const UserCard = ({ voucher, onClick }) => {
           },
           userInfo: {
             userId: userId // Sử dụng userId từ decoded token
+          }
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
           }
         }
       );
