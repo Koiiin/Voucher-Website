@@ -26,7 +26,7 @@ const UserCard = ({ voucher, onClick }) => {
       const userId = decodedToken.id;
 
       const response = await axios.post(
-        "http://localhost:3000/api/payment/momo",
+        "`https://voucher-website-ba.onrender.com/api/payment/momo",
         {
           voucherData: {
             _id: voucher._id,
