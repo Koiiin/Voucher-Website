@@ -1,10 +1,12 @@
 .user-card {
   display: flex;
-  background: white;
-  border-radius: 8px;
+  justify-content: space-between;
   padding: 20px;
   margin: 10px 0;
-  box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
   gap: 20px;
 }
@@ -16,6 +18,7 @@
 
 .user-card-left {
   flex: 2;
+  padding-right: 20px;
 }
 
 .user-card-left h3 {
@@ -29,18 +32,29 @@
   margin: 5px 0;
 }
 
+.voucher-title {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.voucher-info {
+  margin: 5px 0;
+  color: #666;
+}
+
 .user-card-right {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   align-items: flex-end;
+  justify-content: space-between;
 }
 
 .discount {
-  font-size: 1.25rem;
+  font-size: 1.1em;
+  color: #e53935;
   font-weight: bold;
-  color: #ef4444;
 }
 
 .discount-amount {
@@ -89,4 +103,119 @@
   background-color: #9ca3af;
   cursor: not-allowed;
   opacity: 0.7;
+}
+
+.buy-button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+  max-width: 200px;
+}
+
+.buy-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.button-container {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+/* Custom Toast Styles */
+.voucher-confirmation-toast {
+  max-width: 1800px !important;
+  width: 100% !important;  
+}
+
+.Toastify__toast-body {
+  font-family: 'Segoe UI', sans-serif;
+  line-height: 2;
+  padding: 40px 60px;
+  font-size: 1.2em;
+}
+
+.voucher-confirmation-toast .Toastify__toast {
+  padding: 0;
+  background: white;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+  border-radius: 24px;
+  min-height: 700px;
+  margin: 10px auto;
+  width: 95%;
+}
+
+.voucher-confirmation-toast p {
+  margin: 12px 0;
+  color: #333;
+  font-size: 1.1em;
+}
+
+.voucher-confirmation-toast h4 {
+  color: #1a202c;
+  font-size: 2em;
+  padding-bottom: 20px;
+  margin-bottom: 25px;
+  border-bottom: 3px solid #e2e8f0;
+  text-align: center;
+}
+
+.voucher-confirmation-toast .info-section {
+  background: #f8fafc;
+  padding: 15px;
+  border-radius: 8px;
+  margin: 15px 0;
+}
+
+.voucher-confirmation-toast .total-price {
+  font-size: 1.6em;
+  color: #e53935;
+  text-align: right;
+  padding: 20px;
+  background: #fff5f5;
+  border-radius: 8px;
+  margin-top: 20px;
+  border: 1px solid #fee2e2;
+}
+
+.voucher-confirmation-toast .Toastify__close-button {
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  opacity: 0.7;
+  padding: 8px;
+}
+
+.voucher-confirmation-toast .confirm-buy-btn {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 1.2em;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 20px;
+  transition: all 0.3s ease;
+}
+
+.voucher-confirmation-toast .confirm-buy-btn:hover {
+  background: #45a049;
+  transform: translateY(-1px);
+}
+
+/* Ẩn icon xanh lá */
+.Toastify__toast-icon {
+  display: none !important;
+}
+
+.Toastify__toast-body > div:last-child {
+  flex: 1;
+  padding-left: 0;
 }

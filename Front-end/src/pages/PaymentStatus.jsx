@@ -8,14 +8,16 @@ const PaymentStatus = () => {
   const navigate = useNavigate();
   
   useEffect(() => {
-    const status = searchParams.get('status');
-    const orderId = searchParams.get('orderId');
-    
-    if (status === 'completed') {
-      setStatus('success');
-      setTimeout(() => navigate('/'), 3000);
-    } else if (status === 'canceled') {
+    const pathStatus = window.location.pathname.split('/')[2]; // Lấy status từ URL
+    if (pathStatus === 'pending') {
+      setStatus('pending');
+    } else if (pathStatus === 'success') { // Sửa từ 'completed' thành 'success'
+      setStatus('completed');
+      setTimeout(() => navigate('/cart'), 3000);
+    } else if (pathStatus === 'canceled') {
       setStatus('canceled');
+    } else if (pathStatus === 'timeout') {
+      setStatus('timeout');
     } else {
       setStatus('failed');
     }
@@ -29,7 +31,7 @@ const PaymentStatus = () => {
           title: 'Đang xử lý thanh toán...',
           message: 'Vui lòng đợi trong giây lát'
         };
-      case 'success':
+      case 'completed':
         return {
           icon: '✅',
           title: 'Thanh toán thành công!',
@@ -47,11 +49,11 @@ const PaymentStatus = () => {
           title: 'Giao dịch hết hạn',
           message: 'Đã quá thời gian thanh toán'
         };
-      default:
+      case 'pending':
         return {
-          icon: '⚠️',
-          title: 'Thanh toán thất bại',
-          message: 'Đã xảy ra lỗi trong quá trình thanh toán'
+          icon: '⌛',
+          title: 'Đang chờ thanh toán',
+          message: 'Vui lòng hoàn tất thanh toán trong cửa sổ MoMo'
         };
     }
   };
@@ -64,7 +66,7 @@ const PaymentStatus = () => {
         <div className={`status-icon ${status}`}>{content.icon}</div>
         <h2 className="status-title">{content.title}</h2>
         <p className="status-message">{content.message}</p>
-        {status !== 'loading' && status !== 'success' && (
+        {status !== 'loading' && status !== 'success' && status !== 'pending' && (
           <button className="status-button" onClick={() => navigate('/')}>
             Về trang chủ
           </button>

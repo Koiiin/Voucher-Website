@@ -23,8 +23,16 @@ router.post("/payment/momo", async (req, res) => {
     var secretKey = process.env.MOMO_SECRET_KEY || 'K951B6PE1waDMi640xX08PD3vg6EkVlz';
     var orderInfo = `Thanh toán voucher: ${voucherData.title}`;
     var partnerCode = process.env.MOMO_PARTNER_CODE || 'MOMO';
-    var redirectUrl = process.env.MOMO_REDIRECT_URL || 'https://webhook.site/b3088a6a-2d17-4f8d-a383-71389a6c600b';
-    var ipnUrl = process.env.MOMO_IPN_URL || 'https://webhook.site/b3088a6a-2d17-4f8d-a383-71389a6c600b';
+    
+    // URL cho redirect và callback dựa vào môi trường
+    var redirectUrl = process.env.NODE_ENV === 'production'
+        ? 'https://voucher-website-fe.onrender.com/payment/status'
+        : 'http://localhost:5173/payment/success';
+    
+    var ipnUrl = process.env.NODE_ENV === 'production'
+        ? 'https://voucher-website-ba.onrender.com/api/payment/status'
+        : 'http://localhost:3000/api/payment/status';
+    
     var requestType = "payWithMethod";
     var amount = String(voucherData.price);
     var orderId = partnerCode + new Date().getTime();
@@ -205,6 +213,104 @@ router.post("/payment/cancel/:orderId", async (req, res) => {
   } catch (error) {
     console.error("Error canceling payment:", error);
     res.status(500).json({ message: "Lỗi server" });
+  }
+});
+
+// Thêm route xử lý callback từ MoMo
+router.get("/payment/status", async (req, res) => {
+  try {
+    const {
+      orderId,
+      resultCode,
+      message,
+      transId,
+      orderInfo,
+      amount,
+      signature
+    } = req.query;
+
+    // Thêm khai báo baseUrl
+    const baseUrl = process.env.NODE_ENV === 'production'
+      ? 'https://voucher-website-fe.onrender.com'
+      : 'http://localhost:5173';
+
+    // Xác thực chữ ký callback từ MoMo (để đảm bảo an toàn)
+    const secretKey = process.env.MOMO_SECRET_KEY || 'K951B6PE1waDMi640xX08PD3vg6EkVlz';
+    const rawSignature = `accessKey=${process.env.MOMO_ACCESS_KEY}&amount=${amount}&extraData=&message=${message}&orderId=${orderId}&orderInfo=${orderInfo}&orderType=momo_wallet&partnerCode=${process.env.MOMO_PARTNER_CODE}&payType=napas&requestId=${orderId}&responseTime=${req.query.responseTime}&resultCode=${resultCode}&transId=${transId}`;
+    
+    const calculatedSignature = crypto
+      .createHmac('sha256', secretKey)
+      .update(rawSignature)
+      .digest('hex');
+
+    // Kiểm tra chữ ký và mã kết quả
+    if (calculatedSignature === signature && resultCode === '0') {
+      const transaction = await VoucherTransaction.findOne({ orderId });
+      if (transaction) {
+        transaction.status = 'completed';
+        transaction.transId = transId;
+        await transaction.save();
+      }
+
+      // Trả về HTML với script đóng tab và chuyển về tab gốc
+      res.send(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>Thanh toán thành công</title>
+          <script>
+            window.onload = function() {
+              if (window.opener) {
+                // Gửi thông báo thành công về tab gốc
+                window.opener.postMessage({
+                  type: 'PAYMENT_SUCCESS',
+                  orderId: '${orderId}',
+                  transId: '${transId}'
+                }, '*');
+              }
+              setTimeout(function() {
+                window.close();
+              }, 500);
+            };
+          </script>
+        </head>
+        <body style="text-align: center; padding: 50px;">
+          <h2>Thanh toán thành công!</h2>
+          <p>Cửa sổ này sẽ tự động đóng...</p>
+        </body>
+        </html>
+      `);
+    } else {
+      // Nếu thanh toán thất bại
+      if (transaction) {
+        transaction.status = 'failed';
+        await transaction.save();
+      }
+      res.send(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>Thanh toán thất bại</title>
+          <script>
+            window.onload = function() {
+              if (window.opener) {
+                window.opener.postMessage({ type: 'PAYMENT_FAILED' }, '*');
+                window.close();
+              }
+            };
+          </script>
+        </head>
+        <body style="text-align: center; padding: 50px;">
+          <h2>Thanh toán thất bại!</h2>
+          <p>Cửa sổ này sẽ tự động đóng...</p>
+        </body>
+        </html>
+      `);
+    }
+
+  } catch (error) {
+    console.error("Error processing MoMo callback:", error);
+    res.redirect('http://localhost:5173/payment/failed');
   }
 });
 

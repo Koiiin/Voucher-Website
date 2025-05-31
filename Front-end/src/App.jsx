@@ -16,6 +16,8 @@ import "./styles/global.css";
 import React, { useEffect, useState } from 'react';
 import ScrollToTop from "./components/ScrollToTop";
 import Toast from "./components/toast";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const [toast, setToast] = useState({ message: "", type: "info" });
@@ -86,6 +88,15 @@ function App() {
           </Routes>
       </div>
       {!hideHeaderAndFooter && <Footer />} {/* Hiển thị Footer nếu không ở trang login/register */}
+      <ToastContainer
+        position="top-center"
+        autoClose={false}
+        newestOnTop
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable={false}
+      />
     </div>
   );
 }

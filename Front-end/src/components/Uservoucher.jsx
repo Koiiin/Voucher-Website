@@ -1,43 +1,46 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 import "../styles/Uservoucher.css";
 import axios from "axios";
 
 const UserCard = ({ voucher, onClick }) => {
   const [isProcessing, setIsProcessing] = useState(false);
+  const [quantity, setQuantity] = useState(1);
+  const [totalPrice, setTotalPrice] = useState(voucher.price);
   const navigate = useNavigate();
   const ownerUsername = voucher.ownerUsername;
 
-  const handleBuyClick = async (e) => {
-    e.stopPropagation();
+  useEffect(() => {
+    setTotalPrice(quantity * voucher.price);
+  }, [quantity, voucher.price]);
+
+  const processPayment = async (paymentTotal) => { // Add paymentTotal parameter
     setIsProcessing(true);
-    
     try {
-      // Kiểm tra đăng nhập
       const token = sessionStorage.getItem('accessToken');
       if (!token) {
-        alert("Vui lòng đăng nhập để mua voucher!");
+        toast.error("Vui lòng đăng nhập để mua voucher!");
         navigate('/login');
         return;
       }
 
-      // Decode token để lấy userId
       const decodedToken = JSON.parse(atob(token.split('.')[1]));
       const userId = decodedToken.id;
 
-      // Thêm headers vào request
       const response = await axios.post(
-        "https://voucher-website-ba.onrender.com/api/payment/momo",
+        "http://localhost:3000/api/payment/momo",
         {
           voucherData: {
             _id: voucher._id,
             title: voucher.title,
-            price: voucher.price,
-            quantity: voucher.quantity,
+            price: paymentTotal, // Use paymentTotal instead of finalAmount
+            quantity: quantity,
             ownerId: voucher.ownerId
           },
           userInfo: {
-            userId: userId // Sử dụng userId từ decoded token
+            userId: userId
           }
         },
         {
@@ -47,83 +50,231 @@ const UserCard = ({ voucher, onClick }) => {
           }
         }
       );
-      
-      if (response.data.payUrl) {
-        localStorage.setItem('lastOrderId', response.data.orderId);
-        const paymentWindow = window.open(response.data.payUrl, '_blank');
-        
-        // Check if window was closed
-        const checkWindowClosed = setInterval(() => {
-          if (paymentWindow.closed) {
-            clearInterval(checkWindowClosed);
-            clearInterval(checkPaymentStatus);
-            // Navigate to payment status page when window closed
-            navigate(`/payment/canceled?orderId=${response.data.orderId}`);
-          }
-        }, 1000);
 
-        // Check payment status
-        let checkCount = 0; 
-        const checkInterval = 3000; // 3 giây check 1 lần
-        const maxMinutes = 10; // Tối đa 10 phút
-        const maxChecks = (maxMinutes * 60 * 1000) / checkInterval; // Số lần check trong 10 phút
-        
-        const checkPaymentStatus = setInterval(async () => {
-          try {
-            if (checkCount >= maxChecks) {
-              clearInterval(checkPaymentStatus);
-              clearInterval(checkWindowClosed);
-              navigate(`/payment/timeout?orderId=${response.data.orderId}`);
-              return;
-            }
-            
-            checkCount++;
-            const statusRes = await axios.get(
-              `https://voucher-website-ba.onrender.com/api/payment/status/${response.data.orderId}`
-            );
-            
-            if (statusRes.data.status !== 'pending') {
-              clearInterval(checkPaymentStatus);
-              clearInterval(checkWindowClosed);
-              navigate(`/payment/${statusRes.data.status}?orderId=${response.data.orderId}`);
-            }
-          } catch (error) {
-            console.error("Error checking payment status:", error);
-          }
-        }, 3000);
+      if (response.data.payUrl) {
+        // Chuyển trực tiếp đến trang thanh toán
+        window.location.href = response.data.payUrl;
       } else {
-        alert("Không lấy được link thanh toán!");
+        toast.error("Không thể tạo liên kết thanh toán!");
       }
     } catch (error) {
-      alert("Có lỗi khi tạo thanh toán: " + error.message);
+      toast.error("Có lỗi xảy ra: " + error.message);
     } finally {
       setIsProcessing(false);
+    }
+  };
+
+  const showConfirmToast = () => {
+    let currentQuantity = quantity;
+    let currentTotal = totalPrice;
+
+    const updateToast = () => {
+      toast.update(confirmToastId, {
+        render: renderToastContent(),
+      });
+    };
+
+    const increaseQuantity = () => {
+      if (currentQuantity < voucher.quantity) {
+        currentQuantity++;
+        currentTotal = currentQuantity * voucher.price;
+        setQuantity(currentQuantity);
+        setTotalPrice(currentTotal);
+        updateToast();
+      }
+    };
+
+    const decreaseQuantity = () => {
+      if (currentQuantity > 1) {
+        currentQuantity--;
+        currentTotal = currentQuantity * voucher.price;
+        setQuantity(currentQuantity);
+        setTotalPrice(currentTotal);
+        updateToast();
+      }
+    };
+
+    const renderToastContent = () => (
+      <div style={{ padding: '15px', minWidth: '300px' }}>
+        <h4 style={{ marginBottom: '15px', fontWeight: 'bold', borderBottom: '1px solid #ddd', paddingBottom: '10px' }}>
+          Xác nhận mua voucher
+        </h4>
+        <div style={{ marginBottom: '15px' }}>
+          <p><b>Tên voucher:</b> {voucher.title}</p>
+          <p><b>Người tạo:</b> {ownerUsername}</p>
+          <p><b>Loại:</b> {voucher.voucherType}</p>
+          {voucher.category && <p><b>Danh mục:</b> {voucher.category}</p>}
+          <p><b>Bắt đầu:</b> {new Date(voucher.validityStart).toLocaleDateString()}</p>
+          <p><b>Hạn sử dụng:</b> {new Date(voucher.validityEnd).toLocaleDateString()}</p>
+          <p><b>Đơn hàng tối thiểu:</b> {voucher.minSpend.toLocaleString()}đ</p>
+          <p><b>Giá:</b> {voucher.price.toLocaleString()}đ</p>
+          <p><b>Số lượng còn lại:</b> {voucher.quantity}</p>
+        </div>
+
+        <div style={{
+          margin: '15px 0',
+          padding: '15px',
+          backgroundColor: '#f5f5f5',
+          borderRadius: '8px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '15px'
+        }}>
+          <label><b>Chọn số lượng: </b></label>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <button onClick={decreaseQuantity} disabled={currentQuantity <= 1}>-</button>
+            <span style={{ minWidth: '50px', textAlign: 'center', fontSize: '1.1em' }}>
+              {currentQuantity}
+            </span>
+            <button onClick={increaseQuantity} disabled={currentQuantity >= voucher.quantity}>+</button>
+          </div>
+        </div>
+
+        <div style={{
+          marginTop: '15px',
+          padding: '15px',
+          backgroundColor: '#fff3f3',
+          borderRadius: '8px',
+          textAlign: 'center'
+        }}>
+          <p style={{
+            fontSize: '1.6em',
+            fontWeight: 'bold',
+            color: '#e53935'
+          }}>
+            Tổng tiền: {currentTotal.toLocaleString()}đ
+          </p>
+        </div>
+
+        <button
+          onClick={() => {
+            toast.dismiss(confirmToastId);
+            processPayment(currentTotal); // Giữ lại chỉ gọi ở đây
+          }}
+          style={{
+            backgroundColor: '#4CAF50',
+            color: 'white',
+            border: 'none',
+            padding: '10px',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            marginTop: '15px',
+            width: '100%',
+            fontSize: '1.1em'
+          }}
+        >
+          Xác nhận mua
+        </button>
+      </div>
+    );
+
+    const confirmToastId = toast(renderToastContent(), {
+      position: "top-center",
+      autoClose: false,
+      closeOnClick: false,
+      draggable: false,
+      closeButton: true,
+      className: 'voucher-confirmation-toast'
+      // Xóa onClose để không gọi processPayment 2 lần
+    });
+  };
+
+  const isOwner = () => {
+    const token = sessionStorage.getItem('accessToken');
+    if (!token) return false;
+    const decodedToken = JSON.parse(atob(token.split('.')[1]));
+    return decodedToken.id === voucher.ownerId;
+  };
+
+  const handleEdit = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    navigate(`/edit-voucher/${voucher._id}`);
+  };
+
+  const handleToggleSelling = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    try {
+      const response = await axios.patch(
+        `http://localhost:3000/api/vouchers/${voucher._id}/toggle-status`,
+        {},
+        {
+          headers: {
+            'Authorization': `Bearer ${sessionStorage.getItem('accessToken')}`
+          }
+        }
+      );
+      toast.success(response.data.message);
+    } catch (error) {
+      toast.error("Có lỗi xảy ra khi thay đổi trạng thái");
     }
   };
 
   return (
     <div className="user-card" onClick={onClick}>
       <div className="user-card-left">
-        <h3>{voucher.title}</h3>
-        {/* Hiển thị username chủ tạo voucher nếu có */}
-        <p>Người tạo: {ownerUsername}</p>
-        <p>Loại: {voucher.voucherType}</p>
-        {voucher.category && <p>Danh mục: {voucher.category}</p>}
-        <p>Bắt đầu: {new Date(voucher.validityStart).toLocaleDateString()}</p>
-        <p>HSD: {new Date(voucher.validityEnd).toLocaleDateString()}</p>
+        <h3 className="voucher-title">{voucher.title}</h3>
+        <p className="voucher-info">Người tạo: {ownerUsername}</p>
+        <p className="voucher-info">Loại: {voucher.voucherType}</p>
+        {voucher.category && <p className="voucher-info">Danh mục: {voucher.category}</p>}
+        <p className="voucher-info">Bắt đầu: {new Date(voucher.validityStart).toLocaleDateString()}</p>
+        <p className="voucher-info">HSD: {new Date(voucher.validityEnd).toLocaleDateString()}</p>
       </div>
       <div className="user-card-right">
-        <p className="discount">Giảm <span className="discount-amount">{voucher.price}</span> đ</p>
-        <p>Đơn hàng tối thiểu: {voucher.minSpend}đ</p>
-        <p>Số lượng: {voucher.quantity}</p>
-        <div className="button-group">
-          <button 
-            className="banner-button" 
-            onClick={handleBuyClick}
-            disabled={isProcessing || voucher.quantity <= 0}
-          >
-            {isProcessing ? "Đang xử lý..." : "Buy"}
-          </button>
+        <p className="discount">Giảm <span className="discount-amount">{voucher.price}đ</span></p>
+        <p className="min-spend">Đơn hàng tối thiểu: {voucher.minSpend}đ</p>
+        <p className="quantity">Số lượng: {voucher.quantity}</p>
+        <div className="button-container">
+          {isOwner() ? (
+            <>
+              <button
+                className="edit-button"
+                onClick={handleEdit}
+                style={{
+                  marginRight: '10px',
+                  padding: '8px 15px',
+                  backgroundColor: '#2196F3',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  fontSize: '14px'
+                }}
+              >
+                Chỉnh sửa
+              </button>
+              <button
+                className="toggle-button"
+                onClick={handleToggleSelling}
+                style={{
+                  padding: '8px 15px',
+                  backgroundColor: voucher.isActive ? '#f44336' : '#4CAF50',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  fontSize: '14px',
+                  transition: 'background-color 0.3s'
+                }}
+              >
+                {voucher.isActive ? 'Gỡ bán' : 'Đăng bán'}
+              </button>
+            </>
+          ) : (
+            <button
+              className="buy-button"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                showConfirmToast();
+              }}
+              disabled={isProcessing || voucher.quantity <= 0}
+            >
+              {isProcessing ? "Đang xử lý..." : "Mua ngay"}
+            </button>
+          )}
         </div>
       </div>
     </div>
