@@ -13,6 +13,7 @@ const voucherSchema = new Schema(
     price: { type: Number, default: 0 },                     // Giá trị voucher (nếu có)
     quantity: { type: Number, default: 1, min: 0 },                 // Số lượng (mặc định là 1)                       
     minSpend: { type: Number, default: 0 }, // Số tiền tối thiểu để sử dụng voucher
+    isPublic: { type: Boolean, default: false },                    // Trạng thái công khai của voucher
   },
   { timestamps: true }
 );

@@ -6,14 +6,20 @@ const User = require('../models/user');
 // Tạo voucher//T
 exports.createVoucher = async (req, res) => {
   try {
+    console.log("User in request:", req.user); // Log user
+    console.log("Token in headers:", req.headers.authorization); // Log token
+    
     const { title, voucherType, category, validityStart, validityEnd, price, quantity, minSpend } = req.body;
-    const ownerId = req.user._id; // Sử dụng ObjectId cho ownerId
+    const ownerId = req.user.id; // Sửa từ _id thành id
 
     // Lấy username của user từ DB
-    const user = await User.findById(ownerId).select('username');
-    if (!user) {
+    const user = req.user;
+    if (!user) {  
+      console.log("User not found with ID:", ownerId); // Log khi không tìm thấy user  
       return res.status(400).json({ success: false, message: 'Không tìm thấy user!' });
     }
+    console.log("Found user:", user); // Log user tìm thấy
+
     const ownerUsername = user.username;
 
     if (!title || !voucherType || !validityStart || !validityEnd || !ownerId) {
@@ -41,7 +47,7 @@ exports.createVoucher = async (req, res) => {
 //lay tat ca voucher cua nguoi dung c 
 exports.getUserVouchers = async (req, res) => {
   try {
-    const vouchers = await VoucherModel.find(); // Lấy tất cả voucher, không lọc
+    const vouchers = await VoucherModel.find({ isPublic: true }); // Chỉ lấy voucher có isPublic = true
     res.status(200).json({ success: true, data: vouchers });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -278,5 +284,33 @@ exports.getUserVouchersByUsername = async (req, res) => {
     res.status(200).json({ success: true, data: vouchers });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// Thêm hàm toggle trạng thái public/unpublic của voucher
+exports.toggleVoucherStatus = async (req, res) => {
+  try {
+    const voucher = await VoucherModel.findById(req.params.id);
+    if (!voucher) {
+      return res.status(404).json({ success: false, message: 'Không tìm thấy voucher!' });
+    }
+
+    // Kiểm tra quyền - chỉ owner mới được toggle
+    if (voucher.ownerId.toString() !== req.user.id) {
+      return res.status(403).json({ success: false, message: 'Bạn không có quyền thay đổi trạng thái voucher này!' });
+    }
+
+    // Toggle trạng thái isPublic
+    voucher.isPublic = !voucher.isPublic;
+    await voucher.save();
+
+    res.status(200).json({
+      success: true,
+      message: voucher.isPublic ? 'Đã đăng bán voucher!' : 'Đã gỡ voucher khỏi trạng thái bán!',
+      isPublic: voucher.isPublic
+    });
+  } catch (error) {
+    console.error('Error toggling voucher status:', error);
+    res.status(500).json({ success: false, message: 'Lỗi khi thay đổi trạng thái voucher!' });
   }
 };

@@ -7,15 +7,24 @@ const API_URL = import.meta.env.VITE_APP_API_URL;
 
 export const createVoucher = async (voucherData) => {
   try {
+    const token = sessionStorage.getItem('accessToken');
+    if (!token) {
+      throw new Error('Vui lòng đăng nhập để tạo voucher!');
+    }
+
     const response = await authRequest({
       url: "/createVoucher",
       method: "POST",
       data: voucherData,
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
     });
     return response.data;  
   } catch (error) {
     console.error("Lỗi tạo voucher:", error);
-    throw error;  // Throw error để component có thể catch
+    throw error;
   }
 };
 
@@ -104,7 +113,7 @@ export const getVoucherCountByPlatform = async (platform) => {
 export const getUserVouchersByUsername = async () => {
   try {
     const response = await authRequest({
-      url: "getUserVouchersByUsername",
+      url: "/getUserVouchersByUsername",
       method: "GET",
     });
     if (response.data.success) {
