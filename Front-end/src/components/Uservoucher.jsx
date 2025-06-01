@@ -249,9 +249,23 @@ const UserCard = ({ voucher, onClick }) => {
       <div className="user-card-left">
         <h3 className="voucher-title">{voucher.title}</h3>
 
-        <div className="divider"><h4>---------------------------------</h4></div>
+        <div className="divider"><h4>-----------------</h4></div>
 
-        <p className="voucher-info"><b>Người tạo:</b> {ownerUsername}</p>
+        {/* <p className="voucher-info"><b>Người tạo:</b> {ownerUsername}</p> */}
+        <p className="voucher-info">
+          <b>Người tạo:</b>{" "}
+          <span onClick={(e) => {
+            e.stopPropagation();
+            navigate(`/profile/${voucher.ownerId}`);
+          }}
+          style={{
+            color: "#1e88e5",
+            cursor: "pointer",
+            textDecoration: "underline"
+          }}>
+            {ownerUsername}
+          </span>
+        </p>
         <p className="voucher-info"><strong>Loại:</strong> {voucher.voucherType}</p>
         {voucher.category && <p className="voucher-info"><strong>Danh mục:</strong> {voucher.category}</p>}
         {/* <p className="voucher-info">Bắt đầu: {new Date(voucher.validityStart).toLocaleDateString()}</p> */}
