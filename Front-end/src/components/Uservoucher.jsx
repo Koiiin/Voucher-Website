@@ -248,12 +248,16 @@ const UserCard = ({ voucher, onClick }) => {
     <div className="user-card" onClick={onClick}>
       <div className="user-card-left">
         <h3 className="voucher-title">{voucher.title}</h3>
-        <p className="voucher-info">Người tạo: {ownerUsername}</p>
-        <p className="voucher-info">Loại: {voucher.voucherType}</p>
-        {voucher.category && <p className="voucher-info">Danh mục: {voucher.category}</p>}
-        <p className="voucher-info">Bắt đầu: {new Date(voucher.validityStart).toLocaleDateString()}</p>
-        <p className="voucher-info">HSD: {new Date(voucher.validityEnd).toLocaleDateString()}</p>
+
+        <div className="divider"><h4>---------------------------------</h4></div>
+
+        <p className="voucher-info"><b>Người tạo:</b> {ownerUsername}</p>
+        <p className="voucher-info"><strong>Loại:</strong> {voucher.voucherType}</p>
+        {voucher.category && <p className="voucher-info"><strong>Danh mục:</strong> {voucher.category}</p>}
+        {/* <p className="voucher-info">Bắt đầu: {new Date(voucher.validityStart).toLocaleDateString()}</p> */}
+        <p className="voucher-info"><strong>HSD: </strong>{new Date(voucher.validityEnd).toLocaleDateString()}</p>
       </div>
+      {/* <div className="divider">|</div> */}
       <div className="user-card-right">
         <p className="discount">Giảm <span className="discount-amount">{voucher.price}đ</span></p>
         <p className="min-spend">Đơn hàng tối thiểu: {voucher.minSpend}đ</p>
