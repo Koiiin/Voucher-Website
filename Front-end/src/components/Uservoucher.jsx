@@ -19,9 +19,13 @@ const UserCard = ({ voucher, onClick }) => {
   const processPayment = async (paymentTotal) => { // Add paymentTotal parameter
     setIsProcessing(true);
     try {
-      const token = sessionStorage.getItem('accessToken');
-      if (!token) {
-        toast.error("Vui lòng đăng nhập để mua voucher!");
+      const token = sessionStorage.getItem('accessToken');      if (!token) {
+        toast.error("Vui lòng đăng nhập để mua voucher!", {
+          style: {
+            background: '#2196F3',
+            color: 'white'
+          }
+        });
         navigate('/login');
         return;
       }
@@ -53,12 +57,21 @@ const UserCard = ({ voucher, onClick }) => {
 
       if (response.data.payUrl) {
         // Chuyển trực tiếp đến trang thanh toán
-        window.location.href = response.data.payUrl;
-      } else {
-        toast.error("Không thể tạo liên kết thanh toán!");
+        window.location.href = response.data.payUrl;      } else {
+        toast.error("Không thể tạo liên kết thanh toán!", {
+          style: {
+            background: '#2196F3',
+            color: 'white'
+          }
+        });
       }
     } catch (error) {
-      toast.error("Có lỗi xảy ra: " + error.message);
+      toast.error("Có lỗi xảy ra: " + error.message, {
+        style: {
+          background: '#2196F3',
+          color: 'white'
+        }
+      });
     } finally {
       setIsProcessing(false);
     }
@@ -192,13 +205,13 @@ const UserCard = ({ voucher, onClick }) => {
     e.stopPropagation();
     navigate(`/edit-voucher/${voucher._id}`);
   };
-
   const handleToggleSelling = async (e) => {
     e.preventDefault();
     e.stopPropagation();
     try {
+      setIsProcessing(true);
       const response = await axios.patch(
-        `http://localhost:3000/api/vouchers/${voucher._id}/toggle-status`,
+        `http://localhost:3000/api/vouchers/toggle-status/${voucher._id}`,
         {},
         {
           headers: {
@@ -206,9 +219,28 @@ const UserCard = ({ voucher, onClick }) => {
           }
         }
       );
-      toast.success(response.data.message);
-    } catch (error) {
-      toast.error("Có lỗi xảy ra khi thay đổi trạng thái");
+        if (response.data.success) {
+        toast.info(response.data.message, {
+          style: {
+            background: '#2196F3',
+            color: 'white'
+          }
+        });
+        // Đợi toast hiển thị 1 chút rồi mới reload
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      } else {
+        toast.error(response.data.message || "Có lỗi xảy ra khi thay đổi trạng thái", {
+          style: {
+            background: '#2196F3',
+            color: 'white'
+          }
+        });
+      }} catch (error) {
+      toast.error(error.response?.data?.message || "Có lỗi xảy ra khi thay đổi trạng thái");
+    } finally {
+      setIsProcessing(false);
     }
   };
 
@@ -244,22 +276,24 @@ const UserCard = ({ voucher, onClick }) => {
                 }}
               >
                 Chỉnh sửa
-              </button>
-              <button
+              </button>              <button
                 className="toggle-button"
-                onClick={handleToggleSelling}
-                style={{
+                onClick={handleToggleSelling}                style={{
                   padding: '8px 15px',
-                  backgroundColor: voucher.isActive ? '#f44336' : '#4CAF50',
+                  backgroundColor: voucher.isPublic ? '#f44336' : '#4CAF50',
                   color: 'white',
                   border: 'none',
                   borderRadius: '4px',
                   cursor: 'pointer',
                   fontSize: '14px',
-                  transition: 'background-color 0.3s'
+                  transition: 'all 0.3s ease',
+                  minWidth: '100px',
+                  transform: isProcessing ? 'scale(0.95)' : 'scale(1)',
+                  opacity: isProcessing ? '0.8' : '1'
                 }}
+                disabled={isProcessing}
               >
-                {voucher.isActive ? 'Gỡ bán' : 'Đăng bán'}
+                {voucher.isPublic ? 'Gỡ bán' : 'Đăng bán'}
               </button>
             </>
           ) : (

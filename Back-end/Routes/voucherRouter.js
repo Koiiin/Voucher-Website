@@ -8,6 +8,8 @@ router.post('/createVoucher',authMiddleware.verifyToken ,voucherController.creat
 // lay tat ca voucher
 router.get('/getAllVoucher', voucherController.getAllVoucher);
 
+// Toggle trạng thái public/unpublic của voucher
+router.patch('/toggle-status/:id', authMiddleware.verifyToken, voucherController.toggleVoucherStatus);
 
 router.delete('/deleteVoucher/:id',authMiddleware.verifyToken , voucherController.deleteVoucher);
 router.put('/updateVoucher/:id', voucherController.updateVoucher);
