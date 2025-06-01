@@ -6,6 +6,7 @@
 
 .search-form {
   display: flex;
+  flex-wrap: wrap;
   gap: 12px;
   margin-bottom: 24px;
   background-color: #fff;
@@ -262,3 +263,66 @@
   margin-bottom: 5%;
   text-align: center;
 } 
+
+@media (max-width: 768px) {
+  .search-form {
+    flex-direction: column;
+    align-items: stretch;
+    flex-wrap: wrap;
+    padding: 6px 10px;
+    gap: 6px;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+
+  .search-input-wrapper,
+  .search-button {
+    width: 100%;
+    /* margin-bottom: 12px; */
+  }
+
+  .results-list {
+    gap: 12px;
+  }
+
+  .result-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .divider {
+    display: none;
+  }
+
+  .left-section,
+  .middle-section,
+  .right-section {
+    width: 100%;
+    padding: 0;
+  }
+
+  .middle-section {
+    padding: 0 4px;
+  }
+
+  .voucher-title {
+    font-size: 18px;
+  }
+
+  .search-button {
+    padding: 6px 12px;
+    font-size: 13px;
+    justify-content: center;
+  }
+
+  .search-select {
+    width: 100%;
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+}

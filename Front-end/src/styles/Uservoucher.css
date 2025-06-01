@@ -263,19 +263,19 @@
 @media (max-width: 768px) {
   .user-card {
     flex-direction: column;
-    padding: 15px;
+    padding: 10px;
+    width: 100%;
   }
 
   .user-card-left, 
   .user-card-right {
     flex: none;
     width: 100%;
-    padding: 0;
   }
 
   .user-card-right {
     align-items: flex-start;
-    margin-top: 15px;
+    margin-top: -30px;
   }
 
   .discount-amount {
@@ -288,6 +288,7 @@
     width: 100%;
     font-size: 14px;
     padding: 10px;
+    align-items: center;
   }
 
   .button-group {
@@ -295,9 +296,23 @@
     gap: 10px;
     align-items: stretch;
   }
+
+  .buy-button {
+    max-width: 100%;
+    margin-top: 10px;
+  }
 }
 
-@media (max-width: 480px) {
+.voucher-confirmation-toast {
+  max-width: 420px !important;
+  width: 90vw !important;
+  font-size: 14px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  border-radius: 8px;
+}
+
+
+/* @media (max-width: 480px) {
   .user-card-left h3 {
     font-size: 1.1rem;
   }
@@ -309,4 +324,4 @@
   .discount-amount {
     font-size: 1.1rem;
   }
-}
+} */

@@ -108,79 +108,97 @@ const UserCard = ({ voucher, onClick }) => {
     };
 
     const renderToastContent = () => (
-      <div style={{ padding: '15px', minWidth: '300px' }}>
-        <h4 style={{ marginBottom: '15px', fontWeight: 'bold', borderBottom: '1px solid #ddd', paddingBottom: '10px' }}>
-          Xác nhận mua voucher
-        </h4>
-        <div style={{ marginBottom: '15px' }}>
-          <p><b>Tên voucher:</b> {voucher.title}</p>
-          <p><b>Người tạo:</b> {ownerUsername}</p>
-          <p><b>Loại:</b> {voucher.voucherType}</p>
-          {voucher.category && <p><b>Danh mục:</b> {voucher.category}</p>}
-          <p><b>Bắt đầu:</b> {new Date(voucher.validityStart).toLocaleDateString()}</p>
-          <p><b>Hạn sử dụng:</b> {new Date(voucher.validityEnd).toLocaleDateString()}</p>
-          <p><b>Đơn hàng tối thiểu:</b> {voucher.minSpend.toLocaleString()}đ</p>
-          <p><b>Giá:</b> {voucher.price.toLocaleString()}đ</p>
-          <p><b>Số lượng còn lại:</b> {voucher.quantity}</p>
-        </div>
+  <div
+    style={{
+      padding: '12px',
+      width: '100%',
+      maxWidth: '420px',
+      boxSizing: 'border-box',
+      fontSize: '14px',
+      lineHeight: '1.4'
+    }}
+  >
+    <h4
+      style={{
+        marginBottom: '10px',
+        fontWeight: '600',
+        borderBottom: '1px solid #ddd',
+        paddingBottom: '6px',
+        fontSize: '16px'
+      }}
+    >
+      Xác nhận mua voucher
+    </h4>
 
-        <div style={{
-          margin: '15px 0',
-          padding: '15px',
-          backgroundColor: '#f5f5f5',
-          borderRadius: '8px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: '15px'
-        }}>
-          <label><b>Chọn số lượng: </b></label>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <button onClick={decreaseQuantity} disabled={currentQuantity <= 1}>-</button>
-            <span style={{ minWidth: '50px', textAlign: 'center', fontSize: '1.1em' }}>
-              {currentQuantity}
-            </span>
-            <button onClick={increaseQuantity} disabled={currentQuantity >= voucher.quantity}>+</button>
-          </div>
-        </div>
+    <div style={{ marginBottom: '10px' }}>
+      <p><b>Tên:</b> {voucher.title}</p>
+      <p><b>Người tạo:</b> {ownerUsername}</p>
+      <p><b>Loại:</b> {voucher.voucherType}</p>
+      {voucher.category && <p><b>Danh mục:</b> {voucher.category}</p>}
+      <p><b>Bắt đầu:</b> {new Date(voucher.validityStart).toLocaleDateString()}</p>
+      <p><b>Hạn:</b> {new Date(voucher.validityEnd).toLocaleDateString()}</p>
+      <p><b>Tối thiểu:</b> {voucher.minSpend.toLocaleString()}đ</p>
+      <p><b>Giá:</b> {voucher.price.toLocaleString()}đ</p>
+      <p><b>Còn lại:</b> {voucher.quantity}</p>
+    </div>
 
-        <div style={{
-          marginTop: '15px',
-          padding: '15px',
-          backgroundColor: '#fff3f3',
-          borderRadius: '8px',
-          textAlign: 'center'
-        }}>
-          <p style={{
-            fontSize: '1.6em',
-            fontWeight: 'bold',
-            color: '#e53935'
-          }}>
-            Tổng tiền: {currentTotal.toLocaleString()}đ
-          </p>
-        </div>
-
-        <button
-          onClick={() => {
-            toast.dismiss(confirmToastId);
-            processPayment(currentTotal); // Giữ lại chỉ gọi ở đây
-          }}
-          style={{
-            backgroundColor: '#4CAF50',
-            color: 'white',
-            border: 'none',
-            padding: '10px',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            marginTop: '15px',
-            width: '100%',
-            fontSize: '1.1em'
-          }}
-        >
-          Xác nhận mua
-        </button>
+    <div
+      style={{
+        margin: '10px 0',
+        padding: '10px',
+        backgroundColor: '#f5f5f5',
+        borderRadius: '6px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        gap: '8px'
+      }}
+    >
+      <label><b>Số lượng:</b></label>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+        <button onClick={decreaseQuantity} disabled={currentQuantity <= 1}>-</button>
+        <span style={{ minWidth: '32px', textAlign: 'center' }}>{currentQuantity}</span>
+        <button onClick={increaseQuantity} disabled={currentQuantity >= voucher.quantity}>+</button>
       </div>
-    );
+    </div>
+
+    <div
+      style={{
+        marginTop: '10px',
+        padding: '10px',
+        backgroundColor: '#fff3f3',
+        borderRadius: '6px',
+        textAlign: 'center'
+      }}
+    >
+      <p style={{ fontSize: '16px', fontWeight: 'bold', color: '#e53935' }}>
+        Tổng tiền: {currentTotal.toLocaleString()}đ
+      </p>
+    </div>
+
+    <button
+      onClick={() => {
+        toast.dismiss(confirmToastId);
+        processPayment(currentTotal);
+      }}
+      style={{
+        backgroundColor: '#4CAF50',
+        color: '#fff',
+        border: 'none',
+        padding: '10px',
+        borderRadius: '4px',
+        cursor: 'pointer',
+        marginTop: '12px',
+        width: '100%',
+        fontSize: '15px'
+      }}
+    >
+      Xác nhận mua
+    </button>
+  </div>
+);
+
 
     const confirmToastId = toast(renderToastContent(), {
       position: "top-center",
@@ -248,9 +266,6 @@ const UserCard = ({ voucher, onClick }) => {
     <div className="user-card" onClick={onClick}>
       <div className="user-card-left">
         <h3 className="voucher-title">{voucher.title}</h3>
-
-        <div className="divider"><h4>-----------------</h4></div>
-
         {/* <p className="voucher-info"><b>Người tạo:</b> {ownerUsername}</p> */}
         <p className="voucher-info">
           <b>Người tạo:</b>{" "}

@@ -14,6 +14,7 @@ function Cart(props) {
   const [ownedVouchers, setOwnedVouchers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('owned');
+  const [columns, setColumns] = useState(3); // Số cột mặc định
   const navigate = useNavigate();
   useEffect(() => {
     const fetchCart = async () => {
@@ -110,6 +111,21 @@ function Cart(props) {
     fetchOwnedVouchers();
   }, []);
 
+  useEffect(() => {
+    const updateColumns = () => {
+      if (window.innerWidth <= 768) {
+        setColumns(1);
+      } else {
+        setColumns(3);
+      }
+    };
+
+    updateColumns();
+    window.addEventListener("resize", updateColumns);
+
+    return () => window.removeEventListener("resize", updateColumns);
+  }, []);
+
   if (loading) return <p>Đang tải giỏ hàng...</p>;
 
   // Phân loại voucher
@@ -137,7 +153,7 @@ function Cart(props) {
         <button 
           onClick={() => setActiveTab('free')}
           style={{
-            padding: '10px 20px',
+            padding: '10px 10px',
             backgroundColor: activeTab === 'free' ? '#4CAF50' : '#f1f1f1',
             border: 'none',
             borderRadius: '4px',
@@ -153,7 +169,7 @@ function Cart(props) {
         {activeTab === 'owned' ? (
           <div className="voucher-grid" style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
+            gridTemplateColumns: `repeat(${columns}, 1fr)`,
             gap: '20px'
           }}>
             {ownedVouchers.map((voucher) => (
