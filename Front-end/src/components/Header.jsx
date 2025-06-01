@@ -6,6 +6,7 @@ import UserMenu from "./Usermenu";
 function Header() {
   const [user, setUser] = useState(null);  // Giữ tên người dùng trong state
   const navigate = useNavigate();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   // Kiểm tra sessionStorage khi component mount
   useEffect(() => {
@@ -37,27 +38,27 @@ function Header() {
           }}
         />
       </div>
-      <nav>
+      <div className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
+        ☰
+      </div>
+      <nav className={`nav-menu ${menuOpen ? "open" : ""}`}>
         <Link to="/userVoucher" className="menu-btn">Mua bán</Link>
         <Link to="/deals" className="discount-btn">Ưu đãi hot</Link>
         <Link to="/chatbot" className="chatbot-btn">Chatbot</Link>
         <Link to="/create-voucher" className="create-voucher-btn">Tạo voucher</Link>
         <Link to="/cart" className="cart-btn">🛒 Giỏ hàng</Link>
-        {user ? (
-          <>
-            <UserMenu name={user} onLogout={handleLogout} />
-            <script>
-              {user && "window.location.reload();"}
-            </script>
-          </>
-          
-        ) : (
-          <>
-            <Link to="/login" className="login-btn">Đăng nhập</Link>
-            <Link to="/register" className="register-btn">Đăng ký</Link>
-          </>
-        )}
+        {!user && (
+        <>
+          <Link to="/login" className="login-btn">Đăng nhập</Link>
+          <Link to="/register" className="register-btn">Đăng ký</Link>
+        </>
+      )}
       </nav>
+
+      {user && 
+      <div className="header-user-menu">
+        <UserMenu name={user} onLogout={handleLogout} />
+      </div>}
     </header>
   );
 }

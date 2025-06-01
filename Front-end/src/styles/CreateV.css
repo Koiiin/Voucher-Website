@@ -73,3 +73,33 @@
       box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
       outline: none;
     }
+
+@media (max-width: 480px) {
+  .voucher-form {
+    padding: 12px 6px;
+    margin: 16px 2px;
+    font-size: 13px;
+  }
+
+  .form-title {
+    font-size: 20px;
+    margin-bottom: 14px;
+  }
+
+  .form-group {
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+
+  .voucher-form input,
+  .voucher-form select {
+    font-size: 12px;
+    padding: 7px 10px;
+    width: 100%;
+  }
+
+  .submit-btn {
+    font-size: 14px;
+    padding: 8px;
+  }
+}

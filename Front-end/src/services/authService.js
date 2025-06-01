@@ -34,9 +34,21 @@ export const register = async (username, email, password) => {
   }
 };
 
-export const logout = () => {
-  sessionStorage.removeItem("accessToken");
-  sessionStorage.removeItem("username");
+export const logout = async () => {
+  try {
+    // Gọi API logout để vô hiệu hóa refresh token trong cookie
+    await axios.post(`${API_URL}/auth/logout`, {}, {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`
+      },
+      withCredentials: true // Quan trọng: cho phép gửi/nhận cookie
+    });
+    
+    return true;
+  } catch (error) {
+    console.error("Logout error:", error);
+    throw error;
+  }
 };
 
 // Hàm chuyển hướng người dùng đến Google OAuth

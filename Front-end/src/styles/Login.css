@@ -213,15 +213,46 @@
 @media (max-width: 480px) {
   .login-box {
     width: 90%;
+    padding: 15px; /* giảm padding */
   }
   
   .login-box h1 {
-    font-size: 2rem;
-    margin-bottom: 30px;
+    font-size: 1.8rem;
+    margin-bottom: 25px;
   }
   
+  .input-wrapper input {
+    font-size: 14px;
+    padding: 8px 0 8px 28px;
+  }
+  
+  .login-btn {
+    padding: 10px;
+    font-size: 14px;
+  }
+  
+  .social-buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .facebook-btn,
+  .google-btn {
+    width: 100%;
+    font-size: 14px;
+    justify-content: center;
+  }
+
   .copyright {
     font-size: 12px;
     bottom: -60px;
   }
+  .login-page {
+    min-height: 100vh;
+    height: auto;           /* Cho phép chiều cao tự động co lại */
+    padding: 10px 0;        /* Giảm khoảng trắng trên/dưới */
+    align-items: flex-start; /* Đẩy form lên trên nếu muốn */
+  }
+  
+  
 }

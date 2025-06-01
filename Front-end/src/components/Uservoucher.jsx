@@ -265,6 +265,7 @@ const UserCard = ({ voucher, onClick }) => {
           ) : (
             <button
               className="buy-button"
+              style={{ minWidth: '120px' }} // Đặt độ dài cố định cho nút
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();

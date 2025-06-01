@@ -59,3 +59,69 @@
 .logo-img:hover {
   transform: scale(1.5); /* Phóng to logo khi hover */
 }
+.hamburger {
+  display: none;
+  font-size: 26px;
+  cursor: pointer;
+  color: #000;
+}
+
+@media (max-width: 480px) {
+  .hamburger {
+    display: block;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+  }
+
+  .nav-menu {
+    display: none;
+    flex-direction: column;
+    width: 30%;
+    background: #c7adad;
+    position: absolute;
+    top: 40px; /* Đặt sát header nhỏ */
+    right: 0;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    padding: 4px 0; /* Giảm padding tổng */
+    border-radius: 7px;
+  }
+
+  .nav-menu.open {
+    display: flex;
+  }
+
+  .nav-menu a,
+  .nav-menu .menu-btn,
+  .nav-menu .discount-btn,
+  .nav-menu .login-btn,
+  .nav-menu .register-btn,
+  .nav-menu .chatbot-btn,
+  .nav-menu .cart-btn,
+  .nav-menu .create-voucher-btn {
+    width: 90%;
+    margin: 2px auto;
+    text-align: center;
+    text-align: center;
+    font-size: 9px;   /* Nhỏ chữ hơn */
+    padding: 2px 0;    /* Giảm padding trong nút */
+  }
+
+  .header {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px 20px;
+    height: 40px;
+  }
+
+  .logo-img {
+    width: 50px;
+  }
+  .header-user-menu {
+  display: flex;
+  align-items: center;
+  margin-left: 8px; /* hoặc điều chỉnh theo ý bạn */
+  width: 15%;
+  margin-top: 6px;
+}
+}

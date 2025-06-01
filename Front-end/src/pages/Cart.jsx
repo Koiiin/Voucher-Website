@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { authRequest } from "../services/authService";
+import { getUserVouchers } from "../services/voucherService";
 import "../styles/Cart.css";
-import VoucherList from "../components/Voucherlist";
+import UserCard from "../components/Uservoucher";
+import VoucherList from "../components/Voucherlist"; // Thêm import VoucherList
+import { getUserVouchersByUsername } from "../services/voucherService"; // Import hàm lấy voucher sở hữu
 
 function Cart(props) {
   const [cartItems, setCartItems] = useState([]);
+  const [ownedVouchers, setOwnedVouchers] = useState([]); // Thêm state cho voucher sở hữu từ API
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('owned'); // Add state for active tab
 
@@ -22,19 +26,28 @@ function Cart(props) {
       } catch (error) {
         console.error("Lỗi khi tải giỏ hàng:", error);
         alert("Không thể tải giỏ hàng.");
+      }
+    };
+
+    const fetchOwnedVouchers = async () => {
+      try {
+        const response = await getUserVouchersByUsername();
+        setOwnedVouchers(response.data || []);
+      } catch (error) {
+        console.error("Lỗi khi tải voucher sở hữu:", error);
       } finally {
         setLoading(false);
       }
     };
 
     fetchCart();
+    fetchOwnedVouchers();
   }, []);
 
   if (loading) return <p>Đang tải giỏ hàng...</p>;
 
   // Phân loại voucher
-  const ownedVouchers = cartItems.filter(v => !v.isFree);
-  const savedFreeVouchers = cartItems.filter(v => v.isFree);
+  const savedFreeVouchers = cartItems.filter(v => !v.isFree);
 
   return (
     <div className="cart-page">
@@ -72,12 +85,25 @@ function Cart(props) {
 
       <div className="cart-content">
         {activeTab === 'owned' ? (
-          <div>
-            <VoucherList vouchersData={savedFreeVouchers} isCartDisplay={true} setToast={props.setToast} />
+          <div className="voucher-grid" style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(3, 1fr)',
+            gap: '20px'
+          }}>
+            {ownedVouchers.map((voucher) => (
+              <UserCard 
+                key={voucher._id || voucher.id}
+                voucher={voucher}
+              />
+            ))}
           </div>
         ) : (
           <div>
-            <VoucherList vouchersData={ownedVouchers} isCartDisplay={true} setToast={props.setToast} />
+            <VoucherList 
+              vouchersData={savedFreeVouchers} 
+              isCartDisplay={true} 
+              setToast={props.setToast} 
+            />
           </div>
         )}
       </div>

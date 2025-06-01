@@ -7,8 +7,10 @@ exports.verifyToken = (req, res, next) => {
         const accessToken = authHeader.split(" ")[1]; // Sửa lỗi biến token
         jwt.verify(accessToken, process.env.JWT_ACCESS_KEY, (err, user) => {
             if (err) {
+                console.log("Token verification error:", err);
                 return res.status(403).json("Token is not valid");
             }
+            console.log("User from token:", user); // Debug log
             req.user = user;
             next();
          });

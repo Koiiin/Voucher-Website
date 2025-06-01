@@ -7,7 +7,7 @@ const User = require('../models/user');
 exports.createVoucher = async (req, res) => {
   try {
     const { title, voucherType, category, validityStart, validityEnd, price, quantity, minSpend } = req.body;
-    const ownerId = req.user.id;
+    const ownerId = req.user._id; // Sử dụng ObjectId cho ownerId
 
     // Lấy username của user từ DB
     const user = await User.findById(ownerId).select('username');
@@ -41,7 +41,7 @@ exports.createVoucher = async (req, res) => {
 //lay tat ca voucher cua nguoi dung c 
 exports.getUserVouchers = async (req, res) => {
   try {
-    const vouchers = await VoucherModel.find();
+    const vouchers = await VoucherModel.find(); // Lấy tất cả voucher, không lọc
     res.status(200).json({ success: true, data: vouchers });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -264,5 +264,19 @@ exports.getVoucherCountByPlatform = async (req, res) => {
     res.json({ success: true, count });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Lỗi server', error: error.message });
+  }
+};
+
+// Lấy tất cả uservoucher không lọc theo gì cả
+exports.getUserVouchersByUsername = async (req, res) => {
+  try {
+    const username = req.user.username; // Lấy username từ user đã xác thực
+    if (!username) {
+      return res.status(400).json({ success: false, message: 'Không tìm thấy thông tin người dùng!' });
+    }
+    const vouchers = await VoucherModel.find({ ownerUsername: username });
+    res.status(200).json({ success: true, data: vouchers });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
   }
 };

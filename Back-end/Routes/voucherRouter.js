@@ -55,4 +55,6 @@ router.get('/vouchers/saved/user/:username', async (req, res) => {
   }
 });
 
+router.get('/getUserVouchersByUsername', authMiddleware.verifyToken, voucherController.getUserVouchersByUsername);
+
 module.exports = router;

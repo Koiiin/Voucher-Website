@@ -32,3 +32,17 @@
   font-weight: 500;
 }
 
+@media (max-width: 480px) {
+  .category-item {
+    width: 80px;      /* nhỏ hơn trên mobile */
+    padding: 10px;    /* giảm padding */
+  }
+
+  .category-icon {
+    font-size: 20px;  /* nhỏ hơn icon */
+  }
+
+  .category-name {
+    font-size: 12px;  /* nhỏ hơn chữ */
+  }
+}

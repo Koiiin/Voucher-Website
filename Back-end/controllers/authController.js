@@ -46,7 +46,8 @@ exports.generateAccessToken = (user) => {
     return jwt.sign(
         {
             id: user.id,
-            admin: user.admin
+            admin: user.admin,
+            username: user.username
         },
         process.env.JWT_ACCESS_KEY,
         { expiresIn: "100s" }
@@ -243,16 +244,59 @@ exports.requestRefreshToken = async (req, res) => {
 };
 
 exports.logoutUser = async (req, res) => {
-    console.log("Cookies:", req.cookies.refreshToken);
-    if (!req.cookies.refreshToken) {
-        return res.status(400).json({ message: "No refresh token found" });
-    }
     try {
-        res.clearCookie("refreshToken");
-        await RefreshToken.deleteOne({ token: req.cookies.refreshToken }); 
-        res.status(200).json("User logged out");
-    } catch (err) {
-        res.status(500).json(err);
+        // Kiểm tra xem có refreshToken trong cookie không
+        const refreshToken = req.cookies.refreshToken;
+        if (!refreshToken) {
+            return res.status(400).json({ 
+                success: false,
+                message: "Không tìm thấy refresh token" 
+            });
+        }
+
+        // Xác thực token trước khi xóa
+        jwt.verify(refreshToken, process.env.JWT_REFRESH_KEY, async (err, decoded) => {
+            if (err) {
+                // Nếu token không hợp lệ, chỉ xóa cookie
+                res.clearCookie("refreshToken");
+                return res.status(403).json({ 
+                    success: false,
+                    message: "Token không hợp lệ hoặc hết hạn"
+                });
+            }
+
+            try {
+                // Xóa refresh token từ database
+                await RefreshToken.deleteOne({ token: refreshToken });
+                
+                // Xóa cookie
+                res.clearCookie("refreshToken", {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === 'production',
+                    path: '/',
+                    sameSite: "strict"
+                });
+
+                return res.status(200).json({
+                    success: true,
+                    message: "Đăng xuất thành công"
+                });
+            } catch (error) {
+                console.error("Lỗi khi xóa refresh token:", error);
+                return res.status(500).json({
+                    success: false, 
+                    message: "Lỗi server khi xử lý đăng xuất",
+                    error: error.message
+                });
+            }
+        });
+    } catch (error) {
+        console.error("Lỗi đăng xuất:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Lỗi server",
+            error: error.message
+        });
     }
 };
 

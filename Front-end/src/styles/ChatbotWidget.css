@@ -56,3 +56,27 @@
     }
   }
   
+
+  @media (max-width: 480px) {
+  .chatbot-popup {
+    width: 90vw;       /* Chiều rộng gần như full màn hình trên điện thoại */
+    height: 60vh;      /* chiều cao vừa phải để không chiếm hết màn hình */
+    bottom: 80px;      /* nếu cần, tạo khoảng cách cho nút */
+    right: 5vw;
+    position: fixed;
+    border-radius: 10px;
+  }
+
+  .chatbot-button {
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+    bottom: 20px;
+    right: 20px;
+  }
+
+  .chatbot-widget {
+    bottom: 10px;
+    right: 10px;
+  }
+}

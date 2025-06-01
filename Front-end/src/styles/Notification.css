@@ -121,3 +121,30 @@
 .modal-error .modal-icon {
     animation: modal-cross 0.6s ease-out;
 }
+
+@media (max-width: 400px) {
+    .modal-box {
+        width: 60%;
+        transform: scale(1);
+    }
+
+    .modal-message {
+        font-size: 16px;
+        padding: 0 15px 20px;
+    }
+
+    .modal-icon-container {
+        width: 60px;
+        height: 60px;
+        margin: 20px auto 10px;
+    }
+
+    .modal-icon {
+        font-size: 30px;
+    }
+
+    .modal-btn {
+        font-size: 14px;
+        padding: 10px;
+    }
+}

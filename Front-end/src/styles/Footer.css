@@ -26,3 +26,11 @@
   color: #fff;
 
 }
+
+@media (max-width: 480px) {
+  .footer-links a {
+    font-size: 12px;
+    margin: 0 5px;
+  }
+}
+

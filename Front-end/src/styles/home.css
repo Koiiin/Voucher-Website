@@ -53,3 +53,83 @@
   transform: translateY(-2px) scale(1.04);
   box-shadow: 0 4px 16px rgba(56, 142, 60, 0.18);
 }
+
+/* banner ảnh chạy*/
+.carousel {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  padding: 8px 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+  overflow: hidden;
+}
+
+.carousel-images {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+}
+
+.carousel-images img {
+  width: 280px;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 10px;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: transform 0.3s;
+  animation: scroll-left 20s linear infinite;
+}
+
+.carousel-images img:hover {
+  transform: scale(1.04);
+}
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+
+@media (max-width: 600px) {
+  .home-page {
+    padding: 10px;
+  }
+
+  .category-section h2,
+  .featured-section h2 {
+    font-size: 18px;
+    margin-bottom: 8px;
+    text-align: center;
+  }
+
+  .load-more-btn {
+    width: 50%;
+    padding: 1em 0;
+    font-size: 0.8em;
+    border-radius: 1.5em;
+    box-shadow: none;
+  }
+
+  .user-joined {
+    font-size: 14px;
+    margin-top: 15px;
+    padding: 0 10px;
+  }
+
+  .carousel-images img {
+  width: 70px;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 10px;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: transform 0.3s;
+  animation: scroll-left 20s linear infinite;
+}
+}

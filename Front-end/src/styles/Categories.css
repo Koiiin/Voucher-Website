@@ -59,6 +59,8 @@
   .deals-page {
     flex-direction: column;
     padding: 10px;
+    align-items: center; /* Căn giữa cho đẹp */
+    min-height: auto; /* Không ép full chiều cao */
   }
 
   .san-list-container {
@@ -68,17 +70,26 @@
     left: 0;
     bottom: auto;
     margin-bottom: 20px;
+    padding: 16px;
   }
 
   .main-deals-container {
     width: 100%;
     margin-left: 0;
-    padding: 10px;
+    padding: 12px;
+  }
+
+  .title-main-deals {
+    font-size: 22px;
+    text-align: center;
+    margin-bottom: 16px;
   }
 
   .voucher-grid {
     grid-template-columns: 1fr;
-    max-width: 500px;
+    max-width: 100%;
     margin: 0 auto;
+    gap: 10px;
   }
 }
+

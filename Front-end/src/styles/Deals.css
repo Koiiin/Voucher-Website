@@ -232,3 +232,83 @@
     border-color: #28a745;
     transform: translateY(2px) scale(1.04);
   }
+
+
+
+@media (max-width: 768px) {
+  .san-list-container {
+    position: relative;
+    width: 100%;
+    height: auto;
+    top: auto;
+    left: auto;
+    bottom: auto;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    background: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    position: static !important;
+    margin: 0 !important;
+  }
+
+  .san-list {
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    width:100%;
+    
+  }
+
+  .san-item {
+    flex: 0 0 auto;
+    border-bottom: none;
+    border-right: 1px dashed #ddd;
+    margin-right: 10px;
+  }
+
+  .san-item:last-child {
+    border-right: none;
+  }
+
+  .main-deals-container {
+    width: 100%;
+    margin-left: 0;
+    padding: 15px;
+  }
+  .san-list-title {
+    font-size: 10px;
+    margin-bottom: 0px;
+  }
+  .san-button {
+  padding: 4px 8px;
+  min-height: 28px;
+  height: 32px;
+  font-size: 13px;
+  border-radius: 6px;
+  gap: 6px;
+}
+
+.san-logo {
+  width: 20px;
+  height: 20px;
+}
+
+.san-name {
+  font-size: 13px;
+}
+
+.san-count {
+  font-size: 12px;
+  margin-left: 4px;
+}
+h2.title-main-deals {
+    margin: 0px 0 0 0;
+    text-align: center;
+    font-size: 12px;
+  }
+}

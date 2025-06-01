@@ -271,3 +271,85 @@
   margin-top: 10px;
   border-top: 1px solid #eee;
 }
+
+
+@media (max-width: 600px) {
+  .voucher-card {
+    font-size: 85%;
+    aspect-ratio: unset;
+    height: auto;
+    padding: 6px 4px;         /* Thêm: giảm padding tổng thể */
+    font-size: 90%;           /* Thêm: giảm cỡ chữ toàn card */
+    margin-top: 8px;          /* Thêm: giảm khoảng cách giữa các card */
+  }
+
+  .voucher-left {
+    width: 100%;
+    border-radius: 12px 12px 12px 12px;
+    padding: 4%;
+  }
+
+  .voucher-left::after {
+    display: none;
+  }
+  .logo-supplier {
+    width: 25%;           /* Nhỏ hơn trên mobile */
+    min-width: 4px;
+    max-width: 80px;
+    margin-bottom: 4%;
+    font-size: 90%;
+  }
+  .voucher-right {
+    width: 280%;
+    padding: 4%;
+  }
+
+  .copy-code {
+    width: 100%;
+    margin: 10px 0 0 0;
+  }
+
+  .voucher-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .discount,
+  .highlight,
+  .min-order,
+  .note,
+  .apply-list,
+  .expiry-date
+  {
+    font-size: 60%;            /* Chữ nhỏ lại */
+    padding: 2px 0;
+    margin: 2px 0;
+  }
+  .voucher-footer {
+    flex-direction: row;           /* Đặt các nút nằm ngang */
+    align-items: center;
+    justify-content: center; /* Hoặc center nếu muốn sát nhau */
+    width: 100%;
+    margin-top: 4px;
+    gap: 4px;                      /* Thêm khoảng cách giữa các nút nếu cần */
+  }
+  .copy-code,
+  .apply-list {
+    flex: 1 1 1;
+    font-size: 60%;      /* To hơn, dễ bấm */
+    padding: 10px 10px;      /* Tăng padding cho nút */
+    min-width: 0;         /* Để flex chia đều */
+    border-radius: 8px;
+    text-align: center;
+    margin: 0;
+    box-sizing: border-box;
+  }
+  .add-to-cart-btn,
+  .cart-action-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 13px;
+    top: 6px;
+    right: 6px;
+  }
+}

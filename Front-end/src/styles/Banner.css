@@ -29,32 +29,19 @@
 .container {
   position: relative;
   width: 100%;
-  height: 600px;
+  height: 370px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(90deg, #5D54A4, #7C78B8);
+  background: linear-gradient(90deg, #f7b9cc, #f7b9cc);
   text-align: center;
   font-family: 'Bangers', cursive;
   color: white;
+  overflow-x: hidden;
 }
 
-.container::before {
-  content: '';
-  position: absolute;
-  width: 200%;
-  height: 200%;
-  top: 50%;
-  left: 50%;
-  transform: rotate(0) translateX(-50%) translateY(-50%);
-  transform-origin: 0 0;
-  background: repeating-conic-gradient(hsl(0, 50%, 40%), hsl(0, 50%, 50%) 1%);
-  animation: rotation 20s linear infinite;
-  opacity: 0.2;
-  z-index: 0;
-}
 
 .container h1 {
   position: relative;
@@ -76,21 +63,25 @@
                10px 10px 30px rgba(0,0,0,.7);
 }
 
-.glow-text {
-  animation: glow 2s ease-in-out infinite;
+h1.glow-text {
+  /* animation: glow 2s ease-in-out infinite; */ /* Tắt hiệu ứng nháy */
+  font-size: 28px;
+  letter-spacing: 10px;
+  color: #1f6e95; /* Đổi màu chữ, ví dụ vàng cam */
+  text-shadow: 0 2px 8px #fff, 0 0 2px #efebe2;
 }
 
 .banner-btn {
   position: relative;
   z-index: 1;
-  margin-top: 20px;
-  padding: 12px 24px;
-  font-size: 18px;
+  margin-top: 5px;
+  padding: 8px 24px;
+  font-size: 25px;
   font-weight: bold;
   text-transform: uppercase;
   border: none;
   border-radius: 8px;
-  background: hsl(50, 50%, 45%);
+  background: hsl(0, 87%, 62%);
   color: #222;
   cursor: pointer;
   box-shadow: 2px 2px 8px rgba(0,0,0,0.4);
@@ -126,18 +117,34 @@
 }
 
 /* Responsive adjustments */
-@media (max-width: 768px) {
+
+
+
+@media (max-width: 480px) {
   .container {
-    height: 400px;
+    height: 130px;
+    padding: 10px;
   }
 
   .container h1 {
-    font-size: clamp(20px, 4vw, 30px);
-    letter-spacing: 10px;
+    font-size: clamp(16px, 4vw, 22px);
+    letter-spacing: 3px;
+    line-height: 1.1;
   }
 
   .banner-btn {
-    padding: 10px 20px;
-    font-size: 16px;
+    padding: 6px 12px;
+    font-size: 12px;
+    width: 80;
+    max-width: 200px;
+  }
+  .banner-btn
+  .sparkle {
+    width: 10px;
+    height: 10px;
+  }
+  h1.glow-text {
+    font-size: 10px;
+    letter-spacing: 1px;
   }
 }

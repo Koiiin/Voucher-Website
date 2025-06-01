@@ -96,7 +96,7 @@ const SearchBar = () => {
           onChange={(e) => setCategory(e.target.value)}
           className="search-select"
         >
-          <option value="all">Tất cả danh mục</option>
+          <option value="all"></option>
           {categories.map((cat, idx) => (
             <option key={idx} value={cat}>
               {cat}

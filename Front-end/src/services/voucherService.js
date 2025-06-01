@@ -99,3 +99,21 @@ export const getVoucherCountByPlatform = async (platform) => {
     throw new Error("Lỗi kết nối đến server!");
   }
 };
+
+// Lấy tất cả uservoucher không lọc theo gì cả
+export const getUserVouchersByUsername = async () => {
+  try {
+    const response = await authRequest({
+      url: "getUserVouchersByUsername",
+      method: "GET",
+    });
+    if (response.data.success) {
+      return response.data;
+    } else {
+      throw new Error("Không thể tải danh sách uservoucher!");
+    }
+  } catch (error) {
+    console.error(error);
+    throw new Error("Lỗi kết nối đến server!");
+  }
+};
