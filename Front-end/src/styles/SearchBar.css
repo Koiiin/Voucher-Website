@@ -282,6 +282,7 @@
   .search-input-wrapper,
   .search-button {
     width: 100%;
+    padding-right: 5px;
     /* margin-bottom: 12px; */
   }
 

@@ -64,6 +64,7 @@
   margin: 5px 0;
   color: #666;
   font-family: 'Segoe UI', sans-serif;
+  white-space: nowrap;
 }
 
 .user-card-right {

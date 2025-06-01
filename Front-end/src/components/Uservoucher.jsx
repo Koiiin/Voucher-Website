@@ -281,10 +281,12 @@ const UserCard = ({ voucher, onClick }) => {
             {ownerUsername}
           </span>
         </p>
-        <p className="voucher-info"><strong>Loại:</strong> {voucher.voucherType}</p>
-        {voucher.category && <p className="voucher-info"><strong>Danh mục:</strong> {voucher.category}</p>}
-        {/* <p className="voucher-info">Bắt đầu: {new Date(voucher.validityStart).toLocaleDateString()}</p> */}
-        <p className="voucher-info"><strong>HSD: </strong>{new Date(voucher.validityEnd).toLocaleDateString()}</p>
+        <div style="white-space: nowrap;">
+          <p className="voucher-info"><strong>Loại:</strong> {voucher.voucherType}</p>
+          {voucher.category && <p className="voucher-info"><strong>Danh mục:</strong> {voucher.category}</p>}
+          {/* <p className="voucher-info">Bắt đầu: {new Date(voucher.validityStart).toLocaleDateString()}</p> */}
+          <p className="voucher-info"><strong>HSD: </strong>{new Date(voucher.validityEnd).toLocaleDateString()}</p>
+        </div>
       </div>
       {/* <div className="divider">|</div> */}
       <div className="user-card-right">
