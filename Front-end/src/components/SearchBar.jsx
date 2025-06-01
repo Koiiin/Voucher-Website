@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../styles/SearchBar.css";
+import { addToCart } from "../services/voucherService"; 
+// import { getToken } from "../services/authService";
+import Toast from "./Toast";
 
 const API_URL = import.meta.env.VITE_APP_API_URL;
 
@@ -11,8 +14,12 @@ const SearchBar = () => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
+  const [toast, setToast] = useState(null);
 
-  // Load categories từ API
+  const showToast = (message, type = "info") => {
+    setToast({ message, type });
+  };
+
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -25,7 +32,6 @@ const SearchBar = () => {
     fetchCategories();
   }, []);
 
-  // Load suggestions (autocomplete)
   const handleInputChange = async (e) => {
     const value = e.target.value;
     setQuery(value);
@@ -33,7 +39,7 @@ const SearchBar = () => {
     if (value.length >= 2) {
       try {
         const res = await axios.get(`${API_URL}/vouchers/search`, {
-          params: { q: value }
+          params: { q: value },
         });
         setSuggestions(res.data.slice(0, 5));
       } catch (error) {
@@ -52,7 +58,7 @@ const SearchBar = () => {
     try {
       setLoading(true);
       const res = await axios.get(`${API_URL}/vouchers/search`, {
-        params: { q: query, category }
+        params: { q: query, category },
       });
       setResults(res.data);
       setSuggestions([]);
@@ -68,6 +74,23 @@ const SearchBar = () => {
     setQuery(title);
     setSuggestions([]);
   };
+
+  // Hàm gọi service addToCart
+  const handleAddToCart = async (voucherId) => {
+  try {
+    await addToCart(voucherId);
+    showToast("Đã thêm vào giỏ hàng!", "success");
+  } catch (error) {
+    if (error.message.includes("401")) {
+      showToast("Bạn cần đăng nhập để nhận voucher", "error");
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 1500);
+    } else {
+      showToast("Thêm vào giỏ hàng thất bại!", "error");
+    }
+  }
+};
 
   return (
     <div className="search-container">
@@ -96,7 +119,7 @@ const SearchBar = () => {
           onChange={(e) => setCategory(e.target.value)}
           className="search-select"
         >
-          <option value="all"></option>
+          <option value="all">Tất cả danh mục</option>
           {categories.map((cat, idx) => (
             <option key={idx} value={cat}>
               {cat}
@@ -104,24 +127,62 @@ const SearchBar = () => {
           ))}
         </select>
 
-        <button type="submit" className="search-button">🔍 Tìm</button>
+        <button type="submit" className="search-button">
+          🔍 Tìm
+        </button>
       </form>
 
       {loading && <p className="loading-text">Đang tìm kiếm...</p>}
-
       <div className="results-list">
         {results.map((voucher) => (
           <div key={voucher._id} className="result-item">
-            <img src={voucher.linkanh} alt={voucher.title} className="result-image" />
-            <div>
-              <h3>{voucher.title}</h3>
-              <p>Loại: {voucher.voucherType}</p>
-              <p>Giá: {voucher.price}đ</p>
-              <p>Danh mục: {voucher.category}</p>
+            <div className="voucher-section left-section">
+              <h3 className="voucher-title">{voucher.title}</h3>
+              <div className="expiry-time">
+                ⏱ HSD:{" "}
+                {voucher.validityEnd
+                  ? new Date(voucher.validityEnd).toLocaleDateString("vi-VN", {
+                      day: "2-digit",
+                      month: "2-digit",
+                      year: "2-digit",
+                    })
+                  : "--/--"}
+              </div>
+            </div>
+            <div className="divider">|</div>
+            <div className="voucher-section middle-section">
+              <p>
+                <strong>Loại:</strong> {voucher.voucherType}
+              </p>
+              <p>
+                <strong>Giá:</strong> {voucher.price}đ
+              </p>
+              <p>
+                <strong>Số lượng:</strong> {voucher.quantity}
+              </p>
+              <p>
+                <strong>Người tạo:</strong> {voucher.ownerUsername}
+              </p>
+            </div>
+            <div className="divider">|</div>
+            <div className="voucher-section right-section">
+              <button
+                className="get-button"
+                onClick={() => handleAddToCart(voucher._id)}
+              >
+                Nhận voucher
+              </button>
             </div>
           </div>
         ))}
       </div>
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
+      )}
     </div>
   );
 };

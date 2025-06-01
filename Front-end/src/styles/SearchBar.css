@@ -36,7 +36,7 @@
   border-radius: 8px;
   border: 1px solid #ccc;
   font-size: 16px;
-  min-width: 0;
+  min-width: 150px;
   transition: border-color 0.3s, box-shadow 0.3s;
 }
 
@@ -146,39 +146,119 @@
   background-color: #0056b3;
 }
 
-@media (max-width: 480px) {
-  .search-form {
-    gap: 12px;
-    width: 100%;
-  }
-  
-  .search-select {
-  padding: 10px;
+.result-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  border: 1px solid #eee;
   border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 8px;
-  min-width: 0px;
-  transition: border-color 0.3s, box-shadow 0.3s;
-  width: 50px;
-  }
-  .search-input-wrapper {
-    flex-grow: 1;
-    min-width: 0;
-    font-size: 4px;
-  }
-  .search-input {
-    width: 100%;
-    font-size: 12px;
-    padding: 8px 12px;
-  }
-  .search-button {
-    padding: 8px;
-    font-size: 8px;
-    width: 40px;
-    height: 8;
-  }
-  .result-item {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+  background-color: #fdfdfd;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  transition: transform 0.2s;
+  gap: 24px; /* Tăng khoảng cách giữa các phần */
 }
+
+.voucher-section {
+  padding: 0 12px;
+  flex: 1;
+}
+
+.left-section {
+  flex: 1;
+  font-weight: bold;
+  font-size: 18px;
+  display: flex;
+  flex-direction: column; 
+  align-items: flex-start; 
+  justify-content: center;
+  padding-left: 10px;
+}
+
+
+
+.middle-section {
+  flex: 2; /* Tăng độ rộng phần giữa */
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  color: #333;
+  padding: 0 20px; /* Tăng padding trái phải */
+}
+
+.right-section {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.get-button {
+  padding: 8px 16px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.get-button:hover {
+  background-color: #218838;
+}
+
+.divider {
+  font-weight: bold;
+  color: #ccc;
+  padding: 0 16px; /* Tăng khoảng cách hai bên thanh | */
+  font-size: 20px;
+}
+
+/* Làm nổi bật phần tiêu đề bên trái */
+.voucher-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #cf2020;
+  margin: 0;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+/* Làm đẹp phần thông tin giữa */
+.voucher-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #444;
+  padding-left: 10px;
+}
+
+.voucher-info p {
+  margin: 0;
+}
+
+.voucher-info strong {
+  color: #000;
+}
+
+.expiry-time {
+  font-size: 80%;
+  font-weight: 500;
+  color: #045e0d;
+  display: flex;
+  align-items: center;
+  opacity: 0.9;
+}
+
+.fa-clock-o {
+  margin-right: 0%;
+}
+
+.applicable-to {
+  font-size: 90%;
+  font-weight: 700;
+  margin-bottom: 5%;
+  text-align: center;
+} 
