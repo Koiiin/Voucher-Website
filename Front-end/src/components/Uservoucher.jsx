@@ -34,7 +34,7 @@ const UserCard = ({ voucher, onClick }) => {
       const userId = decodedToken.id;
 
       const response = await axios.post(
-        "http://localhost:3000/api/payment/momo",
+        "https://voucher-website-ba.onrender.com/api/payment/momo",
         {
           voucherData: {
             _id: voucher._id,
@@ -229,7 +229,7 @@ const UserCard = ({ voucher, onClick }) => {
     try {
       setIsProcessing(true);
       const response = await axios.patch(
-        `http://localhost:3000/api/vouchers/toggle-status/${voucher._id}`,
+        `https://voucher-website-ba.onrender.com/api/vouchers/toggle-status/${voucher._id}`,
         {},
         {
           headers: {

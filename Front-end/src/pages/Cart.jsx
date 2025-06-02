@@ -37,7 +37,7 @@ function Cart(props) {
             }
             
             // Gọi API refresh token
-            const response = await axios.post('http://localhost:3000/api/auth/refresh', 
+            const response = await axios.post('https://voucher-website-ba.onrender.com/api/auth/refresh', 
               { refreshToken },
               { 
                 headers: { 'Content-Type': 'application/json' }
@@ -88,7 +88,7 @@ function Cart(props) {
             if (!refreshToken) {
               throw new Error('No refresh token');
             }
-            const response = await axios.post('http://localhost:3000/api/auth/refresh', {
+            const response = await axios.post('https://voucher-website-ba.onrender.com/api/auth/refresh', {
               refreshToken
             });
             if (response.data.accessToken) {
