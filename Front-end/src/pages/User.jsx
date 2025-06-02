@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { authRequest } from '../services/authService';
 import '../styles/User.css'; 
+import avt from '../img/avatar/avt.jpg';
+
 
 const User = () => {
     const [user, setUser] = useState(null);
@@ -52,7 +54,7 @@ const User = () => {
         const fetchVouchers = async () => {
             try {
                 const response = await authRequest({
-                    url: `/user/${user._id}/vouchers`,
+                    url: `/user/vouchers`,
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"
@@ -81,7 +83,7 @@ const User = () => {
     return (
         <div className="user-profile">
             <div className="user-header">
-                <img src={user.avatarUrl} alt="User Avatar" className="user-avatar" />
+                <img src={avt} alt="User Avatar" className="user-avatar" />
                 <div className="user-info">
                     <h1>{user.username}</h1>
                     <p className="user-bio">{user.bio || "No bio available"}</p>
@@ -114,26 +116,6 @@ const User = () => {
                     </div>
                 </div>
             ))}
-
-
-            <div className="user-ratings">
-                <h3>Ratings</h3>
-                {Array.isArray(user.ratings) && user.ratings.length === 0 ? (
-                    <p>No ratings yet.</p>
-                ) : (
-                    Array.isArray(user.ratings) &&
-                    user.ratings.map((rating, index) => (
-                        <div key={index} className="user-rating">
-                            <img src={rating.fromUser.avatarUrl} alt="Rater Avatar" className="rater-avatar" />
-                            <div className="rating-details">
-                                <span className="rater-name">{rating.fromUser.username}</span>
-                                <div className="rating-stars">⭐ {rating.stars}</div>
-                                <p className="rating-comment">{rating.comment}</p>
-                            </div>
-                        </div>
-                    ))
-                )}
-            </div>
         </div>
     );
 };
