@@ -50,7 +50,7 @@ exports.generateAccessToken = (user) => {
             username: user.username
         },
         process.env.JWT_ACCESS_KEY,
-        { expiresIn: "100s" }
+        { expiresIn: "50000s" }
     );
 };
 
