@@ -3,7 +3,7 @@ import axios from "axios";
 import "../styles/SearchBar.css";
 import { addToCart } from "../services/voucherService"; 
 // import { getToken } from "../services/authService";
-import Toast from "./Toast";
+import Toast from "./toast";
 
 const API_URL = import.meta.env.VITE_APP_API_URL;
 
