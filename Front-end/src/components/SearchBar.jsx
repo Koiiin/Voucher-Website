@@ -137,6 +137,9 @@ const SearchBar = () => {
         {results.map((voucher) => (
           <div key={voucher._id} className="result-item">
             <div className="voucher-section left-section">
+
+              <img src={voucher.linkanh} alt={voucher.title} className="result-image" />
+              
               <h3 className="voucher-title">{voucher.title}</h3>
               <div className="expiry-time">
                 ⏱ HSD:{" "}

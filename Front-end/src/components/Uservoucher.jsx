@@ -311,9 +311,10 @@ const UserCard = ({ voucher, onClick }) => {
                 }}
               >
                 Chỉnh sửa
-              </button>              <button
+              </button>
+              <button
                 className="toggle-button"
-                onClick={handleToggleSelling}                style={{
+                onClick={handleToggleSelling} style={{
                   padding: '8px 15px',
                   backgroundColor: voucher.isPublic ? '#f44336' : '#4CAF50',
                   color: 'white',

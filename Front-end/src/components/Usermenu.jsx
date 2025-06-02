@@ -25,7 +25,6 @@ function UserMenu({ name, onLogout }) {
         {open && (
           <div className="dropdown">
             <Link to ="/user" className="dropdown-item">👤 Hồ sơ</Link>
-            <p className="dropdown-item">⚙️ Cài đặt</p>
             <p className="dropdown-item" onClick={onLogout} style={{ cursor: "pointer", color: "red" }}>🚪 Đăng xuất</p>
           </div>
         )}
