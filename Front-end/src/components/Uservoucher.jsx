@@ -281,7 +281,7 @@ const UserCard = ({ voucher, onClick }) => {
             {ownerUsername}
           </span>
         </p>
-        <div style="white-space: nowrap;">
+        <div style={{whitespace: "nowrap"}}>
           <p className="voucher-info"><strong>Loại:</strong> {voucher.voucherType}</p>
           {voucher.category && <p className="voucher-info"><strong>Danh mục:</strong> {voucher.category}</p>}
           {/* <p className="voucher-info">Bắt đầu: {new Date(voucher.validityStart).toLocaleDateString()}</p> */}
