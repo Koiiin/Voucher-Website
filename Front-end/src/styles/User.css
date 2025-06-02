@@ -2,21 +2,26 @@
 .user-profile {
     max-width: 800px;
     margin: 40px auto;
-    padding: 30px;
-    background-color: #fff;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    padding: 32px 28px;
+    background: linear-gradient(135deg, #f8fafc 60%, #e3e8f0 100%);
+    border-radius: 24px;
+    box-shadow: 0 8px 32px rgba(80, 120, 200, 0.12), 0 1.5px 6px rgba(0,0,0,0.04);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    transition: box-shadow 0.3s;
+}
+
+.user-profile:hover {
+    box-shadow: 0 16px 40px rgba(80, 120, 200, 0.18), 0 2px 8px rgba(0,0,0,0.06);
 }
 
 /* Header Section */
 .user-header {
     display: flex;
     align-items: center;
-    gap: 25px;
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 20px;
-    margin-bottom: 25px;
+    gap: 32px;
+    border-bottom: 1.5px solid #e0e7ef;
+    padding-bottom: 24px;
+    margin-bottom: 28px;
 }
 
 .user-avatar {
@@ -25,45 +30,62 @@
     border-radius: 50%;
     border: 4px solid #4CAF50;
     object-fit: cover;
-    background-color: #f0f0f0;
+    background: linear-gradient(135deg, #e0ffe0 60%, #f0f0f0 100%);
+    box-shadow: 0 2px 12px rgba(76, 175, 80, 0.10);
+    transition: border 0.3s;
+}
+
+.user-avatar:hover {
+    border: 4px solid #388e3c;
 }
 
 .user-info h1 {
     margin: 0;
-    font-size: 28px;
-    color: #333;
+    font-size: 2.1rem;
+    color: #222;
+    font-weight: 700;
+    letter-spacing: 1px;
 }
 
 .user-bio {
-    color: #777;
-    font-size: 14px;
-    margin: 5px 0;
+    color: #6b7280;
+    font-size: 1rem;
+    margin: 7px 0 0 0;
+    font-style: italic;
 }
 
 .user-stats {
     display: flex;
-    gap: 20px;
-    font-size: 15px;
-    margin: 10px 0;
+    gap: 24px;
+    font-size: 1rem;
+    margin: 14px 0 0 0;
 }
 
 .user-stats div {
-    color: #555;
+    color: #388e3c;
+    background: #e8f5e9;
+    padding: 4px 14px;
+    border-radius: 12px;
+    font-weight: 500;
+    box-shadow: 0 1px 4px rgba(56, 142, 60, 0.05);
 }
 
 .user-theme {
     font-size: 13px;
     color: #aaa;
+    margin-top: 6px;
 }
 
 /* Vouchers Section */
 .user-vouchers h3,
 .user-ratings h3 {
-    font-size: 20px;
-    margin-bottom: 10px;
+    font-size: 1.25rem;
+    margin-bottom: 12px;
     border-left: 4px solid #4CAF50;
-    padding-left: 10px;
-    color: #333;
+    padding-left: 12px;
+    color: #222;
+    font-weight: 600;
+    letter-spacing: 0.5px;
 }
 
 .user-vouchers ul {
@@ -73,28 +95,35 @@
 }
 
 .user-vouchers li {
-    padding: 10px 15px;
-    margin: 8px 0;
-    background-color: #f9f9f9;
+    padding: 12px 18px;
+    margin: 10px 0;
+    background: linear-gradient(90deg, #f4fff4 60%, #e8f5e9 100%);
     border-left: 4px solid #4CAF50;
-    border-radius: 8px;
+    border-radius: 10px;
+    box-shadow: 0 1px 6px rgba(76, 175, 80, 0.06);
+    transition: background 0.2s;
+}
+
+.user-vouchers li:hover {
+    background: linear-gradient(90deg, #e8f5e9 60%, #c8e6c9 100%);
 }
 
 /* Ratings Section */
 .user-rating {
     display: flex;
     align-items: flex-start;
-    gap: 15px;
-    padding: 12px 0;
-    border-top: 1px solid #eee;
+    gap: 18px;
+    padding: 14px 0;
+    border-top: 1px solid #f0f0f0;
 }
 
 .rater-avatar {
-    width: 50px;
-    height: 50px;
+    width: 54px;
+    height: 54px;
     border-radius: 50%;
     object-fit: cover;
-    background-color: #e0e0e0;
+    background: #e0e0e0;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
 }
 
 .rating-details {
@@ -103,92 +132,103 @@
 
 .rater-name {
     font-weight: bold;
-    color: #333;
+    color: #222;
+    font-size: 1.05rem;
 }
 
 .rating-stars {
     color: #FFD700;
-    font-size: 14px;
-    margin: 3px 0;
+    font-size: 1.1rem;
+    margin: 4px 0;
+    letter-spacing: 1px;
 }
 
 .rating-comment {
-    font-size: 14px;
-    color: #555;
+    font-size: 1rem;
+    color: #444;
+    background: #f8fafc;
+    border-radius: 8px;
+    padding: 7px 12px;
+    margin-top: 2px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.03);
 }
 
 /* Loading & Error */
 .loading {
     text-align: center;
     padding: 50px;
-    font-size: 18px;
+    font-size: 1.2rem;
+    color: #4CAF50;
 }
 
 .error-message {
-    color: red;
+    color: #e53935;
     font-weight: bold;
+    background: #ffebee;
+    border-radius: 8px;
+    padding: 10px 0;
+    margin: 10px 0;
+    text-align: center;
 }
-
-
 
 /* Responsive Media Queries */
 @media (max-width: 768px) {
   .user-profile {
-    padding: 20px;
-    margin: 20px 15px;
+    padding: 16px 6px;
+    margin: 18px 6px;
   }
 
   .user-header {
     flex-direction: column;
     align-items: center;
-    gap: 15px;
-    padding-bottom: 15px;
-    margin-bottom: 20px;
+    gap: 12px;
+    padding-bottom: 12px;
+    margin-bottom: 16px;
   }
 
   .user-avatar {
-    width: 100px;
-    height: 100px;
+    width: 90px;
+    height: 90px;
     border-width: 3px;
   }
 
   .user-info h1 {
-    font-size: 24px;
+    font-size: 1.3rem;
     text-align: center;
   }
 
   .user-bio {
-    font-size: 13px;
+    font-size: 0.95rem;
     text-align: center;
   }
 
   .user-stats {
     justify-content: center;
     flex-wrap: wrap;
-    gap: 12px;
-    font-size: 14px;
+    gap: 10px;
+    font-size: 0.95rem;
   }
 
   .user-vouchers li {
-    padding: 8px 12px;
-    margin: 6px 0;
+    padding: 8px 10px;
+    margin: 5px 0;
   }
 
   .user-vouchers h3,
   .user-ratings h3 {
-    font-size: 18px;
-    padding-left: 8px;
+    font-size: 1.1rem;
+    padding-left: 7px;
   }
 
   .user-rating {
     flex-direction: column;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
   }
 
   .rater-avatar {
-    width: 40px;
-    height: 40px;
+    width: 38px;
+    height: 38px;
   }
 
   .rating-details {
@@ -196,43 +236,43 @@
   }
 
   .rating-comment {
-    font-size: 13px;
+    font-size: 0.95rem;
   }
 }
 
 @media (max-width: 480px) {
   .user-avatar {
-    width: 80px;
-    height: 80px;
+    width: 64px;
+    height: 64px;
   }
 
   .user-info h1 {
-    font-size: 20px;
+    font-size: 1.1rem;
   }
 
   .user-stats {
-    font-size: 13px;
+    font-size: 0.9rem;
   }
 
   .user-vouchers h3,
   .user-ratings h3 {
-    font-size: 16px;
+    font-size: 1rem;
   }
 
   .user-vouchers li {
-    padding: 6px 10px;
+    padding: 6px 7px;
   }
 
   .rater-avatar {
-    width: 35px;
-    height: 35px;
+    width: 28px;
+    height: 28px;
   }
 
   .rating-stars {
-    font-size: 12px;
+    font-size: 0.9rem;
   }
 
   .rating-comment {
-    font-size: 12px;
+    font-size: 0.9rem;
   }
 }
