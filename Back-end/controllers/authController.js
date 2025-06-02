@@ -122,10 +122,10 @@ exports.google = passport.authenticate("google", { scope: ["profile", "email"], 
 exports.googleCallback = (req, res, next) => {
     passport.authenticate('google', { session: false }, async (err, user, info) => {
         if (err) {
-            return res.redirect(`http://localhost:5173/oauth-error?message=${encodeURIComponent("Đăng nhập Google thất bại ❌")}`);
+            return res.redirect(`https://voucher-website-fe.onrender.com/oauth-error?message=${encodeURIComponent("Đăng nhập Google thất bại ❌")}`);
         }
         if (!user) {
-            return res.redirect(`http://localhost:5173/oauth-error?message=${encodeURIComponent("Không tìm thấy tài khoản Google!")}`);
+            return res.redirect(`https://voucher-website-fe.onrender.com/oauth-error?message=${encodeURIComponent("Không tìm thấy tài khoản Google!")}`);
         }
 
         try {
@@ -149,11 +149,11 @@ exports.googleCallback = (req, res, next) => {
                 sameSite: "strict"
             });
 
-            const redirectUrl = `http://localhost:5173/oauth-success?token=${accessToken}&username=${existingUser.username}`;
+            const redirectUrl = `https://voucher-website-fe.onrender.com/oauth-success?token=${accessToken}&username=${existingUser.username}`;
             return res.redirect(redirectUrl);
 
         } catch (error) {
-            return res.redirect(`http://localhost:5173/oauth-error?message=${encodeURIComponent("Lỗi server ❌")}`);
+            return res.redirect(`https://voucher-website-fe.onrender.com/oauth-error?message=${encodeURIComponent("Lỗi server ❌")}`);
         }
     })(req, res, next);
 };
@@ -165,11 +165,11 @@ exports.facebook = passport.authenticate('facebook', { scope: ['email'] });
 exports.facebookCallback = (req, res,next) => {
   passport.authenticate('facebook', { session: false }, async (err, user, info) => {
     if (err) {
-      return res.redirect(`http://localhost:5173/oauth-error?message=${encodeURIComponent('Đăng nhập Facebook thất bại ❌')}`);
+      return res.redirect(`https://voucher-website-fe.onrender.com/oauth-error?message=${encodeURIComponent('Đăng nhập Facebook thất bại ❌')}`);
     }
 
     if (!user) {
-      return res.redirect(`http://localhost:5173/oauth-error?message=${encodeURIComponent('Không tìm thấy tài khoản Facebook!')}`);
+      return res.redirect(`https://voucher-website-fe.onrender.com/oauth-error?message=${encodeURIComponent('Không tìm thấy tài khoản Facebook!')}`);
     }
 
     try {
@@ -192,11 +192,11 @@ exports.facebookCallback = (req, res,next) => {
         sameSite: 'strict',
       });
 
-      const redirectUrl = `http://localhost:5173/oauth-success?token=${accessToken}&username=${existingUser.username}`;
+      const redirectUrl = `https://voucher-website-fe.onrender.com/oauth-success?token=${accessToken}&username=${existingUser.username}`;
       return res.redirect(redirectUrl);
 
     } catch (error) {
-      return res.redirect(`http://localhost:5173/oauth-error?message=${encodeURIComponent('Lỗi server ❌')}`);
+      return res.redirect(`https://voucher-website-fe.onrender.com/oauth-error?message=${encodeURIComponent('Lỗi server ❌')}`);
     }
   })(req, res,next);
 };
