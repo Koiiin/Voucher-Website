@@ -23,7 +23,6 @@ function OauthSuccess() {
           success: true,
           message: "🎉 Đăng nhập thành công!",
         });
-        window.location.reload();
       } else {
         setModalData({
           show: true,
