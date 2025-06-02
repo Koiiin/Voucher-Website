@@ -33,7 +33,7 @@ app.use(session({
     saveUninitialized: false
 }));
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: 'https://voucher-website-fe.onrender.com',
     credentials: true
 }));
 app.use(express.urlencoded({extended: true}));
